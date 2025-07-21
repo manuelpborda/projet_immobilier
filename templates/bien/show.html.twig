@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle de la Propiedad{% endblock %}
+
+{% block body %}
+<div>
+    <header>
+        {# Aquí va  nav si lo tienes en base.html.twig #}
+    </header>
+    <main>
+        <img src="https://placehold.co/600x400" alt="Imagen propiedad">
+        <h2>
+            {{ bien.typeDeBien|capitalize }} à vendre
+        </h2>
+        <ul>
+            <li><strong>Tipo:</strong> {{ bien.typeDeBien }}</li>
+            <li><strong>Dirección:</strong> {{ bien.adresse }}</li>
+            <li><strong>Precio:</strong> {{ bien.prix|number_format(0, ',', ' ') }} €</li>
+            <li><strong>Superficie:</strong> {{ bien.surfaceM2 }} m²</li>
+            <li><strong>Estado:</strong> {{ bien.etatDuBien }}</li>
+        </ul>
+        <div>
+    <a href="{{ path('home') }}">
+        ← Volver al listado
+    </a>
+    <button type="button" onclick="document.getElementById('contactModal').style.display='block';">
+        Contactar un agente
+    </button>
+</div>
+
+{# Popup sin CSS  #}
+<div id="contactModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,.25); z-index:999;">
+    <div style="background:#fff; max-width:350px; margin:120px auto; padding:1.5em 2em; border-radius:10px; box-shadow:0 4px 16px #0003;">
+        <h3>Contactar un agente</h3>
+        <p>
+            <strong>Email:</strong> manuelpborda@gmail.com<br>
+            <a href="mailto:manuelpborda@gmail.com?subject=Consulta sobre inmueble: {{ bien.typeDeBien }} en {{ bien.adresse }}">Enviar correo</a>
+        </p>
+        <p>
+            <strong>WhatsApp:</strong> +57 312 450 49 82<br>
+            <a href="https://wa.me/573215551234?text=Hola, quiero información sobre el inmueble '{{ bien.typeDeBien }}' en '{{ bien.adresse }}'" target="_blank">
+                Escribir por WhatsApp
+            </a>
+        </p>
+        <button onclick="document.getElementById('contactModal').style.display='none';">Cerrar</button>
+    </div>
+</div>
+
+    </main>
+    {# El footer irá en base.html.twig o se agregará después #}
+</div>
+{% endblock %}

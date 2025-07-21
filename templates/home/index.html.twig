@@ -1,0 +1,112 @@
+{# templates/home/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Inicio - Agencia Inmobiliaria{% endblock %}
+
+{% block body %}
+<header>
+    <nav>
+        <!-- Logo y menú principal según wireframe -->
+        <!-- ... -->
+    </nav>
+</header>
+
+<div class="search-section">
+    <form method="get" action="{{ path('home') }}">
+        {# Type de bien #}
+        <select name="typeDeBien">
+            <option value="">Todos los tipos</option>
+            {% for tipo in tiposDeBien %}
+                <option value="{{ tipo }}" {% if app.request.get('typeDeBien') == tipo %}selected{% endif %}>
+                    {# Traducción a español para mostrar al usuario #}
+                    {% if tipo == 'Appartement' %}Apartamento
+                    {% elseif tipo == 'Maison' %}Casa
+                    {% else %}{{ tipo }}
+                    {% endif %}
+                </option>
+            {% endfor %}
+        </select>
+
+        {# Prix minimum et maximum #}
+        <input type="number" name="prixMin" placeholder="Precio mínimo" value="{{ app.request.get('prixMin') }}">
+        <input type="number" name="prixMax" placeholder="Precio máximo" value="{{ app.request.get('prixMax') }}">
+
+        {# Adresse #}
+        <input type="text" name="adresse" placeholder="Dirección" value="{{ app.request.get('adresse') }}">
+
+        {# Surface minimum et maximum #}
+        <input type="number" name="surfaceMin" placeholder="Superficie mínima" value="{{ app.request.get('surfaceMin') }}">
+        <input type="number" name="surfaceMax" placeholder="Superficie máxima" value="{{ app.request.get('surfaceMax') }}">
+
+        {# État du bien #}
+        <select name="etatDuBien">
+            <option value="">Todos los estados</option>
+            {% for etat in estadosDeBien %}
+                <option value="{{ etat }}" {% if app.request.get('etatDuBien') == etat %}selected{% endif %}>
+                    {# Traducción a español para mostrar al usuario #}
+                    {% if etat == 'Neuf' %}Nuevo
+                    {% elseif etat == 'Ancien' %}Antiguo
+                    {% else %}{{ etat }}
+                    {% endif %}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filtrar</button>
+        <a href="{{ path('home') }}">Limpiar filtros</a>
+    </form>
+</div>
+
+<main>
+    <div class="property-grid">
+        {% for bien in bienes %}
+            <div class="property-card">
+                <!-- Imagen genérica -->
+                <div class="property-image">
+                    <img src="https://placehold.co/300x200" alt="Imagen de la propiedad">
+                </div>
+                <div class="property-info">
+                    <h3>
+                        {# Traducción para el usuario #}
+                        {% if bien.typeDeBien == 'Appartement' %}Apartamento
+                        {% elseif bien.typeDeBien == 'Maison' %}Casa
+                        {% else %}{{ bien.typeDeBien }}
+                        {% endif %}
+                        en venta
+                    </h3>
+                    <div class="price">{{ bien.prix|number_format(0, ',', ' ') }} COP</div>
+                    <p>Dirección: {{ bien.adresse }}</p>
+                    <p>Superficie: {{ bien.surfaceM2 }} m²</p>
+                    <a href="{{ path('bien_show', {'id': bien.id}) }}">Ver más</a>
+                </div>
+            </div>
+        {% else %}
+            <p>No hay propiedades disponibles.</p>
+        {% endfor %}
+    </div>
+    <!-- Paginación (estática por ahora) -->
+    <div class="pagination">
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-section">
+        <div>
+            <strong>Oficina en Bogotá - Colombia</strong>
+            <p>Carrera 7 #85-24, Chapinero</p>
+        </div>
+        <div>
+            <strong>Oficina en París - Francia</strong>
+            <p>12 Rue de Paris, 75000 Paris</p>
+        </div>
+        <div>
+            <strong>Habla con un agente</strong>
+            <p><a href="#">WhatsApp</a></p>
+        </div>
+    </div>
+</footer>
+{% endblock %}
