@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacto - CONSORIA Inmobiliaria{% endblock %}
+
+{% block body %}
+{# Página directa para contactar y dar confianza al usuario #}
+<h1>Contacto directo con CONSORIA Inmobiliaria</h1>
+<p>
+    ¿Tienes dudas, quieres programar una visita o necesitas asesoría? Completa el formulario o comunícate por los medios directos que ves abajo. <br>
+    ¡Respondo personalmente y lo más rápido posible!
+</p>
+
+<form method="post" action="#" style="max-width:400px; margin:2em 0;">
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="telefono">Teléfono:</label><br>
+    <input type="tel" id="telefono" name="telefono"><br><br>
+
+    <label for="correo">Correo electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required><br><br>
+
+    <label for="mensaje">Mensaje:</label><br>
+    <textarea id="mensaje" name="mensaje" rows="4" required></textarea><br><br>
+
+    <button type="submit">Enviar mensaje</button>
+</form>
+
+{# Bloque de contacto rápido con los datos principales de la agencia y asesor #}
+<h2>También puedes contactarme así:</h2>
+<ul>
+    <li><strong>WhatsApp/Teléfono directo:</strong> <a href="https://wa.me/573124504982" target="_blank">+57 312 4504982</a></li>
+    <li><strong>Oficina principal:</strong> Cra 7D # 151-42, Oficina 201, Bogotá</li>
+    <li><strong>Email asesor:</strong> <a href="mailto:gabrielpulido1984@gmail.com">gabrielpulido1984@gmail.com</a></li>
+</ul>
+
+<img src="https://placehold.co/600x180?text=Contacto+CONSORIA" alt="Contacto Consoria" style="margin-top:2em;">
+
+<div style="width:100%; max-width:600px; margin:auto;">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d162.78017140715383!2d-74.02804183904063!3d4.7294215943001685!2m3!1f170.9358334253712!2f44.986777622933026!3f0!3m2!1i1024!2i768!4f35!5e1!3m2!1sfr!2sfr!4v1753179233481!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+{% endblock %}

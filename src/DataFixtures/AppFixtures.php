@@ -17,7 +17,7 @@ class AppFixtures extends Fixture
         $agent1->setPrenom('Juan');
         $agent1->setEmail('juan.garcia@inmobiliaria.com');
         $agent1->setTelephone('3101234567');
-        $agent1->setPassword('secret123'); // Solo para pruebas
+        $agent1->setPassword('secret123');
         $agent1->setRoles(['ROLE_AGENT']);
         $agent1->setTypeDeContrat('Indefinido');
         $agent1->setDateEmbauche(new \DateTime('2022-01-15'));
@@ -49,27 +49,29 @@ class AppFixtures extends Fixture
         $client2->setTelephone('3125566778');
         $manager->persist($client2);
 
-        // ----- Bienes fijos -----
+        // ----- Bienes fijos (ejemplo manual) -----
         $bien1 = new Bien();
         $bien1->setTypeDeBien('Appartement');
-        $bien1->setAdresse('Carrera 7 #85-24, Chapinero, Bogotá');
+        $bien1->setVille('Bogotá');
+        $bien1->setAdresse('Carrera 7 #85-24, Chapinero');
         $bien1->setPrix('520000000');
         $bien1->setSurfaceM2(90);
         $bien1->setEtatDuBien('Neuf');
+        $bien1->setTipoTransaccion('venta');
         $manager->persist($bien1);
 
         $bien2 = new Bien();
         $bien2->setTypeDeBien('Maison');
-        $bien2->setAdresse('Calle 127 #45-19, Suba, Bogotá');
+        $bien2->setVille('Bogotá');
+        $bien2->setAdresse('Calle 127 #45-19, Suba');
         $bien2->setPrix('780000000');
         $bien2->setSurfaceM2(180);
         $bien2->setEtatDuBien('Rénové');
+        $bien2->setTipoTransaccion('arriendo');
         $manager->persist($bien2);
 
         // ----- Bienes automáticos para paginación -----
-        $ciudades = [
-            'Bogotá', 'Medellín', 'Cartagena', 'Villavicencio'
-        ];
+        $ciudades = ['Bogotá', 'Medellín', 'Cartagena', 'Villavicencio'];
         $barrios = [
             'Bogotá' => ['Chapinero', 'Usaquén', 'Teusaquillo', 'Cedritos'],
             'Medellín' => ['El Poblado', 'Laureles', 'Envigado'],
@@ -78,6 +80,7 @@ class AppFixtures extends Fixture
         ];
         $tipos = ['Appartement', 'Maison'];
         $etats = ['Neuf', 'Ancien', 'Rénové'];
+        $tiposTransaccion = ['venta', 'arriendo', 'vacacional'];
 
         for ($i = 1; $i <= 30; $i++) {
             $bien = new Bien();
@@ -86,16 +89,20 @@ class AppFixtures extends Fixture
             $barrio = $barrios[$ciudad][array_rand($barrios[$ciudad])];
             $tipo = $tipos[array_rand($tipos)];
             $etat = $etats[array_rand($etats)];
+            $tipoTransaccion = $tiposTransaccion[array_rand($tiposTransaccion)];
 
             $bien->setTypeDeBien($tipo);
-            $bien->setAdresse("Calle ".rand(1,99)." #".rand(1,99)."-".rand(1,99).", {$barrio}, {$ciudad}");
+            $bien->setVille($ciudad);
+            $bien->setAdresse("Calle ".rand(1,99)." #".rand(1,99)."-".rand(1,99).", $barrio");
             $bien->setPrix(rand(80000000, 900000000));
             $bien->setSurfaceM2(rand(40, 200));
             $bien->setEtatDuBien($etat);
+            $bien->setTipoTransaccion($tipoTransaccion);
 
             $manager->persist($bien);
         }
 
+        // Finalmente guardar todos los cambios
         $manager->flush();
     }
 }

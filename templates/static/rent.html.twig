@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Arriendo de Inmuebles - CONSORIA Inmobiliaria{% endblock %}
+
+{% block body %}
+{# Título principal enfocado en arriendo tradicional #}
+<h1>Arrienda tu inmueble fácil y seguro</h1>
+<p>
+    Con <strong>CONSORIA Inmobiliaria</strong> puedes arrendar tu apartamento, casa, oficina o local comercial en las principales ciudades de Colombia con total respaldo.<br>
+    Encontramos el arrendatario ideal y te acompañamos en cada paso.
+</p>
+
+{# Beneficios del servicio de arriendo tradicional #}
+<h2>¿Por qué arrendar con nosotros?</h2>
+<ul>
+    <li>Promoción en los principales portales inmobiliarios</li>
+    <li>Selección y validación de inquilinos (estudio de crédito y referencias)</li>
+    <li>Elaboración y gestión de contratos de arriendo</li>
+    <li>Asesoría jurídica y acompañamiento en entrega y recibo del inmueble</li>
+    <li>Gestión de cobro y seguimiento mensual</li>
+</ul>
+
+<h3>Condiciones de corretaje para arriendo</h3>
+<ul>
+    <li>Comisión: <strong>50% del valor del primer canon + IVA</strong> (solo si se concreta el arriendo)</li>
+    <li>Sin pagos anticipados. Solo cobramos si se arrienda tu inmueble</li>
+</ul>
+
+<a href="{{ path('home') }}" style="font-weight:bold; display:inline-block; margin:1em 0;">Ver inmuebles en arriendo</a>
+
+{# la seccion vacacion al final la pongo #}
+<hr>
+<h2 style="margin-top:2em;">¿Buscas alquilar tu propiedad por temporadas (vacacional)?</h2>
+<p>
+    También te ayudamos a promocionar y gestionar tu inmueble en alquiler vacacional, para estadías cortas en plataformas como Airbnb o Booking.<br>
+    Nosotros nos encargamos de todo para que solo recibas ingresos sin complicaciones.
+</p>
+<ul>
+    <li>Gestión completa de reservas, check-in y check-out</li>
+    <li>Promoción en plataformas internacionales</li>
+    <li>Asesoría para optimizar la ocupación y el precio</li>
+    <li>Comisión: <strong>10% del valor del alquiler</strong> (mínimo aplicable según temporada y ciudad)</li>
+</ul>
+
+
+<h3>¿Quieres que te asesoremos? Contáctanos:</h3>
+<ul>
+    <li><strong>Teléfono/WhatsApp:</strong> <a href="https://wa.me/573124504982" target="_blank">+57 312 4504982</a></li>
+    <li><strong>Oficina principal:</strong> Cra 7D # 151-42, oficina 201 Bogotá</li>
+    <li><strong>Email:</strong> gabrielpulido1984@gmail.com</li>
+</ul>
+
+<img src="https://placehold.co/700x250?text=Arriendo+de+Inmuebles" alt="Arriendo de Inmuebles" style="margin-top:2em;">
+{% endblock %}

@@ -14,12 +14,11 @@
 
 <div class="search-section">
     <form method="get" action="{{ path('home') }}">
-        {# Type de bien #}
+        {# Filtro: Tipo de bien (Apartamento, Casa...) #}
         <select name="typeDeBien">
             <option value="">Todos los tipos</option>
             {% for tipo in tiposDeBien %}
                 <option value="{{ tipo }}" {% if app.request.get('typeDeBien') == tipo %}selected{% endif %}>
-                    {# Traducción a español para mostrar al usuario #}
                     {% if tipo == 'Appartement' %}Apartamento
                     {% elseif tipo == 'Maison' %}Casa
                     {% else %}{{ tipo }}
@@ -28,23 +27,51 @@
             {% endfor %}
         </select>
 
-        {# Prix minimum et maximum #}
-        <input type="number" name="prixMin" placeholder="Precio mínimo" value="{{ app.request.get('prixMin') }}">
-        <input type="number" name="prixMax" placeholder="Precio máximo" value="{{ app.request.get('prixMax') }}">
+        {# Filtro: Tipo de transacción (Venta, Arriendo, Vacacional) #}
+        <select name="tipoTransaccion">
+            <option value="">Todas las operaciones</option>
+            <option value="venta" {% if app.request.get('tipoTransaccion') == 'venta' %}selected{% endif %}>Venta</option>
+            <option value="arriendo" {% if app.request.get('tipoTransaccion') == 'arriendo' %}selected{% endif %}>Arriendo</option>
+            <option value="vacacional" {% if app.request.get('tipoTransaccion') == 'vacacional' %}selected{% endif %}>Alquiler vacacional</option>
+        </select>
 
-        {# Adresse #}
+        {# Filtro: Ciudad, lista desplegable dinámica #}
+        <select name="ville">
+            <option value="">Todas las ciudades</option>
+            {% for ciudad in ciudadesDisponibles %}
+                <option value="{{ ciudad }}" {% if app.request.get('ville') == ciudad %}selected{% endif %}>{{ ciudad }}</option>
+            {% endfor %}
+        </select>
+
+        {# Filtro: Dirección libre (input de texto) #}
         <input type="text" name="adresse" placeholder="Dirección" value="{{ app.request.get('adresse') }}">
 
-        {# Surface minimum et maximum #}
-        <input type="number" name="surfaceMin" placeholder="Superficie mínima" value="{{ app.request.get('surfaceMin') }}">
-        <input type="number" name="surfaceMax" placeholder="Superficie máxima" value="{{ app.request.get('surfaceMax') }}">
+        {# Filtro: Rango de precio (en COP) #}
+        <select name="rangoPrecio">
+            <option value="">Todos los precios</option>
+            <option value="1-100000000" {% if app.request.get('rangoPrecio') == '1-100000000' %}selected{% endif %}>Hasta 100 millones</option>
+            <option value="100000001-250000000" {% if app.request.get('rangoPrecio') == '100000001-250000000' %}selected{% endif %}>100 a 250 millones</option>
+            <option value="250000001-500000000" {% if app.request.get('rangoPrecio') == '250000001-500000000' %}selected{% endif %}>250 a 500 millones</option>
+            <option value="500000001-750000000" {% if app.request.get('rangoPrecio') == '500000001-750000000' %}selected{% endif %}>500 a 750 millones</option>
+            <option value="750000001-1000000000" {% if app.request.get('rangoPrecio') == '750000001-1000000000' %}selected{% endif %}>750 millones a 1.000 millones</option>
+            <option value="1000000001-9999999999" {% if app.request.get('rangoPrecio') == '1000000001-9999999999' %}selected{% endif %}>Más de 1.000 millones</option>
+        </select>
 
-        {# État du bien #}
+        {# Filtro: Rango de superficie (m2) #}
+        <select name="rangoSuperficie">
+            <option value="">Todas las superficies</option>
+            <option value="1-49" {% if app.request.get('rangoSuperficie') == '1-49' %}selected{% endif %}>Menos de 50 m²</option>
+            <option value="50-99" {% if app.request.get('rangoSuperficie') == '50-99' %}selected{% endif %}>50 - 99 m²</option>
+            <option value="100-149" {% if app.request.get('rangoSuperficie') == '100-149' %}selected{% endif %}>100 - 149 m²</option>
+            <option value="150-199" {% if app.request.get('rangoSuperficie') == '150-199' %}selected{% endif %}>150 - 199 m²</option>
+            <option value="200-9999" {% if app.request.get('rangoSuperficie') == '200-9999' %}selected{% endif %}>200 m² o más</option>
+        </select>
+
+        {# Filtro: Estado del bien (nuevo, antiguo, renovado) #}
         <select name="etatDuBien">
             <option value="">Todos los estados</option>
             {% for etat in estadosDeBien %}
                 <option value="{{ etat }}" {% if app.request.get('etatDuBien') == etat %}selected{% endif %}>
-                    {# Traducción a español para mostrar al usuario #}
                     {% if etat == 'Neuf' %}Nuevo
                     {% elseif etat == 'Ancien' %}Antiguo
                     {% else %}{{ etat }}
@@ -60,6 +87,7 @@
 
 <main>
     <div class="property-grid">
+        {# Mostrar las propiedades paginadas #}
         {% for bien in bienes %}
             <div class="property-card">
                 <!-- Imagen genérica -->
@@ -68,14 +96,15 @@
                 </div>
                 <div class="property-info">
                     <h3>
-                        {# Traducción para el usuario #}
                         {% if bien.typeDeBien == 'Appartement' %}Apartamento
                         {% elseif bien.typeDeBien == 'Maison' %}Casa
                         {% else %}{{ bien.typeDeBien }}
                         {% endif %}
-                        en venta
+                        {# Mostramos aquí el tipo de transacción para claridad #}
+                        {% if bien.tipoTransaccion %} en {{ bien.tipoTransaccion }}{% endif %}
                     </h3>
                     <div class="price">{{ bien.prix|number_format(0, ',', ' ') }} COP</div>
+                    <p>Ciudad: {{ bien.ville }}</p>
                     <p>Dirección: {{ bien.adresse }}</p>
                     <p>Superficie: {{ bien.surfaceM2 }} m²</p>
                     <a href="{{ path('bien_show', {'id': bien.id}) }}">Ver más</a>
@@ -85,12 +114,8 @@
             <p>No hay propiedades disponibles.</p>
         {% endfor %}
     </div>
-    <!-- Paginación (estática por ahora) -->
-    <div class="pagination">
-        <a href="#">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-    </div>
+    {# Paginación interactiva (usa KNP Paginator) #}
+    {{ knp_pagination_render(bienes) }}
 </main>
 
 <footer>
