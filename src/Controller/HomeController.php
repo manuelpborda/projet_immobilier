@@ -127,4 +127,6 @@ class HomeController extends AbstractController
             'bien' => $bien,
         ]);
     }
+   
+
 }
