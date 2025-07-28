@@ -5,13 +5,26 @@
 {% block body %}
 <div>
     <header>
-        {# Aquí va  nav si lo tienes en base.html.twig #}
+        {# Aquí va  nav  #}
     </header>
     <main>
-        <img src="https://placehold.co/600x400" alt="Imagen propiedad">
+        <img src="{{ asset(bien.foto) }}" alt="Imagen de {{ bien.typeDeBien }}" class="card-img-top" style="width:100%;height:200px;object-fit:cover;">
+
+
         <h2>
             {{ bien.typeDeBien|capitalize }} à vendre
+            {# Botón de favoritos solo para clientes autenticados #}
+            {% if app.user and 'ROLE_CLIENT' in app.user.roles %}
+                <button
+                    class="btn-favorito"
+                    data-id="{{ bien.id }}"
+                    onclick="toggleFavorito({{ bien.id }})"
+                >
+                    <span id="icon-{{ bien.id }}">{{ esFavorito ? '❤️' : 'Agregar a Favorito 🤍' }}</span>
+                </button>
+            {% endif %}
         </h2>
+
         <ul>
             <li><strong>Tipo:</strong> {{ bien.typeDeBien }}</li>
             <li><strong>Dirección:</strong> {{ bien.adresse }}</li>
@@ -20,33 +33,30 @@
             <li><strong>Estado:</strong> {{ bien.etatDuBien }}</li>
         </ul>
         <div>
-    <a href="{{ path('home') }}">
-        ← Volver al listado
-    </a>
-    <button type="button" onclick="document.getElementById('contactModal').style.display='block';">
-        Contactar un agente
-    </button>
-</div>
+            <a href="{{ path('home') }}">← Volver al listado</a>
+            <button type="button" onclick="document.getElementById('contactModal').style.display='block';">
+                Contactar un agente
+            </button>
+        </div>
 
-{# Popup sin CSS  #}
-<div id="contactModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,.25); z-index:999;">
-    <div style="background:#fff; max-width:350px; margin:120px auto; padding:1.5em 2em; border-radius:10px; box-shadow:0 4px 16px #0003;">
-        <h3>Contactar un agente</h3>
-        <p>
-            <strong>Email:</strong> manuelpborda@gmail.com<br>
-            <a href="mailto:manuelpborda@gmail.com?subject=Consulta sobre inmueble: {{ bien.typeDeBien }} en {{ bien.adresse }}">Enviar correo</a>
-        </p>
-        <p>
-            <strong>WhatsApp:</strong> +57 312 450 49 82<br>
-            <a href="https://wa.me/573215551234?text=Hola, quiero información sobre el inmueble '{{ bien.typeDeBien }}' en '{{ bien.adresse }}'" target="_blank">
-                Escribir por WhatsApp
-            </a>
-        </p>
-        <button onclick="document.getElementById('contactModal').style.display='none';">Cerrar</button>
-    </div>
-</div>
-
+        {# Popup sin CSS  #}
+        <div id="contactModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,.25); z-index:999;">
+            <div style="background:#fff; max-width:350px; margin:120px auto; padding:1.5em 2em; border-radius:10px; box-shadow:0 4px 16px #0003;">
+                <h3>Contactar un agente</h3>
+                <p>
+                    <strong>Email:</strong> manuelpborda@gmail.com<br>
+                    <a href="mailto:manuelpborda@gmail.com?subject=Consulta sobre inmueble: {{ bien.typeDeBien }} en {{ bien.adresse }}">Enviar correo</a>
+                </p>
+                <p>
+                    <strong>WhatsApp:</strong> +57 312 450 49 82<br>
+                    <a href="https://wa.me/573215551234?text=Hola, quiero información sobre el inmueble '{{ bien.typeDeBien }}' en '{{ bien.adresse }}'" target="_blank">
+                        Escribir por WhatsApp
+                    </a>
+                </p>
+                <button onclick="document.getElementById('contactModal').style.display='none';">Cerrar</button>
+            </div>
+        </div>
     </main>
-    {# El footer irá en base.html.twig o se agregará después #}
 </div>
+<script src="/js/favoris.js"></script>
 {% endblock %}

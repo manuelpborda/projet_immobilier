@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mis Inmuebles Favoritos{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Mis Inmuebles Favoritos</h1>
+
+    {% if favoritos|length == 0 %}
+        <div class="alert alert-info">
+            Aún no tienes inmuebles en favoritos.
+        </div>
+    {% else %}
+        <div class="row">
+            {% for favorito in favoritos %}
+                {% set bien = favorito.bien %}
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        {# Imagen (puedes poner bien.foto cuando la agregues a la entidad) #}
+                        <img src="{{ asset(bien.foto) }}" alt="Imagen de {{ bien.typeDeBien }}" class="card-img-top" style="width:100%;height:200px;object-fit:cover;">
+
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ bien.typeDeBien|capitalize }} en {{ bien.ville }}
+                            </h5>
+                            <p class="card-text mb-1"><strong>Dirección:</strong> {{ bien.adresse }}</p>
+                            <p class="card-text mb-1"><strong>Precio:</strong> {{ bien.prix|number_format(0, ',', ' ') }} €</p>
+                            <p class="card-text mb-2"><strong>Superficie:</strong> {{ bien.surfaceM2 }} m²</p>
+                            <a href="{{ path('bien_show', {id: bien.id}) }}" class="btn btn-sm btn-primary mb-1">Ver detalle</a>
+                            <form method="post" action="{{ path('quitar_favorito', {id: bien.id}) }}" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <span aria-hidden="true">&hearts;</span> Quitar de favoritos
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <a href="{{ path('home') }}" class="btn btn-secondary mt-4">← Volver al inicio</a>
+</div>
+{% endblock %}

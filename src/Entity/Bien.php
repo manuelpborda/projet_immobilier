@@ -63,6 +63,24 @@ class Bien
         $this->visites = new ArrayCollection();
         $this->offres = new ArrayCollection();
     }
+    // ...otras propiedades...
+
+// --- Nueva propiedad para la foto ---
+#[ORM\Column(type: "string", length: 255, nullable: true)]
+private ?string $foto = null;
+
+// --- Getter y Setter para foto ---
+public function getFoto(): ?string
+{
+    return $this->foto;
+}
+
+public function setFoto(?string $foto): self
+{
+    $this->foto = $foto;
+    return $this;
+}
+
 
     // --- Getters y Setters ---
     public function getId(): ?int { return $this->id; }

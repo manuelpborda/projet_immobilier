@@ -6,15 +6,12 @@
 
 {% block body %}
 <header>
-    <nav>
-        <!-- Logo y menú principal según wireframe -->
-        <!-- ... -->
-    </nav>
+    {# Puedes dejar tu nav aquí si quieres menú fijo en cada página #}
 </header>
 
 <div class="search-section">
     <form method="get" action="{{ path('home') }}">
-        {# Filtro: Tipo de bien (Apartamento, Casa...) #}
+        <!-- Filtros para búsqueda avanzada -->
         <select name="typeDeBien">
             <option value="">Todos los tipos</option>
             {% for tipo in tiposDeBien %}
@@ -26,27 +23,19 @@
                 </option>
             {% endfor %}
         </select>
-
-        {# Filtro: Tipo de transacción (Venta, Arriendo, Vacacional) #}
         <select name="tipoTransaccion">
             <option value="">Todas las operaciones</option>
             <option value="venta" {% if app.request.get('tipoTransaccion') == 'venta' %}selected{% endif %}>Venta</option>
             <option value="arriendo" {% if app.request.get('tipoTransaccion') == 'arriendo' %}selected{% endif %}>Arriendo</option>
             <option value="vacacional" {% if app.request.get('tipoTransaccion') == 'vacacional' %}selected{% endif %}>Alquiler vacacional</option>
         </select>
-
-        {# Filtro: Ciudad, lista desplegable dinámica #}
         <select name="ville">
             <option value="">Todas las ciudades</option>
             {% for ciudad in ciudadesDisponibles %}
                 <option value="{{ ciudad }}" {% if app.request.get('ville') == ciudad %}selected{% endif %}>{{ ciudad }}</option>
             {% endfor %}
         </select>
-
-        {# Filtro: Dirección libre (input de texto) #}
         <input type="text" name="adresse" placeholder="Dirección" value="{{ app.request.get('adresse') }}">
-
-        {# Filtro: Rango de precio (en COP) #}
         <select name="rangoPrecio">
             <option value="">Todos los precios</option>
             <option value="1-100000000" {% if app.request.get('rangoPrecio') == '1-100000000' %}selected{% endif %}>Hasta 100 millones</option>
@@ -56,8 +45,6 @@
             <option value="750000001-1000000000" {% if app.request.get('rangoPrecio') == '750000001-1000000000' %}selected{% endif %}>750 millones a 1.000 millones</option>
             <option value="1000000001-9999999999" {% if app.request.get('rangoPrecio') == '1000000001-9999999999' %}selected{% endif %}>Más de 1.000 millones</option>
         </select>
-
-        {# Filtro: Rango de superficie (m2) #}
         <select name="rangoSuperficie">
             <option value="">Todas las superficies</option>
             <option value="1-49" {% if app.request.get('rangoSuperficie') == '1-49' %}selected{% endif %}>Menos de 50 m²</option>
@@ -66,8 +53,6 @@
             <option value="150-199" {% if app.request.get('rangoSuperficie') == '150-199' %}selected{% endif %}>150 - 199 m²</option>
             <option value="200-9999" {% if app.request.get('rangoSuperficie') == '200-9999' %}selected{% endif %}>200 m² o más</option>
         </select>
-
-        {# Filtro: Estado del bien (nuevo, antiguo, renovado) #}
         <select name="etatDuBien">
             <option value="">Todos los estados</option>
             {% for etat in estadosDeBien %}
@@ -79,43 +64,42 @@
                 </option>
             {% endfor %}
         </select>
-
-        <button type="submit">Filtrar</button>
-        <a href="{{ path('home') }}">Limpiar filtros</a>
+        <button type="submit" class="btn-primary">Filtrar</button>
+        <a href="{{ path('home') }}" class="btn-warning">Limpiar filtros</a>
     </form>
 </div>
 
 <main>
-    <div class="property-grid">
-        {# Mostrar las propiedades paginadas #}
+    <div class="grille-biens">
+        {# Mostramos las propiedades paginadas #}
         {% for bien in bienes %}
-            <div class="property-card">
-                <!-- Imagen genérica -->
-                <div class="property-image">
-                    <img src="https://placehold.co/300x200" alt="Imagen de la propiedad">
+            <div class="carte-bien">
+                <div class="carte-bien-image">
+                    <img src="{{ asset(bien.foto) }}" alt="Imagen de {{ bien.typeDeBien }}" class="carte-bien-img">
                 </div>
-                <div class="property-info">
+                <div class="carte-bien-info">
                     <h3>
                         {% if bien.typeDeBien == 'Appartement' %}Apartamento
                         {% elseif bien.typeDeBien == 'Maison' %}Casa
                         {% else %}{{ bien.typeDeBien }}
                         {% endif %}
-                        {# Mostramos aquí el tipo de transacción para claridad #}
                         {% if bien.tipoTransaccion %} en {{ bien.tipoTransaccion }}{% endif %}
                     </h3>
-                    <div class="price">{{ bien.prix|number_format(0, ',', ' ') }} COP</div>
+                    <div class="prix-bien">{{ bien.prix|number_format(0, ',', ' ') }} COP</div>
                     <p>Ciudad: {{ bien.ville }}</p>
                     <p>Dirección: {{ bien.adresse }}</p>
                     <p>Superficie: {{ bien.surfaceM2 }} m²</p>
-                    <a href="{{ path('bien_show', {'id': bien.id}) }}">Ver más</a>
+                    <a href="{{ path('bien_show', {'id': bien.id}) }}" class="btn-primary">Ver más</a>
                 </div>
             </div>
         {% else %}
             <p>No hay propiedades disponibles.</p>
         {% endfor %}
     </div>
-    {# Paginación interactiva (usa KNP Paginator) #}
+   <div class="pagination-wrapper">
     {{ knp_pagination_render(bienes) }}
+</div>
+
 </main>
 
 <footer>

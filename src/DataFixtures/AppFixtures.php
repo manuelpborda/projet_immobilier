@@ -11,7 +11,7 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // ----- Agentes -----
+        // --- Creo agentes de prueba para tener variedad de roles en el sistema ---
         $agent1 = new Agent();
         $agent1->setNom('García');
         $agent1->setPrenom('Juan');
@@ -34,7 +34,7 @@ class AppFixtures extends Fixture
         $agent2->setDateEmbauche(new \DateTime('2023-03-10'));
         $manager->persist($agent2);
 
-        // ----- Clientes -----
+        // --- Creo clientes de ejemplo para las funcionalidades de favoritos ---
         $client1 = new Client();
         $client1->setNom('Rodríguez');
         $client1->setPrenom('Sofía');
@@ -49,7 +49,7 @@ class AppFixtures extends Fixture
         $client2->setTelephone('3125566778');
         $manager->persist($client2);
 
-        // ----- Bienes fijos (ejemplo manual) -----
+        // --- Creo dos bienes fijos (uno apartamento y uno casa), asignando sus fotos ---
         $bien1 = new Bien();
         $bien1->setTypeDeBien('Appartement');
         $bien1->setVille('Bogotá');
@@ -58,6 +58,7 @@ class AppFixtures extends Fixture
         $bien1->setSurfaceM2(90);
         $bien1->setEtatDuBien('Neuf');
         $bien1->setTipoTransaccion('venta');
+        $bien1->setFoto('assets/img/apartamentos/apto1.jpg'); // Asigno la foto antes de persistir
         $manager->persist($bien1);
 
         $bien2 = new Bien();
@@ -68,9 +69,10 @@ class AppFixtures extends Fixture
         $bien2->setSurfaceM2(180);
         $bien2->setEtatDuBien('Rénové');
         $bien2->setTipoTransaccion('arriendo');
+        $bien2->setFoto('assets/img/casas/casa1.jpg'); // Asigno la foto antes de persistir
         $manager->persist($bien2);
 
-        // ----- Bienes automáticos para paginación -----
+        // --- Genero automáticamente 30 bienes con fotos variadas para pruebas y paginación ---
         $ciudades = ['Bogotá', 'Medellín', 'Cartagena', 'Villavicencio'];
         $barrios = [
             'Bogotá' => ['Chapinero', 'Usaquén', 'Teusaquillo', 'Cedritos'],
@@ -85,6 +87,7 @@ class AppFixtures extends Fixture
         for ($i = 1; $i <= 30; $i++) {
             $bien = new Bien();
 
+            // Elijo valores aleatorios para dar realismo a los datos de ejemplo
             $ciudad = $ciudades[array_rand($ciudades)];
             $barrio = $barrios[$ciudad][array_rand($barrios[$ciudad])];
             $tipo = $tipos[array_rand($tipos)];
@@ -99,10 +102,16 @@ class AppFixtures extends Fixture
             $bien->setEtatDuBien($etat);
             $bien->setTipoTransaccion($tipoTransaccion);
 
+            // Asigno una foto acorde al tipo de bien, eligiendo aleatoriamente entre 16 imágenes de cada tipo
+            if ($tipo === 'Maison') {
+                $bien->setFoto('assets/img/casas/casa' . rand(1, 16) . '.jpg');
+            } else {
+                $bien->setFoto('assets/img/apartamentos/apto' . rand(1, 16) . '.jpg');
+            }
             $manager->persist($bien);
         }
 
-        // Finalmente guardar todos los cambios
+        // --- Guardo todos los cambios en la base de datos ---
         $manager->flush();
     }
 }

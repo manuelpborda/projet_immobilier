@@ -2,46 +2,57 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    {# Título principal de la web, lo personalizo por página si lo deseo con block title #}
+    {# Título principal de la web. Uso block title para personalizarlo por página #}
     <title>{% block title %}CONSORIA Inmobiliaria{% endblock %}</title>
-    {# Aquí más adelante irán los links de CSS cuando pase al diseño visual #}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> {#enlazar css en public #}
+
 </head>
 <body>
-    {# === MENÚ DE NAVEGACIÓN PRINCIPAL === 
-       Siempre visible arriba en todas las páginas (lo repito usando este base)
+    {# === MENÚ DE NAVEGACIÓN PRINCIPAL ===
+       Este menú aparece en todas las páginas y adapto su contenido según el estado de autenticación y rol del usuario.
+       Así, mantengo la navegación intuitiva y profesional para cada tipo de usuario.
     #}
     <nav>
-        {# El logo de la agencia (o solo el nombre si no tengo logo aún),
-           siempre me lleva a la página principal (Home) #}
+        {# Logo y nombre de la agencia, siempre enlaza al inicio. #}
         <a href="{{ path('home') }}">
-    <img src="assets/img/logo.png" alt="Logo CONSORIA Inmobiliaria" height="80" style="vertical-align: middle;">
-    <span style="font-weight:bold; font-size:18px; vertical-align: middle;">CONSORIA Inmobiliaria</span>
-</a>
+            <img src="assets/img/logo.png" alt="Logo CONSORIA Inmobiliaria" height="80" style="vertical-align: middle;">
+            <span style="font-weight:bold; font-size:18px; vertical-align: middle;">CONSORIA Inmobiliaria</span>
+        </a>
 
-
-        {# === Menú principal ===
-           Estas rutas son las esenciales según el REFERENTIEL y la práctica del sector
-           Siempre reviso que los paths coincidan con mis rutas Symfony #}
+        {# === Enlaces principales, visibles para todos === #}
         <a href="{{ path('home') }}">Inicio</a>
         <a href="{{ path('buy') }}">Comprar</a>
         <a href="{{ path('sell') }}">Vender</a>
         <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
         <a href="{{ path('about') }}">Nosotros</a>
         <a href="{{ path('contact') }}">Contacto</a>
-        {# Si más adelante necesito login, dashboard, etc., agrego aquí #}
+
+        {# === Sección dinámica según el usuario autenticado === #}
+        {% if app.user %}
+            {# Doy la bienvenida y muestro el email del usuario logueado. #}
+            <span>Hola, {{ app.user.email }}</span>
+            <a href="{{ path('app_logout') }}">Cerrar sesión</a>
+            {# Solo el rol CLIENTE ve el enlace a favoritos #}
+            {% if 'ROLE_CLIENT' in app.user.roles %}
+                <a href="{{ path('app_favoris') }}">Mis Favoritos</a>
+            {% endif %}
+        {% else %}
+            {# Si el usuario NO está autenticado, muestro login y registro #}
+            <a href="{{ path('app_login') }}" class="btn btn-outline-primary">Iniciar sesión</a>
+            <a href="{{ path('app_register') }}" class="btn btn-primary">Registrarse</a>
+        {% endif %}
     </nav>
 
-    {# Aquí puedo poner los mensajes flash (éxito, error, etc.) si lo necesito más adelante #}
+    {# === Mensajes flash para mostrar éxito, error, etc. en UX (puedes agregar aquí si usas flashbag) #}
 
     {# === CONTENIDO PRINCIPAL ===
-       Cada página extiende este archivo y pone su contenido en block body #}
+       Uso block body para que cada vista hija defina su contenido central #}
     <div class="container">
         {% block body %}{% endblock %}
     </div>
 
     {# === FOOTER ===
-       Pie de página fijo y sencillo, siempre presente
-       Más adelante lo puedo hacer responsivo, agregar más enlaces, etc. #}
+       Pie de página sencillo, fijo, con información de contacto. Lo puedo hacer responsivo más adelante. #}
     <footer>
         <div>
             <strong>Oficina en Bogotá - Colombia</strong>
