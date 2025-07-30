@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel Propietario{% endblock %}
+
+{% block body %}
+    <h1>Bienvenido Propietario {{ user.firstName }}</h1>
+    <p>Desde este panel podrás administrar los inmuebles que ofreces.</p>
+
+    <ul>
+        <li>Correo: <strong>{{ user.email }}</strong></li>
+        <li>Tipo: <strong>{{ user.typeUser }}</strong></li>
+        <li>Roles: {{ user.roles|join(', ') }}</li>
+    </ul>
+{% endblock %}

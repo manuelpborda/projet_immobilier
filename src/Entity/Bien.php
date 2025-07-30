@@ -6,6 +6,9 @@ use App\Repository\BienRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
+use App\Entity\Visite;
+use App\Entity\Offre;
 
 #[ORM\Entity(repositoryClass: BienRepository::class)]
 class Bien
@@ -40,10 +43,19 @@ class Bien
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $etatDuBien = null;
 
-    // --- Relación con propietario (opcional) ---
-    #[ORM\ManyToOne(inversedBy: 'biens')]
-    #[ORM\JoinColumn(name: "id_proprietaire", referencedColumnName: "id_proprietaire", nullable: true)]
-    private ?Proprietaire $proprietaire = null;
+    // --- Foto principal del bien ---
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $foto = null;
+
+    // --- Tipo de transacción: Venta, Arriendo, etc ---
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $tipoTransaccion = null;
+
+    // --- Relación con el propietario ---
+    // Antes se usaba la entidad Proprietaire, ahora uso la entidad User con typeUser = 'proprietaire'
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "id_proprietaire", referencedColumnName: "id", nullable: true)]
+    private ?User $proprietaire = null;
 
     // --- Relación con visitas ---
     #[ORM\OneToMany(targetEntity: Visite::class, mappedBy: 'bien')]
@@ -53,36 +65,14 @@ class Bien
     #[ORM\OneToMany(targetEntity: Offre::class, mappedBy: 'bien')]
     private Collection $offres;
 
-    // --- NUEVO: Tipo de transacción (Venta, Arriendo, Alquiler Vacacional) ---
-    #[ORM\Column(length: 30, nullable: true)]
-    private ?string $tipoTransaccion = null;
-
-    // --- Constructor ---
     public function __construct()
     {
         $this->visites = new ArrayCollection();
         $this->offres = new ArrayCollection();
     }
-    // ...otras propiedades...
 
-// --- Nueva propiedad para la foto ---
-#[ORM\Column(type: "string", length: 255, nullable: true)]
-private ?string $foto = null;
+    // --- Getters y setters ---
 
-// --- Getter y Setter para foto ---
-public function getFoto(): ?string
-{
-    return $this->foto;
-}
-
-public function setFoto(?string $foto): self
-{
-    $this->foto = $foto;
-    return $this;
-}
-
-
-    // --- Getters y Setters ---
     public function getId(): ?int { return $this->id; }
     public function setId(int $id): static { $this->id = $id; return $this; }
 
@@ -104,7 +94,6 @@ public function setFoto(?string $foto): self
     public function getEtatDuBien(): ?string { return $this->etatDuBien; }
     public function setEtatDuBien(?string $etatDuBien): static { $this->etatDuBien = $etatDuBien; return $this; }
 
-    // Getter y Setter para tipo de transacción
     public function getTipoTransaccion(): ?string { return $this->tipoTransaccion; }
     public function setTipoTransaccion(?string $tipoTransaccion): static
     {
@@ -112,7 +101,25 @@ public function setFoto(?string $foto): self
         return $this;
     }
 
+    public function getFoto(): ?string { return $this->foto; }
+    public function setFoto(?string $foto): static
+    {
+        $this->foto = $foto;
+        return $this;
+    }
+
+    // --- Relación con propietario: ahora apunta a la entidad User ---
+    public function getProprietaire(): ?User { return $this->proprietaire; }
+
+    public function setProprietaire(?User $proprietaire): static
+    {
+        $this->proprietaire = $proprietaire;
+        return $this;
+    }
+
+    // --- Relación con visitas ---
     public function getVisites(): Collection { return $this->visites; }
+
     public function addVisite(Visite $visite): static
     {
         if (!$this->visites->contains($visite)) {
@@ -121,6 +128,7 @@ public function setFoto(?string $foto): self
         }
         return $this;
     }
+
     public function removeVisite(Visite $visite): static
     {
         if ($this->visites->removeElement($visite)) {
@@ -131,10 +139,9 @@ public function setFoto(?string $foto): self
         return $this;
     }
 
-    public function getProprietaire(): ?Proprietaire { return $this->proprietaire; }
-    public function setProprietaire(?Proprietaire $proprietaire): static { $this->proprietaire = $proprietaire; return $this; }
-
+    // --- Relación con ofertas ---
     public function getOffres(): Collection { return $this->offres; }
+
     public function addOffre(Offre $offre): static
     {
         if (!$this->offres->contains($offre)) {
@@ -143,6 +150,7 @@ public function setFoto(?string $foto): self
         }
         return $this;
     }
+
     public function removeOffre(Offre $offre): static
     {
         if ($this->offres->removeElement($offre)) {

@@ -27,20 +27,45 @@
         <a href="{{ path('about') }}">Nosotros</a>
         <a href="{{ path('contact') }}">Contacto</a>
 
-        {# === Sección dinámica según el usuario autenticado === #}
+        {# -------------------- Sección dinámica según el usuario autenticado == este es el panel personalizado segun el usuario que ingresa-------- #}
         {% if app.user %}
             {# Doy la bienvenida y muestro el email del usuario logueado. #}
-            <span>Hola, {{ app.user.email }}</span>
+            <span>Bienvenido, {{ app.user.email }}</span>
             <a href="{{ path('app_logout') }}">Cerrar sesión</a>
             {# Solo el rol CLIENTE ve el enlace a favoritos #}
             {% if 'ROLE_CLIENT' in app.user.roles %}
-                <a href="{{ path('app_favoris') }}">Mis Favoritos</a>
+                <a href="{{ path('app_favoris') }}">Mis Inmuebles Favoritos</a>
             {% endif %}
         {% else %}
             {# Si el usuario NO está autenticado, muestro login y registro #}
             <a href="{{ path('app_login') }}" class="btn btn-outline-primary">Iniciar sesión</a>
             <a href="{{ path('app_register') }}" class="btn btn-primary">Registrarse</a>
+        {% endif %} <br>
+
+        <nav>
+    <!-- ... otros enlaces ... -->
+    {% if app.user %}
+        <span>Hola, {{ app.user.email }}</span>
+        <a href="{{ path('app_logout') }}">Cerrar sesión</a>
+        {% if 'ROLE_CLIENT' in app.user.roles %}
+            <a href="{{ path('app_favoris') }}">Mis Favoritos</a>
         {% endif %}
+        {% if 'ROLE_PROPRIETAIRE' in app.user.roles %}
+            <a href="{{ path('proprietaire_dashboard') }}" class="btn-proprietaire">
+                Panel Propietario
+            </a>
+        {% endif %}
+        {% if 'ROLE_ADMIN' in app.user.roles %}
+            <a href="{{ path('admin_dashboard') }}" class="btn-admin">
+                Panel Agente
+            </a>
+        {% endif %}
+    {% else %}
+        <a href="{{ path('app_login') }}">Iniciar sesión</a>
+        <a href="{{ path('app_register') }}">Registrarse</a>
+    {% endif %}
+</nav>
+
     </nav>
 
     {# === Mensajes flash para mostrar éxito, error, etc. en UX (puedes agregar aquí si usas flashbag) #}
@@ -48,6 +73,12 @@
     {# === CONTENIDO PRINCIPAL ===
        Uso block body para que cada vista hija defina su contenido central #}
     <div class="container">
+    {% for label, messages in app.flashes %}
+    {% for msg in messages %}
+        <div class="alert alert-{{ label }}">{{ msg }}</div>
+    {% endfor %}
+{% endfor %}
+
         {% block body %}{% endblock %}
     </div>
 

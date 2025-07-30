@@ -34,9 +34,25 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
+    
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+      
+    # Solo usuarios con ROLE_ADMIN pueden entrar a /admin/*
+    - { path: ^/admin, roles: ROLE_ADMIN }
+
+    # Solo usuarios con ROLE_CLIENT pueden entrar a /client/*
+    - { path: ^/client, roles: ROLE_CLIENT }
+
+    # Solo usuarios con ROLE_PROPRIETAIRE pueden entrar a /proprietaire/*
+    - { path: ^/proprietaire, roles: ROLE_PROPRIETAIRE }
+
+    # Cualquiera puede acceder a login y registro
+    - { path: ^/login, roles: PUBLIC_ACCESS }
+    - { path: ^/register, roles: PUBLIC_ACCESS }
+
+    # Todo lo demás requiere estar autenticado
+    - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+
 
 when@test:
     security:

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel Administrador{% endblock %}
+
+{% block body %}
+    <h1>Bienvenido, administrador {{ user.firstName }}</h1>
+    <p>Desde aquí puedes gestionar propiedades, revisar usuarios y controlar el sistema.</p>
+
+    <ul>
+        <li>Tu email: <strong>{{ user.email }}</strong></li>
+        <li>Tipo de usuario: <strong>{{ user.typeUser }}</strong></li>
+        <li>Roles asignados: {{ user.roles|join(', ') }}</li>
+    </ul>
+{% endblock %}

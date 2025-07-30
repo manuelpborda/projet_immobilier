@@ -1,55 +1,68 @@
 <?php
+
 namespace App\DataFixtures;
 
-use App\Entity\Agent;
-use App\Entity\Client;
+use App\Entity\User;
 use App\Entity\Bien;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private UserPasswordHasherInterface $passwordHasher;
+
+    // Inyecto el hasher para codificar contraseñas
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     public function load(ObjectManager $manager): void
     {
-        // --- Creo agentes de prueba para tener variedad de roles en el sistema ---
-        $agent1 = new Agent();
-        $agent1->setNom('García');
-        $agent1->setPrenom('Juan');
+        // --- Agentes (typeUser = 'admin' o 'agent') ---
+        $agent1 = new User();
         $agent1->setEmail('juan.garcia@inmobiliaria.com');
-        $agent1->setTelephone('3101234567');
-        $agent1->setPassword('secret123');
-        $agent1->setRoles(['ROLE_AGENT']);
-        $agent1->setTypeDeContrat('Indefinido');
-        $agent1->setDateEmbauche(new \DateTime('2022-01-15'));
+        $agent1->setFirstName('Juan');
+        $agent1->setLastName('García');
+        $agent1->setPhone('3101234567');
+        $agent1->setTypeUser('admin');
+        $agent1->setRoles(['ROLE_ADMIN']);
+        $agent1->setPassword($this->passwordHasher->hashPassword($agent1, 'secret123'));
         $manager->persist($agent1);
 
-        $agent2 = new Agent();
-        $agent2->setNom('Martínez');
-        $agent2->setPrenom('Camila');
+        $agent2 = new User();
         $agent2->setEmail('camila.martinez@inmobiliaria.com');
-        $agent2->setTelephone('3207654321');
-        $agent2->setPassword('secret456');
-        $agent2->setRoles(['ROLE_AGENT']);
-        $agent2->setTypeDeContrat('Temporal');
-        $agent2->setDateEmbauche(new \DateTime('2023-03-10'));
+        $agent2->setFirstName('Camila');
+        $agent2->setLastName('Martínez');
+        $agent2->setPhone('3207654321');
+        $agent2->setTypeUser('admin');
+        $agent2->setRoles(['ROLE_ADMIN']);
+        $agent2->setPassword($this->passwordHasher->hashPassword($agent2, 'secret456'));
         $manager->persist($agent2);
 
-        // --- Creo clientes de ejemplo para las funcionalidades de favoritos ---
-        $client1 = new Client();
-        $client1->setNom('Rodríguez');
-        $client1->setPrenom('Sofía');
+        // --- Clientes de ejemplo ---
+        $client1 = new User();
         $client1->setEmail('sofia.rodriguez@gmail.com');
-        $client1->setTelephone('3119988776');
+        $client1->setFirstName('Sofía');
+        $client1->setLastName('Rodríguez');
+        $client1->setPhone('3119988776');
+        $client1->setTypeUser('client');
+        $client1->setRoles(['ROLE_CLIENT']);
+        $client1->setPassword($this->passwordHasher->hashPassword($client1, 'clientpass'));
         $manager->persist($client1);
 
-        $client2 = new Client();
-        $client2->setNom('Pérez');
-        $client2->setPrenom('Andrés');
+        $client2 = new User();
         $client2->setEmail('andres.perez@gmail.com');
-        $client2->setTelephone('3125566778');
+        $client2->setFirstName('Andrés');
+        $client2->setLastName('Pérez');
+        $client2->setPhone('3125566778');
+        $client2->setTypeUser('client');
+        $client2->setRoles(['ROLE_CLIENT']);
+        $client2->setPassword($this->passwordHasher->hashPassword($client2, 'clientpass'));
         $manager->persist($client2);
 
-        // --- Creo dos bienes fijos (uno apartamento y uno casa), asignando sus fotos ---
+        // --- Bienes fijos ---
         $bien1 = new Bien();
         $bien1->setTypeDeBien('Appartement');
         $bien1->setVille('Bogotá');
@@ -58,7 +71,8 @@ class AppFixtures extends Fixture
         $bien1->setSurfaceM2(90);
         $bien1->setEtatDuBien('Neuf');
         $bien1->setTipoTransaccion('venta');
-        $bien1->setFoto('assets/img/apartamentos/apto1.jpg'); // Asigno la foto antes de persistir
+        $bien1->setFoto('assets/img/apartamentos/apto1.jpg');
+        $bien1->setProprietaire($agent1); // Asigno el agente como propietario
         $manager->persist($bien1);
 
         $bien2 = new Bien();
@@ -69,10 +83,11 @@ class AppFixtures extends Fixture
         $bien2->setSurfaceM2(180);
         $bien2->setEtatDuBien('Rénové');
         $bien2->setTipoTransaccion('arriendo');
-        $bien2->setFoto('assets/img/casas/casa1.jpg'); // Asigno la foto antes de persistir
+        $bien2->setFoto('assets/img/casas/casa1.jpg');
+        $bien2->setProprietaire($agent2);
         $manager->persist($bien2);
 
-        // --- Genero automáticamente 30 bienes con fotos variadas para pruebas y paginación ---
+        // --- Bienes dinámicos (30 aleatorios) ---
         $ciudades = ['Bogotá', 'Medellín', 'Cartagena', 'Villavicencio'];
         $barrios = [
             'Bogotá' => ['Chapinero', 'Usaquén', 'Teusaquillo', 'Cedritos'],
@@ -87,7 +102,6 @@ class AppFixtures extends Fixture
         for ($i = 1; $i <= 30; $i++) {
             $bien = new Bien();
 
-            // Elijo valores aleatorios para dar realismo a los datos de ejemplo
             $ciudad = $ciudades[array_rand($ciudades)];
             $barrio = $barrios[$ciudad][array_rand($barrios[$ciudad])];
             $tipo = $tipos[array_rand($tipos)];
@@ -102,16 +116,17 @@ class AppFixtures extends Fixture
             $bien->setEtatDuBien($etat);
             $bien->setTipoTransaccion($tipoTransaccion);
 
-            // Asigno una foto acorde al tipo de bien, eligiendo aleatoriamente entre 16 imágenes de cada tipo
             if ($tipo === 'Maison') {
                 $bien->setFoto('assets/img/casas/casa' . rand(1, 16) . '.jpg');
             } else {
                 $bien->setFoto('assets/img/apartamentos/apto' . rand(1, 16) . '.jpg');
             }
+
+            // Asigno propietario aleatorio (agente1 o agente2)
+            $bien->setProprietaire(rand(0, 1) ? $agent1 : $agent2);
             $manager->persist($bien);
         }
 
-        // --- Guardo todos los cambios en la base de datos ---
         $manager->flush();
     }
 }

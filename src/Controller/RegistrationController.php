@@ -4,71 +4,53 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
-    /**
-     * Este método muestra y procesa el formulario de registro.
-     * Uso la ruta "/register" para que los usuarios puedan acceder fácilmente desde el menú principal.
-     */
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
-        // Creo una nueva instancia de usuario
+        // Aquí creo un nuevo objeto User vacío que se llenará con los datos del formulario
         $user = new User();
 
-        // Construyo el formulario usando el formulario personalizado RegistrationFormType
+        // Creo el formulario usando el tipo que definimos antes
         $form = $this->createForm(RegistrationFormType::class, $user);
 
-        // Procesa la solicitud (POST o GET)
+        // Symfony procesa automáticamente la petición HTTP y rellena el objeto $user si los datos son válidos
         $form->handleRequest($request);
 
-        // Si el formulario fue enviado y es válido, procedo al registro
+        // Si el formulario fue enviado y es válido...
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hasheo la contraseña ingresada por el usuario, nunca guardo texto plano
-            $user->setPassword(
-                $passwordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            // Tomo la contraseña en texto plano que viene del formulario
+            $plainPassword = $form->get('plainPassword')->getData();
 
-            // Obtengo el tipo de usuario seleccionado en el formulario (cliente, propietario, agente)
-            $userType = $form->get('type')->getData();
+            // Codifico esa contraseña antes de guardarla
+            $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+            $user->setPassword($hashedPassword);
 
-            // Asigno roles automáticamente según el tipo de usuario elegido
-            switch ($userType) {
-                case 'agent':
-                    $user->setRoles(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']);
-                    break;
-                case 'proprietaire':
-                    $user->setRoles(['ROLE_PROPRIETAIRE']);
-                    break;
-                case 'client':
-                default:
-                    $user->setRoles(['ROLE_CLIENT']);
-                    break;
-            }
+            // Opcional: podría agregar manualmente roles si se quisiera.
+            // En este caso lo manejamos con el campo `typeUser` que luego se transforma a roles automáticamente
 
-            // Persiste el usuario en la base de datos
+            // Guardo el nuevo usuario en la base de datos
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Agrego un mensaje flash para informar éxito en el registro
-            $this->addFlash('success', '¡Usuario registrado exitosamente! Ahora puedes iniciar sesión.');
+            // Opcional: mensaje de confirmación
+            $this->addFlash('success', 'Usuario registrado exitosamente');
 
-            // Redirijo al login (puedes cambiar a otra ruta si lo prefieres)
-            return $this->redirectToRoute('home');
+            // Redirijo según su tipo de usuario
+            return $this->redirectToRoute('app_login'); // Puedo cambiar esto según los roles
         }
 
-        // Renderizo la vista del formulario de registro
-        return $this->render('registration/index.html.twig', [
+        // Si aún no se envió o hay errores, muestro el formulario
+        return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }

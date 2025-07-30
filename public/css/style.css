@@ -230,6 +230,21 @@ nav a:hover {
     filter: brightness(1.11);
 }
 
+/* Boton EXCLUSIVO para propietario mas visible */
+.btn-proprietaire {
+    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
+    color: var(--luxe-black);
+    border-radius: 8px;
+    padding: 6px 18px;
+    font-weight: bold;
+    margin-left: 12px;
+}
+.btn-proprietaire:hover {
+    background: linear-gradient(90deg, var(--luxe-gold-bright), var(--luxe-gold));
+    color: var(--luxe-black);
+    box-shadow: 0 6px 24px var(--luxe-gold);
+}
+
 /* =============================
    AVISOS Y ALERTAS
    ============================= */
