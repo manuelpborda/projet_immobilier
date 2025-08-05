@@ -350,6 +350,54 @@ footer {
     box-shadow: none;
     pointer-events: none;
 }
+/* ========== DETALLE DE BIEN ========= */
+.detalle-bien {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin: 3em auto;
+    max-width: 1000px;
+    padding: 0 1em;
+    justify-content: center;
+}
+
+.detalle-bien-imagen {
+    flex: 1 1 450px;
+    text-align: center;
+}
+
+.detalle-img {
+    max-width: 100%;
+    border-radius: 16px;
+    box-shadow: var(--shadow-gold);
+    height: auto; /* Permite altura proporcional */
+}
+
+.detalle-bien-info {
+    flex: 1 1 450px;
+    color: var(--luxe-white);
+    font-size: 1.05em;
+    line-height: 1.7em;
+}
+
+.detalle-bien-info h1 {
+    color: var(--luxe-gold);
+    margin-bottom: 0.5em;
+}
+
+.detalle-bien-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.detalle-bien-info li {
+    margin-bottom: 0.8em;
+    border-bottom: 1px solid var(--luxe-gold);
+    padding-bottom: 0.4em;
+}
+
+
+
 
 /* =============================
    RESPONSIVE
@@ -380,6 +428,71 @@ footer {
     }
 }
 
-/* Fin del CSS de branding dorado premium. 
-   Todos los botones, avisos y paginación ahora usan dorados
-   para máxima coherencia y experiencia de lujo. */
+
+/* =============================
+   ADMIN PANEL - Tablas y Acciones
+   ============================= */
+.admin-panel {
+    display: flex;
+    gap: 16px;
+    margin-top: 1.5em;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2em;
+    background: var(--luxe-white);
+    color: var(--luxe-black);
+    border: 2px solid var(--luxe-gold);
+    box-shadow: var(--shadow-gold);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.admin-table th, .admin-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--luxe-gold);
+    text-align: left;
+}
+
+.admin-table th {
+    background: var(--luxe-gold);
+    color: var(--luxe-black);
+    font-weight: bold;
+}
+
+.admin-table tr:hover {
+    background: var(--luxe-gold-bright);
+    color: var(--luxe-black);
+}
+
+/* para el graico estdisticas en perfil admin */
+
+.admin-table, .tabla-estadisticas {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2em auto;
+    background: var(--luxe-white);
+    color: var(--luxe-black);
+    box-shadow: var(--shadow-gold);
+}
+
+.admin-table th, .tabla-estadisticas th,
+.admin-table td, .tabla-estadisticas td {
+    border: 1px solid var(--luxe-gold);
+    padding: 10px;
+}
+
+.admin-table th, .tabla-estadisticas th {
+    background: var(--luxe-gold);
+    color: var(--luxe-black);
+}
+
+.admin-table tr:nth-child(even), .tabla-estadisticas tr:nth-child(even) {
+    background: #fdfaf0;
+}
+
+.admin-table tr:hover, .tabla-estadisticas tr:hover {
+    background: var(--luxe-grey);
+}

@@ -10,9 +10,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Validator\Constraints\IsTrue;
 
 class BienType extends AbstractType
 {
+    // En este método defino todos los campos del formulario para crear o editar un Bien (inmueble)
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -59,7 +62,18 @@ class BienType extends AbstractType
                 'label' => 'Ruta de la foto (ej: assets/img/casas/casa1.jpg)',
                 'required' => false,
             ])
-        ;
+
+            // Agrego el checkbox obligatorio para cumplir RGPD
+            ->add('aceptaTerminos', CheckboxType::class, [
+                'label' => 'Acepto el tratamiento de los datos del inmueble conforme a la política de privacidad',
+                'mapped' => false, // No se guarda en base de datos
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Debes aceptar la política de privacidad para continuar.',
+                    ])
+                ],
+                'required' => true,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

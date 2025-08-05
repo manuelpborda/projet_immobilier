@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
+use App\Repository\ContactMessageRepository; // Importa correctamente el repositorio
 use Doctrine\ORM\Mapping as ORM;
-
 
 #[ORM\Entity(repositoryClass: ContactMessageRepository::class)]
 class ContactMessage
@@ -16,7 +16,7 @@ class ContactMessage
     #[ORM\Column(type: "string", length: 255)]
     private $name;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string", length: 20, nullable: true)] // Corrijo tipo y longitud del teléfono
     private $phone;
 
     #[ORM\Column(type: "string", length: 255)]
@@ -25,7 +25,11 @@ class ContactMessage
     #[ORM\Column(type: "text")]
     private $message;
 
-    // Getters and setters
+    #[ORM\Column(type: "datetime", nullable: true)] // Fecha de envío del mensaje
+    private $fechaEnvio;
+
+    // === GETTERS y SETTERS ===
+
     public function getId(): ?int
     {
         return $this->id;
@@ -39,7 +43,6 @@ class ContactMessage
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -48,10 +51,9 @@ class ContactMessage
         return $this->phone;
     }
 
-    public function setPhone(string $phone): self
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
-
         return $this;
     }
 
@@ -63,7 +65,6 @@ class ContactMessage
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -75,7 +76,17 @@ class ContactMessage
     public function setMessage(string $message): self
     {
         $this->message = $message;
+        return $this;
+    }
 
+    public function getFechaEnvio(): ?\DateTimeInterface
+    {
+        return $this->fechaEnvio;
+    }
+
+    public function setFechaEnvio(\DateTimeInterface $fechaEnvio): self
+    {
+        $this->fechaEnvio = $fechaEnvio;
         return $this;
     }
 }

@@ -7,7 +7,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Bien>
+ * Repositorio de la entidad Bien.
+ * Aquí centralizo todas las consultas complejas relacionadas a inmuebles,
+ * como estadísticas y filtros personalizados.
  */
 class BienRepository extends ServiceEntityRepository
 {
@@ -16,28 +18,29 @@ class BienRepository extends ServiceEntityRepository
         parent::__construct($registry, Bien::class);
     }
 
-//    /**
-//     * @return Bien[] Returns an array of Bien objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * Devuelve un array con el número de inmuebles por tipo (ej: Casa, Apartamento).
+     * Este método me permite mostrar estadísticas agrupadas en el panel admin.
+     */
+    public function countByType(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->select('b.typeDeBien AS typeDeBien, COUNT(b.id) AS count')
+            ->groupBy('b.typeDeBien')
+            ->getQuery()
+            ->getArrayResult();
+    }
 
-//    public function findOneBySomeField($value): ?Bien
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * Devuelve un array con el número de inmuebles por ciudad.
+     * Este dato me sirve para ver la distribución geográfica de propiedades.
+     */
+    public function countByCity(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->select('b.ville AS ville, COUNT(b.id) AS count')
+            ->groupBy('b.ville')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

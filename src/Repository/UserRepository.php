@@ -5,14 +5,8 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
-/**
- * @extends ServiceEntityRepository<User>
- */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -20,41 +14,42 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * Used to upgrade (rehash) the user's password automatically over time.
+     * Cuenta cantidad de inmuebles agrupados por tipo
+     * Este código es parte de tu lógica original, no lo modifico.
      */
-    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    public function countByType(): array
     {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
-        }
-
-        $user->setPassword($newHashedPassword);
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        return $this->createQueryBuilder('b')
+            ->select('b.typeDeBien AS typeDeBien, COUNT(b.id) AS count')
+            ->groupBy('b.typeDeBien')
+            ->getQuery()
+            ->getArrayResult();
     }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Cuenta cantidad de inmuebles agrupados por ciudad
+     * Este código es parte de tu lógica original, no lo modifico.
+     */
+    public function countByCity(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->select('b.ville AS ville, COUNT(b.id) AS count')
+            ->groupBy('b.ville')
+            ->getQuery()
+            ->getArrayResult();
+    }
 
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * NUEVO MÉTODO: Cuenta usuarios que contienen un rol específico (campo JSON)
+     * Compatible con Doctrine y MySQL sin usar JSON_CONTAINS.
+     */
+    public function countByRole(string $role): int
+    {
+        return (int) $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%"' . $role . '"%') // Busca el rol como texto en el array JSON
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

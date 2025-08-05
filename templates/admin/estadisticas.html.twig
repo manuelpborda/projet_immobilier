@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block title %}Estadísticas Admin{% endblock %}
+{% block body %}
+<div class="section-texto">
+    <h1>Estadísticas Inmuebles</h1>
+    <h2>Por Tipo</h2>
+    <table class="tabla-estadisticas">
+        <thead><tr><th>Tipo</th><th>Cantidad</th></tr></thead>
+        <tbody>
+            {% for t in porTipo %}
+                <tr><td>{{ t.typeDeBien }}</td><td>{{ t.count }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Por Ciudad</h2>
+    <table class="tabla-estadisticas">
+        <thead><tr><th>Ciudad</th><th>Cantidad</th></tr></thead>
+        <tbody>
+            {% for c in porCiudad %}
+                <tr><td>{{ c.ville }}</td><td>{{ c.count }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('admin_dashboard') }}" class="btn-warning" style="margin-top: 2em; display: inline-block;">
+    ← Volver al Panel
+</a>
+
+</div>
+{% endblock %}

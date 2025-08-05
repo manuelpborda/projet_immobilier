@@ -1,14 +1,19 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Panel Administrador{% endblock %}
-
+{% block title %}Dashboard Admin{% endblock %}
 {% block body %}
-    <h1>Bienvenido, administrador {{ user.firstName }}</h1>
-    <p>Desde aquí puedes gestionar propiedades, revisar usuarios y controlar el sistema.</p>
-
+<div class="section-texto">
+    <h1>Panel de Administración</h1>
+    <p>Resumen general del sistema</p>
     <ul>
-        <li>Tu email: <strong>{{ user.email }}</strong></li>
-        <li>Tipo de usuario: <strong>{{ user.typeUser }}</strong></li>
-        <li>Roles asignados: {{ user.roles|join(', ') }}</li>
+        <li>Total Usuarios: <strong>{{ totalUsuarios }}</strong></li>
+        <li>Clientes: <strong>{{ clientes }}</strong></li>
+        <li>Propietarios: <strong>{{ propietarios }}</strong></li>
+        <li>Administradores: <strong>{{ administradores }}</strong></li>
+        <li>Total Inmuebles: <strong>{{ totalBienes }}</strong></li>
     </ul>
+    <div class="admin-panel">
+        <a href="{{ path('admin_usuarios') }}" class="btn-primary">Ver Usuarios</a>
+        <a href="{{ path('admin_estadisticas') }}" class="btn-primary">Ver Estadísticas</a>
+    </div>
+</div>
 {% endblock %}

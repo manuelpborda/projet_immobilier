@@ -4,86 +4,90 @@
     <meta charset="UTF-8">
     {# Título principal de la web. Uso block title para personalizarlo por página #}
     <title>{% block title %}CONSORIA Inmobiliaria{% endblock %}</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> {#enlazar css en public #}
-
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> {# Enlazo el CSS ubicado en /public/css/style.css #}
 </head>
 <body>
-    {# === MENÚ DE NAVEGACIÓN PRINCIPAL ===
-       Este menú aparece en todas las páginas y adapto su contenido según el estado de autenticación y rol del usuario.
-       Así, mantengo la navegación intuitiva y profesional para cada tipo de usuario.
+
+    {# === MENÚ DE NAVEGACIÓN PERSONALIZADO ===
+       Este menú se adapta según el tipo de usuario que esté autenticado. Mantengo coherencia y seguridad en la interfaz.
     #}
     <nav>
-        {# Logo y nombre de la agencia, siempre enlaza al inicio. #}
+        {# LOGO DE LA EMPRESA
+           Aquí muestro solo el logo de CONSORIA Inmobiliaria (sin texto), agrandado para mejor visibilidad.
+           Al hacer clic, redirige siempre al inicio (ruta 'home').
+        #}
         <a href="{{ path('home') }}">
-            <img src="assets/img/logo.png" alt="Logo CONSORIA Inmobiliaria" height="80" style="vertical-align: middle;">
-            <span style="font-weight:bold; font-size:18px; vertical-align: middle;">CONSORIA Inmobiliaria</span>
+            <img src="/assets/img/logo.png" alt="Logo CONSORIA Inmobiliaria" height="100" style="vertical-align: middle;">
         </a>
 
-        {# === Enlaces principales, visibles para todos === #}
-        <a href="{{ path('home') }}">Inicio</a>
-        <a href="{{ path('buy') }}">Comprar</a>
-        <a href="{{ path('sell') }}">Vender</a>
-        <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
-        <a href="{{ path('about') }}">Nosotros</a>
-        <a href="{{ path('contact') }}">Contacto</a>
-
-        {# -------------------- Sección dinámica según el usuario autenticado == este es el panel personalizado segun el usuario que ingresa-------- #}
+        {# NAVBAR PERSONALIZADA POR ROL. Acomodo enlaces y opciones según el usuario autenticado. #}
         {% if app.user %}
-            {# Doy la bienvenida y muestro el email del usuario logueado. #}
-            <span>Bienvenido, {{ app.user.email }}</span>
-            <a href="{{ path('app_logout') }}">Cerrar sesión</a>
-            {# Solo el rol CLIENTE ve el enlace a favoritos #}
-            {% if 'ROLE_CLIENT' in app.user.roles %}
-                <a href="{{ path('app_favoris') }}">Mis Inmuebles Favoritos</a>
+
+            {# === ADMIN === #}
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <a href="{{ path('admin_dashboard') }}">Panel Admin</a>
+                <a href="{{ path('admin_usuarios') }}">Usuarios</a>
+                <a href="{{ path('admin_estadisticas') }}">Estadísticas</a>
+                <span>Bienvenido, {{ app.user.email }}</span>
+                <a href="{{ path('app_logout') }}">Cerrar sesión</a>
+
+            {# === PROPIETARIO === #}
+            {% elseif 'ROLE_PROPRIETAIRE' in app.user.roles %}
+                <a href="{{ path('home') }}">Inicio</a>
+                <a href="{{ path('buy') }}">Comprar</a>
+                <a href="{{ path('sell') }}">Vender</a>
+                <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
+                <a href="{{ path('proprietaire_dashboard') }}">Panel Propietario</a>
+                <a href="{{ path('proprietaire_publicar_bien') }}">Publicar Bien</a>
+                <a href="{{ path('contact') }}">Contacto</a>
+                <span>Bienvenido, {{ app.user.email }}</span>
+                <a href="{{ path('app_logout') }}">Cerrar sesión</a>
+
+            {# === CLIENTE === #}
+            {% elseif 'ROLE_CLIENT' in app.user.roles %}
+                <a href="{{ path('home') }}">Inicio</a>
+                <a href="{{ path('buy') }}">Comprar</a>
+                <a href="{{ path('sell') }}">Vender</a>
+                <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
+                <a href="{{ path('client_dashboard') }}">Mi Panel</a>
+                <a href="{{ path('favoritos_index') }}">Mis Favoritos</a>
+                <a href="{{ path('contact') }}">Contacto</a>
+                <span>Bienvenido, {{ app.user.email }}</span>
+                <a href="{{ path('app_logout') }}">Cerrar sesión</a>
             {% endif %}
+
         {% else %}
-            {# Si el usuario NO está autenticado, muestro login y registro #}
+            {# === VISITANTE (NO LOGUEADO) === #}
+            <a href="{{ path('home') }}">Inicio</a>
+            <a href="{{ path('buy') }}">Comprar</a>
+            <a href="{{ path('sell') }}">Vender</a>
+            <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
+            <a href="{{ path('about') }}">Nosotros</a>
+            <a href="{{ path('contact') }}">Contacto</a>
             <a href="{{ path('app_login') }}" class="btn btn-outline-primary">Iniciar sesión</a>
             <a href="{{ path('app_register') }}" class="btn btn-primary">Registrarse</a>
-        {% endif %} <br>
-
-        <nav>
-    <!-- ... otros enlaces ... -->
-    {% if app.user %}
-        <span>Hola, {{ app.user.email }}</span>
-        <a href="{{ path('app_logout') }}">Cerrar sesión</a>
-        {% if 'ROLE_CLIENT' in app.user.roles %}
-            <a href="{{ path('app_favoris') }}">Mis Favoritos</a>
         {% endif %}
-        {% if 'ROLE_PROPRIETAIRE' in app.user.roles %}
-            <a href="{{ path('proprietaire_dashboard') }}" class="btn-proprietaire">
-                Panel Propietario
-            </a>
-        {% endif %}
-        {% if 'ROLE_ADMIN' in app.user.roles %}
-            <a href="{{ path('admin_dashboard') }}" class="btn-admin">
-                Panel Agente
-            </a>
-        {% endif %}
-    {% else %}
-        <a href="{{ path('app_login') }}">Iniciar sesión</a>
-        <a href="{{ path('app_register') }}">Registrarse</a>
-    {% endif %}
-</nav>
-
     </nav>
 
-    {# === Mensajes flash para mostrar éxito, error, etc. en UX (puedes agregar aquí si usas flashbag) #}
-
-    {# === CONTENIDO PRINCIPAL ===
-       Uso block body para que cada vista hija defina su contenido central #}
+    {# === MENSAJES FLASH ===
+       Aquí muestro mensajes generados por acciones del usuario (éxito, error, etc.)
+    #}
     <div class="container">
-    {% for label, messages in app.flashes %}
-    {% for msg in messages %}
-        <div class="alert alert-{{ label }}">{{ msg }}</div>
-    {% endfor %}
-{% endfor %}
+        {% for label, messages in app.flashes %}
+            {% for msg in messages %}
+                <div class="alert alert-{{ label }}">{{ msg }}</div>
+            {% endfor %}
+        {% endfor %}
 
+        {# === BLOQUE PRINCIPAL ===
+           Cada página que extiende esta plantilla define su contenido en este bloque.
+        #}
         {% block body %}{% endblock %}
     </div>
 
-    {# === FOOTER ===
-       Pie de página sencillo, fijo, con información de contacto. Lo puedo hacer responsivo más adelante. #}
+    {# === PIE DE PÁGINA FIJO ===
+       Contiene la dirección en Colombia y Francia, más un contacto rápido.
+    #}
     <footer>
         <div>
             <strong>Oficina en Bogotá - Colombia</strong>
