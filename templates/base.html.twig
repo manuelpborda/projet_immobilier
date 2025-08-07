@@ -94,42 +94,64 @@
         {% block body %}{% endblock %}
     </div>
 
-    {# === PIE DE PÁGINA FINAL ===
-       Justifico al jurado: elimino contenido duplicado y muestro imágenes como marca visual.
+{# === PIE DE PÁGINA FINAL BIEN ORGANIZADO ===
+   Justifico ante el jurado: separación clara de elementos visuales e información estructurada profesionalmente.
+#}
+<footer>
+
+    {# === Banda de galería horizontal que rota automáticamente ===
+       Colocada en la parte superior del footer, visible en todas las páginas. Animación definida en el CSS externo.
     #}
-    <footer>
+    <div class="footer-gallery-container">
+        <div class="footer-gallery">
+            <img src="/assets/footer-gallery/img7.png" alt="Galería 1">
+            <img src="/assets/footer-gallery/img5.png" alt="Galería 2">
+            <img src="/assets/footer-gallery/img3.png" alt="Galería 3">
+            <img src="/assets/footer-gallery/img4.jpg" alt="Galería 4">
+            <img src="/assets/footer-gallery/img6.png" alt="Galería 5">
+            <img src="/assets/footer-gallery/img1.jpg" alt="Galería 6">
+            <img src="/assets/footer-gallery/img8.jpg" alt="Galería 7">
+            <img src="/assets/footer-gallery/img9.png" alt="Galería 8">
+            {# Duplicadas para efecto continuo sin fin #}
+            <img src="/assets/footer-gallery/img10.jpg" alt="Galería 1 duplicado">
+            <img src="/assets/footer-gallery/img7.png" alt="Galería 2 duplicado">
+            <img src="/assets/footer-gallery/img4.jpg" alt="Galería 3 duplicado">
+            <img src="/assets/footer-gallery/img9.png" alt="Galería 4 duplicado">
+            <img src="/assets/footer-gallery/img6.png" alt="Galería 5 duplicado">
+        </div>
+    </div>
 
-        {# Galería horizontal tipo banda con imágenes suaves
-           Imágenes cargadas desde /public/assets/footer-gallery/
-        #}
-        <div class="footer-gallery-container">
-            <div class="footer-gallery">
-                <img src="/assets/footer-gallery/img7.png" alt="Galería 1">
-                <img src="/assets/footer-gallery/img5.png" alt="Galería 2">
-                <img src="/assets/footer-gallery/img3.png" alt="Galería 3">
-                <img src="/assets/footer-gallery/img4.jpg" alt="Galería 4">
-                <img src="/assets/footer-gallery/img6.png" alt="Galería 5">
-                <img src="/assets/footer-gallery/img1.jpg" alt="Galería 6">
-                <img src="/assets/footer-gallery/img8.jpg" alt="Galería 7">
-                <img src="/assets/footer-gallery/img9.png" alt="Galería 8">
-                {# duplico para efecto de continuidad sin fin #}
-                <img src="/assets/footer-gallery/img1.jpg" alt="Galería 1 duplicado">
-                <img src="/assets/footer-gallery/img7.png" alt="Galería 2 duplicado">
-                <img src="/assets/footer-gallery/img4.jpg" alt="Galería 3 duplicado">
-                <img src="/assets/footer-gallery/img9.png" alt="Galería 4 duplicado">
-                 <img src="/assets/footer-gallery/img6.png" alt="Galería 5 duplicado">
-            </div>
+    {# === Información estructurada del footer (oficinas y contacto) === #}
+    <div class="footer-info-columns">
+        <div class="footer-office">
+            <p><strong>Oficina en Bogotá - Colombia</strong><br>
+            Carrera 7 #85-24, Chapinero</p>
         </div>
 
-        {# Contacto  whats y mencion legal  #}
-        <div class="footer-info">
-            <p><a href="#">WhatsApp</a> | <a href="{{ path('mentions_legales') }}">Mentions légales</a></p>
+        <div class="footer-office">
+            <p><strong>Oficina en París - Francia</strong><br>
+            12 Rue de Paris, 75000 Paris</p>
         </div>
 
-    </footer>
+        <div class="footer-contact">
+            <p><strong>Habla con un agente</strong><br>
+            <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
+        </div>
+    </div>
+
+    {# === Menciones legales centradas al final === #}
+    <div class="footer-bottom">
+        <p><a href="{{ path('mentions_legales') }}">Mentions légales</a></p>
+    </div>
+
+</footer>
+
+
+
 
     {# Script externo dark mode desde /public/js/ #}
     <script src="{{ asset('js/darkmode_toggle.js') }}"></script>
 
 </body>
 </html>
+

@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 final class FavorisController extends AbstractController
 {
     // Página principal de favoritos para clientes autenticados
-    #[Route('/favoritos', name: 'app_favoris')]
+    #[Route('/favoritos', name: 'favoritos_index')]
     public function index(FavoritoRepository $favoritoRepository): Response
     {
         // Solo permito acceso a clientes autenticados

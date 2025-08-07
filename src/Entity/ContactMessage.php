@@ -25,9 +25,12 @@ class ContactMessage
     #[ORM\Column(type: "text")]
     private $message;
 
-    #[ORM\Column(type: "datetime", nullable: true)] // Fecha de envío del mensaje
+    #[ORM\Column(type: "datetime", options:["default"=>"CURRENT_TIMESTAMP"])] // Fecha de envío del mensaje
     private $fechaEnvio;
-
+public function __construct()
+{
+    $this->fechaEnvio = new \DateTime();
+}
     // === GETTERS y SETTERS ===
 
     public function getId(): ?int

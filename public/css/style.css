@@ -558,28 +558,31 @@ html.light-mode .carte-bien {
 }
 
 
-/* ---------------------Galería horizontal en footer con imágenes rotativas------- */
+/* === Galería horizontal tipo banda === */
 .footer-gallery-container {
     overflow: hidden;
     width: 100%;
-    background: var(--luxe-black);
+    background: #000;
     border-top: 2px solid var(--luxe-gold);
-    margin-top: 40px;
 }
 
 .footer-gallery {
     display: flex;
-    width: max-content;
+    width: fit-content;
     animation: scrollGallery 25s linear infinite;
 }
 
 .footer-gallery img {
-    height: 160px; /* MÁS GRANDE */
+    height: 150px; /*tamano de imagenes galeria */
     margin: 10px 24px;
-    object-fit: cover;
-    border-radius: 8px; /* BORDE SUAVIZADO */
-    box-shadow: 0 2px 10px #c19d5344;
+    object-fit: contain;
     flex-shrink: 0;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.footer-gallery img:hover {
+    transform: scale(1.05);
 }
 
 @keyframes scrollGallery {
@@ -587,22 +590,42 @@ html.light-mode .carte-bien {
     100% { transform: translateX(-50%); }
 }
 
-/* Información legal */
-.footer-info {
-    background: var(--luxe-black);
-    color: var(--luxe-gold-bright);
-    padding: 18px 0;
-    text-align: center;
-    font-size: 1rem;
+/* Información del footer en columnas  y contacto con agente whatsaap lo dejo al a derecha */
+/* === Estructura del footer === */
+.footer-info-columns {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 24px 16px;
+    background-color: var(--luxe-black);
     border-top: 2px solid var(--luxe-gold);
+    color: var(--luxe-white);
 }
 
-.footer-info a {
-    color: var(--luxe-gold-bright);
+.footer-office,
+.footer-contact {
+    flex: 1;
+    min-width: 220px;
+    margin: 12px;
+}
+
+.footer-contact a {
+    color: var(--luxe-gold);
     text-decoration: none;
-    margin: 0 6px;
 }
 
-.footer-info a:hover {
+.footer-contact a:hover {
     text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 16px;
+    padding-bottom: 16px;
+}
+
+.footer-bottom a {
+    color: var(--luxe-gold);
+    text-decoration: none;
 }
