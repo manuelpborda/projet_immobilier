@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  app:
+  php:
     build: .
     container_name: agencia_php
     ports:
@@ -10,6 +8,7 @@ services:
       - ./:/var/www/html
     depends_on:
       - db
+
 
   db:  # <--- Este es el nombre correcto
     image: mysql:8.0

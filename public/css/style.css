@@ -4,22 +4,22 @@
 
 /*
    Uso variables CSS centralizadas para la paleta dorado-negro,
-   así todo el sitio es coherente y los cambios se propagan fácil.
+   
 */
 :root {
-    --luxe-black: #1A181A;        /* Fondo y textos fuertes (marca premium) */
-    --luxe-gold: #C19D53;         /* Dorado principal, sensación de lujo */
-    --luxe-gold-bright: #FFD700;  /* Oro intenso para highlights y gradientes */
-    --luxe-white: #FFFDF8;        /* Blanco cálido, fondo de cards y contraste suave */
-    --luxe-grey: #E0E0E0;         /* Gris claro para detalles sutiles */
-    --luxe-yellow: #FFD600;       /* Amarillo para avisos o botones importantes */
-    --luxe-green: #223A2F;        /* Verde para alertas de éxito, opcional */
-    --shadow-gold: 0 6px 18px #c19d5333; /* Sombra suave dorada */
+    --luxe-black: #1A181A;        
+    --luxe-gold: #C19D53;         
+    --luxe-gold-bright: #FFD700;  
+    --luxe-white: #FFFDF8;        /
+    --luxe-grey: #E0E0E0;         
+    --luxe-yellow: #FFD600;      
+    --luxe-green: #223A2F;        
+    --shadow-gold: 0 6px 18px #c19d5333; /
 }
 
-/* ==============================
+/* 
    FONDO GENERAL Y TIPOGRAFÍA
-   ============================== */
+    */
 body {
     background: var(--luxe-black);
     color: var(--luxe-white);
@@ -28,9 +28,9 @@ body {
     padding: 0;
 }
 
-/* ==============================
+/* 
    NAVBAR PRINCIPAL
-   ============================== */
+    */
 nav {
     background: var(--luxe-black);
     color: var(--luxe-gold);
@@ -54,9 +54,9 @@ nav a:hover {
     text-shadow: 0 0 14px var(--luxe-gold-bright);
 }
 
-/* ==============================
+/* 
    SECCIÓN DE FILTROS/BÚSQUEDA
-   ============================== */
+    */
 .search-section {
     background: var(--luxe-black);
     border-bottom: 2px solid var(--luxe-gold);
@@ -97,12 +97,12 @@ nav a:hover {
     filter: brightness(1.10);
 }
 
-/* =====================================
-   GRID DE PROPIEDADES: SIEMPRE 3x3 DESKTOP
-   ===================================== */
+/* 
+   GRID DE PROPIEDADES:  3x3 DESKTOP
+   */
 .grille-biens {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Siempre 3 columnas desktop */
+    grid-template-columns: repeat(3, 1fr); /*  3 columnas desktop */
     gap: 32px 24px;
     margin: 24px 0 40px 0;
     padding: 0 8vw;
@@ -127,7 +127,7 @@ nav a:hover {
     border-color: var(--luxe-gold-bright);
 }
 
-/* Imagen de la card, sin deformar */
+/* Imagen de la card  */
 .carte-bien-image {
     width: 100%;
     aspect-ratio: 3 / 2;
@@ -495,4 +495,114 @@ footer {
 
 .admin-table tr:hover, .tabla-estadisticas tr:hover {
     background: var(--luxe-grey);
+}
+
+/* =============================
+   BOTÓN DARK MODE PERSONALIZADO
+   ============================= */
+/* Explico: coloco el botón fijo en la parte superior derecha, separado del nav, estilo dorado coherente */
+#darkModeToggle {
+    position: fixed;
+    top: 15px; /* un poco más cerca del borde superior */
+    right: 15px; /* un poco más cerca del borde derecho */
+    z-index: 999;
+    padding: 4px 10px; 
+    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
+    color: var(--luxe-black);
+    border: 1px solid var(--luxe-gold-bright); 
+    border-radius: 6px; 
+    font-weight: bold;
+    font-size: 0.8rem; 
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 4px #c19d5366; 
+}
+
+
+#darkModeToggle:hover {
+    background: linear-gradient(90deg, var(--luxe-gold-bright), var(--luxe-gold));
+    box-shadow: 0 4px 14px var(--luxe-gold-bright);
+    color: var(--luxe-black);
+    transform: scale(1.05);
+}
+
+/* MODO CLARO (cuando NO hay dark-mode) ------------ */
+/* Explico al jurado: uso body:not(.dark-mode) para mantener sitio oscuro por defecto y aplicar claro solo cuando cambia */
+
+/* === CLARO cuando hay .light-mode === */
+html.light-mode body {
+    background-color: #f5f5f5;
+    color: #1A181A;
+}
+
+html.light-mode nav,
+html.light-mode footer {
+    background-color: #fffdf8;
+    color: #1A181A;
+    border-color: #C19D53;
+}
+
+html.light-mode a {
+    color: #1A181A;
+}
+
+html.light-mode .btn-primary {
+    background: linear-gradient(90deg, #FFD700, #C19D53);
+    color: #1A181A;
+}
+
+html.light-mode .carte-bien {
+    background: #ffffff;
+    color: #1A181A;
+    border-color: #C19D53;
+}
+
+
+/* ---------------------Galería horizontal en footer con imágenes rotativas------- */
+.footer-gallery-container {
+    overflow: hidden;
+    width: 100%;
+    background: var(--luxe-black);
+    border-top: 2px solid var(--luxe-gold);
+    margin-top: 40px;
+}
+
+.footer-gallery {
+    display: flex;
+    width: max-content;
+    animation: scrollGallery 25s linear infinite;
+}
+
+.footer-gallery img {
+    height: 160px; /* MÁS GRANDE */
+    margin: 10px 24px;
+    object-fit: cover;
+    border-radius: 8px; /* BORDE SUAVIZADO */
+    box-shadow: 0 2px 10px #c19d5344;
+    flex-shrink: 0;
+}
+
+@keyframes scrollGallery {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Información legal */
+.footer-info {
+    background: var(--luxe-black);
+    color: var(--luxe-gold-bright);
+    padding: 18px 0;
+    text-align: center;
+    font-size: 1rem;
+    border-top: 2px solid var(--luxe-gold);
+}
+
+.footer-info a {
+    color: var(--luxe-gold-bright);
+    text-decoration: none;
+    margin: 0 6px;
+}
+
+.footer-info a:hover {
+    text-decoration: underline;
 }

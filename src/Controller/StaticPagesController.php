@@ -107,4 +107,11 @@ class StaticPagesController extends AbstractController
         // Si el método no es POST, simplemente retorno la página de contacto con el formulario
         return $this->render('static/contact.html.twig');
     }
+
+    #[Route('/mentions-legales', name: 'mentions_legales')] // Ruta para la página de menciones legales
+public function mentionsLegales(): Response
+{
+    return $this->render('mentions_legales.html.twig');
+}
+
 }
