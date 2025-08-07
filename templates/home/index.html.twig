@@ -101,6 +101,9 @@
 </div>
 
 </main>
+{% if app.request.attributes.get('_route') == 'home' %}
+  <script src="{{ asset('js/weather_widget.js') }}"></script>
+{% endif %}
 
 
 {% endblock %}

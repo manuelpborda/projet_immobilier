@@ -123,23 +123,32 @@
 
     {# === Información estructurada del footer (oficinas y contacto) === #}
     <div class="footer-info-columns">
-        <div class="footer-office">
-            <p><strong>Oficina en Bogotá - Colombia</strong><br>
-            Carrera 7 #85-24, Chapinero</p>
-        </div>
+    <div class="footer-office">
+        <p><strong>Oficina en Bogotá - Colombia</strong><br>
+        Carrera 7 #85-24, Chapinero</p>
 
-        <div class="footer-office">
-            <p><strong>Oficina en París - Francia</strong><br>
-            12 Rue de Paris, 75000 Paris</p>
-        </div>
-
-        <div class="footer-contact">
-            <p><strong>Habla con un agente</strong><br>
-            <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
-        </div>
+        {# API clima de Bogotá solo visible en home #}
+        {% if app.request.attributes.get('_route') == 'home' %}
+            <p id="clima-bogota">Clima Bogotá: cargando...</p>
+        {% endif %}
     </div>
 
-    {# === Menciones legales centradas al final === #}
+    <div class="footer-office">
+        <p><strong>Oficina en París - Francia</strong><br>
+        12 Rue de Paris, 75000 Paris</p>
+
+        {# API clima de París solo visible en home #}
+        {% if app.request.attributes.get('_route') == 'home' %}
+            <p id="clima-paris">Clima París: cargando...</p>
+        {% endif %}
+    </div>
+
+    <div class="footer-contact">
+        <p><strong>Habla con un agente</strong><br>
+        <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
+    </div>
+</div>
+{#  Menciones legales centradas al final #}
     <div class="footer-bottom">
         <p><a href="{{ path('mentions_legales') }}">Mentions légales</a></p>
     </div>
@@ -147,10 +156,11 @@
 </footer>
 
 
-
-
-    {# Script externo dark mode desde /public/js/ #}
+     {# Script externo dark mode desde /public/js/ #}
     <script src="{{ asset('js/darkmode_toggle.js') }}"></script>
+
+   
+</div>
 
 </body>
 </html>

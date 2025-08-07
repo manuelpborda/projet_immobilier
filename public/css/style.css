@@ -629,3 +629,8 @@ html.light-mode .carte-bien {
     color: var(--luxe-gold);
     text-decoration: none;
 }
+.footer-weather {
+    color: var(--luxe-gold);
+    margin-top: 12px;
+    font-size: 0.95em;
+}
