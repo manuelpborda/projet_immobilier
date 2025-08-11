@@ -147,6 +147,31 @@ nav a:hover {
     box-shadow: 0 2px 12px #0001;
 }
 
+.favorito-img-wrapper {
+    text-align: center;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 100%;
+}
+
+/* Estilo de la tarjeta del bien en favoritos */
+.favorito-card {
+    background: transparent !important;
+    }
+
+/* Estilo de la imagen */
+.favorito-img {
+    max-width: 380px;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #0002;
+    display: block;
+    margin: 0 auto;
+}
+
+
+
 /* Info de la card */
 .carte-bien-info {
     padding: 18px 18px 24px 18px;
@@ -496,6 +521,107 @@ footer {
 .admin-table tr:hover, .tabla-estadisticas tr:hover {
     background: var(--luxe-grey);
 }
+/* =========================================================
+   SECCIÓN CONTACTO (Opción 2: fondo blanco solo hasta email)
+   ========================================================= */
+
+/* Contenedor general de la página de contacto */
+.contact-section {
+    max-width: 900px;
+    margin: 2em auto;
+}
+
+/* Bloque interno que sí lleva fondo blanco */
+.contact-info-block {
+    background: var(--luxe-white);
+    color: var(--luxe-black);
+    border-radius: 12px;
+    padding: 1.5em;
+    box-shadow: var(--shadow-gold);
+    margin-bottom: 2em;
+}
+
+.contact-info-block h1 {
+    color: var(--luxe-gold);
+    text-align: center;
+    margin-bottom: 0.8em;
+}
+
+.contact-info-block p {
+    text-align: center;
+    margin-bottom: 2em;
+    font-size: 1.05em;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin-bottom: 2em;
+}
+
+.contact-form label {
+    font-weight: bold;
+    color: var(--luxe-black);
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 10px;
+    border: 1.5px solid var(--luxe-gold);
+    border-radius: 8px;
+    font-size: 1em;
+    background: var(--luxe-white);
+    color: var(--luxe-black);
+    box-shadow: 0 2px 6px #c19d5320;
+}
+
+.contact-form textarea {
+    resize: vertical;
+}
+
+.contact-info {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 0; /* Ajuste para que no se coma margen extra antes de imagen */
+}
+
+.contact-info li {
+    margin-bottom: 0.6em;
+}
+
+.contact-info a {
+    color: var(--luxe-gold);
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+/* Imagen y mapa se mantienen fuera del bloque blanco */
+.contact-image {
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+.contact-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--shadow-gold);
+}
+
+.contact-map {
+    text-align: center;
+}
+
+.contact-map iframe {
+    border: none;
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--shadow-gold);
+}
+
 
 /* =============================
    BOTÓN DARK MODE PERSONALIZADO
@@ -573,7 +699,7 @@ html.light-mode .carte-bien {
 }
 
 .footer-gallery img {
-    height: 150px; /*tamano de imagenes galeria */
+    height: 100px;
     margin: 10px 24px;
     object-fit: contain;
     flex-shrink: 0;
@@ -628,9 +754,4 @@ html.light-mode .carte-bien {
 .footer-bottom a {
     color: var(--luxe-gold);
     text-decoration: none;
-}
-.footer-weather {
-    color: var(--luxe-gold);
-    margin-top: 12px;
-    font-size: 0.95em;
 }

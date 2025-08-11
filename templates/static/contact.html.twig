@@ -3,52 +3,65 @@
 {% block title %}Contacto - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
- {# Mostrar mensaje de éxito si está disponible #}
+
+    {# Mensajes flash de éxito o error, usan las clases globales de alertas #}
     {% for message in app.flashes('success') %}
         <div class="alert alert-success">
             {{ message }}
         </div>
     {% endfor %}
-{# Página directa para contactar y dar confianza al usuario #}
-<h1>Contacto directo con CONSORIA Inmobiliaria</h1>
-<p>
-    ¿Tienes dudas, quieres programar una visita o necesitas asesoría? Completa el formulario o comunícate por los medios directos que ves abajo.<br>
-    ¡Respondo personalmente y lo más rápido posible!
-</p>
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
 
-{# -- FORMULARIO DE CONTACTO (cumplo buenas prácticas básicas de seguridad) -- #}
-<form method="post" action="{{ path('contact_post') }}" style="max-width:400px; margin:2em 0;">
-    {# CSRF Token obligatorio para evitar ataques de tipo Cross-Site Request Forgery (seguridad básica exigida en el referencial) #}
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('contact_form') }}">
-    
-    <label for="nombre">Nombre:</label><br>
-    <input type="text" id="nombre" name="nombre" required maxlength="100"><br><br>
+    <section class="contact-section">
+        
+        {# Contenedor solo para la parte con fondo blanco #}
+        <div class="contact-info-block">
+            <h1>Contacto directo con CONSORIA Inmobiliaria</h1>
+            <p>
+                ¿Tienes dudas, quieres programar una visita o necesitas asesoría?  
+                Completa el formulario o comunícate por los medios directos que ves abajo.<br>
+                ¡Respondo personalmente y lo más rápido posible!
+            </p>
 
-    <label for="telefono">Teléfono:</label><br>
-    <input type="tel" id="telefono" name="telefono" maxlength="20"><br><br>
+            {# Formulario con clases consistentes #}
+            <form method="post" action="{{ path('contact_post') }}" class="contact-form">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('contact_form') }}">
+                
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required maxlength="100">
 
-    <label for="correo">Correo electrónico:</label><br>
-    <input type="email" id="correo" name="correo" required maxlength="120"><br><br>
+                <label for="telefono">Teléfono:</label>
+                <input type="tel" id="telefono" name="telefono" maxlength="20">
 
-    <label for="mensaje">Mensaje:</label><br>
-    <textarea id="mensaje" name="mensaje" rows="4" required maxlength="1000"></textarea><br><br>
+                <label for="correo">Correo electrónico:</label>
+                <input type="email" id="correo" name="correo" required maxlength="120">
 
-    <button type="submit">Enviar mensaje</button>
-</form>
-{# Explicación: El CSRF token y los atributos required/maxlength hacen parte de la primera línea de defensa recomendada en el documento "Sécurité en PHP" y el referencial #}
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" rows="4" required maxlength="1000"></textarea>
 
-{# Bloque de contacto rápido con los datos principales de la agencia y asesor #}
-<h2>También puedes contactarme así:</h2>
-<ul>
-    <li><strong>WhatsApp/Teléfono directo:</strong> <a href="https://wa.me/573124504982" target="_blank">+57 312 4504982</a></li>
-    <li><strong>Oficina principal:</strong> Cra 7D # 151-42, Oficina 201, Bogotá</li>
-    <li><strong>Email asesor:</strong> <a href="mailto:gabrielpulido1984@gmail.com">gabrielpulido1984@gmail.com</a></li>
-</ul>
+                <button type="submit" class="btn-primary">Enviar mensaje</button>
+            </form>
 
-<img src="https://placehold.co/600x180?text=Contacto+CONSORIA" alt="Contacto Consoria" style="margin-top:2em;">
+            <h2>También puedes contactarme así:</h2>
+            <ul class="contact-info">
+                <li><strong>WhatsApp/Teléfono directo:</strong> <a href="https://wa.me/573124504982" target="_blank">+57 312 4504982</a></li>
+                <li><strong>Oficina principal:</strong> Cra 7D # 151-42, Oficina 201, Bogotá</li>
+                <li><strong>Email asesor:</strong> <a href="mailto:consoriainmobiliaria@gmail.com">consoriainmobiliaria@gmail.com</a></li>
+            </ul>
+        </div>
+        {# Fin del bloque con fondo blanco #}
 
-<div style="width:100%; max-width:600px; margin:auto;">
-    {# Aquí integro Google Maps con el iframe generado, esto da confianza y transparencia al usuario y permite localizar la agencia físicamente #}
-    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d290.21813937218394!2d-74.02892513938065!3d4.728322218542193!2m3!1f170.9358334253712!2f44.964086237061!3f0!3m2!1i1024!2i768!4f35!5e1!3m2!1sfr!2sfr!4v1753180255338!5m2!1sfr!2sfr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-</div>
+        <div class="contact-image">
+            <img src="{{ asset('assets/img/static_pages/contact.jpg') }}" alt="Contacto Consoria">
+        </div>
+
+        <div class="contact-map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d290.21813937218394!2d-74.02892513938065!3d4.728322218542193!2m3!1f170.9358334253712!2f44.964086237061!3f0!3m2!1i1024!2i768!4f35!5e1!3m2!1sfr!2sfr!4v1753180255338!5m2!1sfr!2sfr" width="600" height="450" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
 {% endblock %}
