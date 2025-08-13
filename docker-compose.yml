@@ -1,39 +1,64 @@
+
 services:
+  #  Contenedor de PHP + Apache donde corre Symfony.
   php:
     build: .
     container_name: agencia_php
     ports:
-      - "8080:80"
+      - "8080:80"                 #  Accedo a la web en http://localhost:8080
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www/html          #  Monto mi código dentro del contenedor
     depends_on:
-      - db
+      - db                        #  Arranco después de MySQL (otras secciones del sitio podrían usarlo)
+      - mongodb                   #  Arranco después de MongoDB (el formulario de contacto apunta aquí)
+    environment:
+      #  Estandarizo la URL de Mongo para Doctrine ODM en Symfony (la misma que uso en .env)
+      # Nota: uso el "container_name" del servicio Mongo para que resuelva el host.
+      MONGODB_URL: mongodb://agencia_mongodb:27017/inmobiliaria
+      # Si quiero forzar dev desde aquí: APP_ENV: dev
 
-
-  db:  # <--- Este es el nombre correcto
+  #  Base de datos MySQL. La mantengo por si otras partes del proyecto la usan.
+  db:
     image: mysql:8.0
     container_name: agencia_mysql
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: inmobiliaria
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     ports:
-      - "3306:3306"
+      - "3306:3306"               #  Puedo conectarme desde mi host si lo necesito
     volumes:
       - db_data:/var/lib/mysql
 
+  #  UI de MySQL (phpMyAdmin) con perfil "mysql-ui".
+  # - Por defecto NO se levanta (limpio para la demo con solo Mongo).
+  # - Para activarlo: `docker compose --profile mysql-ui up -d phpmyadmin`
   phpmyadmin:
+    profiles: ["mysql-ui"]        #  Solo se crea si especifico el profile
     image: phpmyadmin/phpmyadmin
     container_name: agencia_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"                 #  Entraría por http://localhost:8081
+    environment:
+      PMA_HOST: db                #  Apunto al servicio MySQL por su NOMBRE de servicio (mejor práctica)
+      PMA_USER: user
+      PMA_PASSWORD: pass
     depends_on:
       - db
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: root
+
+  #  MongoDB 6. Es mi fuente para el formulario de contacto (solo Mongo).
+  mongodb:
+    image: mongo:6
+    container_name: agencia_mongodb
+    restart: unless-stopped
     ports:
-      - "8081:80"
+      - "27017:27017"             #  Conecto MongoDB Compass a mongodb://localhost:27017
+    volumes:
+      - mongo_data:/data/db
 
 volumes:
   db_data:
+  mongo_data:

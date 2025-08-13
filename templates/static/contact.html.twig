@@ -1,67 +1,46 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Contacto - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
 
-    {# Mensajes flash de éxito o error, usan las clases globales de alertas #}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">
-            {{ message }}
-        </div>
-    {% endfor %}
+  {% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+  {% endfor %}
+  {% for message in app.flashes('info') %}
+    <div class="alert alert-info">{{ message }}</div>
+  {% endfor %}
+  {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+  {% endfor %}
 
-    <section class="contact-section">
-        
-        {# Contenedor solo para la parte con fondo blanco #}
-        <div class="contact-info-block">
-            <h1>Contacto directo con CONSORIA Inmobiliaria</h1>
-            <p>
-                ¿Tienes dudas, quieres programar una visita o necesitas asesoría?  
-                Completa el formulario o comunícate por los medios directos que ves abajo.<br>
-                ¡Respondo personalmente y lo más rápido posible!
-            </p>
+  <section class="contact-section">
+    <div class="contact-info-block">
+      <h1>Contacto directo con CONSORIA Inmobiliaria</h1>
+      <p>Completa el formulario y te responderé.</p>
 
-            {# Formulario con clases consistentes #}
-            <form method="post" action="{{ path('contact_post') }}" class="contact-form">
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('contact_form') }}">
-                
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required maxlength="100">
+      {# posteo a la misma ruta 'contact' (GET/POST) #}
+      <form method="post" action="{{ path('contact') }}" class="contact-form">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('contact_form') }}">
 
-                <label for="telefono">Teléfono:</label>
-                <input type="tel" id="telefono" name="telefono" maxlength="20">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required maxlength="100">
 
-                <label for="correo">Correo electrónico:</label>
-                <input type="email" id="correo" name="correo" required maxlength="120">
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" maxlength="20">
 
-                <label for="mensaje">Mensaje:</label>
-                <textarea id="mensaje" name="mensaje" rows="4" required maxlength="1000"></textarea>
+        <label for="correo">Correo electrónico:</label>
+        <input type="email" id="correo" name="correo" required maxlength="120">
 
-                <button type="submit" class="btn-primary">Enviar mensaje</button>
-            </form>
+        <label for="mensaje">Mensaje:</label>
+        <textarea id="mensaje" name="mensaje" rows="4" required maxlength="1000"></textarea>
 
-            <h2>También puedes contactarme así:</h2>
-            <ul class="contact-info">
-                <li><strong>WhatsApp/Teléfono directo:</strong> <a href="https://wa.me/573124504982" target="_blank">+57 312 4504982</a></li>
-                <li><strong>Oficina principal:</strong> Cra 7D # 151-42, Oficina 201, Bogotá</li>
-                <li><strong>Email asesor:</strong> <a href="mailto:consoriainmobiliaria@gmail.com">consoriainmobiliaria@gmail.com</a></li>
-            </ul>
-        </div>
-        {# Fin del bloque con fondo blanco #}
+        <button type="submit" class="btn-primary">Enviar mensaje</button>
+      </form>
 
-        <div class="contact-image">
-            <img src="{{ asset('assets/img/static_pages/contact.jpg') }}" alt="Contacto Consoria">
-        </div>
-
-        <div class="contact-map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d290.21813937218394!2d-74.02892513938065!3d4.728322218542193!2m3!1f170.9358334253712!2f44.964086237061!3f0!3m2!1i1024!2i768!4f35!5e1!3m2!1sfr!2sfr!4v1753180255338!5m2!1sfr!2sfr" width="600" height="450" allowfullscreen="" loading="lazy"></iframe>
-        </div>
-    </section>
+      {% if __stamp is defined %}
+        <small style="opacity:.6">__stamp: {{ __stamp }}</small>
+      {% endif %}
+    </div>
+  </section>
 
 {% endblock %}

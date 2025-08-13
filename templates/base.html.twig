@@ -11,28 +11,25 @@
     if (localStorage.getItem('lightMode') === 'true') {
         document.documentElement.classList.add('light-mode');
     }
-</script>
-
+    </script>
 
     {# Título principal de la web. Uso block title para personalizarlo por página #}
     <title>{% block title %}CONSORIA Inmobiliaria{% endblock %}</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> {# Enlazo el CSS ubicado en /public/css/style.css #}
+    <meta name="description" content="{% block meta_description %}Servicios inmobiliarios en Bogotá y París. Compra, venta, arriendo y asesoría personalizada.{% endblock %}">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0"> {#--- SEO con meta etiquetas  que mejora la visibilidad en buscadors --#}
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
 
-    {# === MENÚ DE NAVEGACIÓN PERSONALIZADO ===
-       Este menú se adapta según el tipo de usuario que esté autenticado. Mantengo coherencia y seguridad en la interfaz.
-    #}
     <nav>
-        {# LOGO DE LA EMPRESA
-           Aquí muestro solo el logo de CONSORIA Inmobiliaria (sin texto), agrandado para mejor visibilidad.
-           Al hacer clic, redirige siempre al inicio (ruta 'home').
-        #}
+        {# LOGO DE LA EMPRESA con eco-concepción
+           Aplico loading="lazy" para cargarlo solo cuando sea necesario y defino width/height para evitar repintados.
+           Esto reduce consumo de datos y energía, y acelera el renderizado inicial. #}
         <a href="{{ path('home') }}">
-            <img src="/assets/img/logo.png" alt="Logo CONSORIA Inmobiliaria" height="100" style="vertical-align: middle;">
-        </a>
+    <img src="/assets/img/logo.png" alt="Logo CONSORIA Inmobiliaria" style="height:100px; width:auto; vertical-align:middle;">
+</a>
 
-        {# NAVBAR PERSONALIZADA POR ROL. Acomodo enlaces y opciones según el usuario autenticado. #}
         {% if app.user %}
             {% if 'ROLE_ADMIN' in app.user.roles %}
                 <a href="{{ path('admin_dashboard') }}">Panel Admin</a>
@@ -72,15 +69,11 @@
             <a href="{{ path('app_register') }}" class="btn btn-primary">Registrarse</a>
         {% endif %}
         
-        {# Botón Dark Mode integrado en navbar #}
         <button id="darkModeToggle">
             Modo Oscuro / Claro
         </button>
     </nav>
 
-    {# === MENSAJES FLASH ===
-       Aquí muestro mensajes generados por acciones del usuario (éxito, error, etc.)
-    #}
     <div class="container">
         {% for label, messages in app.flashes %}
             {% for msg in messages %}
@@ -88,80 +81,58 @@
             {% endfor %}
         {% endfor %}
 
-        {# === BLOQUE PRINCIPAL ===
-           Cada página que extiende esta plantilla define su contenido en este bloque.
-        #}
         {% block body %}{% endblock %}
     </div>
 
-{# === PIE DE PÁGINA FINAL BIEN ORGANIZADO ===
-   Justifico ante el jurado: separación clara de elementos visuales e información estructurada profesionalmente.
-#}
 <footer>
-
-    {# === Banda de galería horizontal que rota automáticamente ===
-       Colocada en la parte superior del footer, visible en todas las páginas. Animación definida en el CSS externo.
-    #}
     <div class="footer-gallery-container">
         <div class="footer-gallery">
-            <img src="/assets/footer-gallery/img7.png" alt="Galería 1">
-            <img src="/assets/footer-gallery/img5.png" alt="Galería 2">
-            <img src="/assets/footer-gallery/img3.png" alt="Galería 3">
-            <img src="/assets/footer-gallery/img4.jpg" alt="Galería 4">
-            <img src="/assets/footer-gallery/img6.png" alt="Galería 5">
-            <img src="/assets/footer-gallery/img1.jpg" alt="Galería 6">
-            <img src="/assets/footer-gallery/img8.jpg" alt="Galería 7">
-            <img src="/assets/footer-gallery/img9.png" alt="Galería 8">
-            {# Duplicadas para efecto continuo sin fin #}
-            <img src="/assets/footer-gallery/img10.jpg" alt="Galería 1 duplicado">
-            <img src="/assets/footer-gallery/img7.png" alt="Galería 2 duplicado">
-            <img src="/assets/footer-gallery/img4.jpg" alt="Galería 3 duplicado">
-            <img src="/assets/footer-gallery/img9.png" alt="Galería 4 duplicado">
-            <img src="/assets/footer-gallery/img6.png" alt="Galería 5 duplicado">
+            {# ----Eco-concepción aplicada--: uso loading="lazy" en todas las imágenes del footer
+               para que se carguen solo cuando estén cerca de entrar en pantalla. #}
+            <img src="/assets/footer-gallery/img7.png" alt="Galería 1" loading="lazy"> {# uso loading lazy paa que se carguen solo al llegar a esta seccion #}
+            <img src="/assets/footer-gallery/img5.png" alt="Galería 2" loading="lazy">
+            <img src="/assets/footer-gallery/img3.png" alt="Galería 3" loading="lazy">
+            <img src="/assets/footer-gallery/img4.jpg" alt="Galería 4" loading="lazy">
+            <img src="/assets/footer-gallery/img6.png" alt="Galería 5" loading="lazy">
+            <img src="/assets/footer-gallery/img1.jpg" alt="Galería 6" loading="lazy">
+            <img src="/assets/footer-gallery/img8.jpg" alt="Galería 7" loading="lazy">
+            <img src="/assets/footer-gallery/img9.png" alt="Galería 8" loading="lazy">
+            <img src="/assets/footer-gallery/img10.jpg" alt="Galería 1 duplicado" loading="lazy">
+            <img src="/assets/footer-gallery/img7.png" alt="Galería 2 duplicado" loading="lazy">
+            <img src="/assets/footer-gallery/img4.jpg" alt="Galería 3 duplicado" loading="lazy">
+            <img src="/assets/footer-gallery/img9.png" alt="Galería 4 duplicado" loading="lazy">
+            <img src="/assets/footer-gallery/img6.png" alt="Galería 5 duplicado" loading="lazy">
+            <img src="/assets/footer-gallery/img8.jpg" alt="Galería 6 duplicado" loading="lazy">
+            <img src="/assets/footer-gallery/img3.png" alt="Galería 7 duplicado" loading="lazy">
         </div>
     </div>
 
-    {# === Información estructurada del footer (oficinas y contacto) === #}
     <div class="footer-info-columns">
-    <div class="footer-office">
-        <p><strong>Oficina en Bogotá - Colombia</strong><br>
-        Carrera 7 #85-24, Chapinero</p>
-
-        {# API clima de Bogotá solo visible en home #}
-        {% if app.request.attributes.get('_route') == 'home' %}
-            <p id="clima-bogota">Clima Bogotá: cargando...</p>
-        {% endif %}
+        <div class="footer-office">
+            <p><strong>Oficina en Bogotá - Colombia</strong><br>
+            Carrera 7 #85-24, Chapinero</p>
+            {% if app.request.attributes.get('_route') == 'home' %}
+                <p id="clima-bogota">Clima Bogotá: cargando...</p>
+            {% endif %}
+        </div>
+        <div class="footer-office">
+            <p><strong>Oficina en París - Francia</strong><br>
+            12 Rue de Paris, 75000 Paris</p>
+            {% if app.request.attributes.get('_route') == 'home' %}
+                <p id="clima-paris">Clima París: cargando...</p>
+            {% endif %}
+        </div>
+        <div class="footer-contact">
+            <p><strong>Habla con un agente</strong><br>
+            <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
+        </div>
     </div>
 
-    <div class="footer-office">
-        <p><strong>Oficina en París - Francia</strong><br>
-        12 Rue de Paris, 75000 Paris</p>
-
-        {# API clima de París solo visible en home #}
-        {% if app.request.attributes.get('_route') == 'home' %}
-            <p id="clima-paris">Clima París: cargando...</p>
-        {% endif %}
-    </div>
-
-    <div class="footer-contact">
-        <p><strong>Habla con un agente</strong><br>
-        <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
-    </div>
-</div>
-{#  Menciones legales centradas al final #}
     <div class="footer-bottom">
         <p><a href="{{ path('mentions_legales') }}">Mentions légales</a></p>
     </div>
-
 </footer>
 
-
-     {# Script externo dark mode desde /public/js/ #}
-    <script src="{{ asset('js/darkmode_toggle.js') }}"></script>
-
-   
-</div>
-
+<script src="{{ asset('js/darkmode_toggle.js') }}"></script>
 </body>
 </html>
-
