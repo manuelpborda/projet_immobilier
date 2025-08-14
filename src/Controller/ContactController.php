@@ -113,7 +113,7 @@ final class ContactController extends AbstractController
             }
         }
 
-        // Mensaje de éxito simple y redirección.
+        // Mensaje de éxito y redirección.
         $this->addFlash('success', 'Mensaje enviado, le contactaremos próximamente.');
         return $this->redirectToRoute('contact');
     }
