@@ -4,33 +4,41 @@
 
 /*
    Uso variables CSS centralizadas para la paleta dorado-negro,
-   
 */
 :root {
     --luxe-black: #1A181A;        
     --luxe-gold: #C19D53;         
     --luxe-gold-bright: #FFD700;  
-    --luxe-white: #FFFDF8;        /
+    --luxe-white: #FFFDF8;        
     --luxe-grey: #E0E0E0;         
     --luxe-yellow: #FFD600;      
     --luxe-green: #223A2F;        
-    --shadow-gold: 0 6px 18px #c19d5333; /
+    --shadow-gold: 0 6px 18px #c19d5333; 
 }
 
 /* 
    FONDO GENERAL Y TIPOGRAFÍA
-    */
+*/
+html, body { height: 100%; } /* base para sticky footer */
 body {
     background: var(--luxe-black);
     color: var(--luxe-white);
     font-family: 'Segoe UI', Arial, sans-serif;
     margin: 0;
     padding: 0;
+
+    /* STICKY FOOTER: cuerpo como contenedor flex vertical */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
+/* Si usas <main> en tus templates, se expandirá para empujar el footer al fondo */
+main { flex: 1 0 auto; }
 
 /* 
    NAVBAR PRINCIPAL
-    */
+*/
 nav {
     background: var(--luxe-black);
     color: var(--luxe-gold);
@@ -56,7 +64,7 @@ nav a:hover {
 
 /* 
    SECCIÓN DE FILTROS/BÚSQUEDA
-    */
+*/
 .search-section {
     background: var(--luxe-black);
     border-bottom: 2px solid var(--luxe-gold);
@@ -97,9 +105,21 @@ nav a:hover {
     filter: brightness(1.10);
 }
 
+/* === SEARCH SECTION: corregir viñetas cuando el contenedor está centrado === */
+.search-section ul,
+.search-section ol {
+    display: inline-block;   /* el bloque de la lista queda centrado */
+    text-align: left;        /* el texto se lee alineado a la izquierda */
+    margin: 0 auto 1em;
+    list-style-position: inside; /* viñetas/números junto al texto */
+    padding-left: 0;
+}
+.search-section ul { list-style-type: disc; }
+.search-section ol { list-style-type: decimal; }
+
 /* 
    GRID DE PROPIEDADES:  3x3 DESKTOP
-   */
+*/
 .grille-biens {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /*  3 columnas desktop */
@@ -157,7 +177,7 @@ nav a:hover {
 /* Estilo de la tarjeta del bien en favoritos */
 .favorito-card {
     background: transparent !important;
-    }
+}
 
 /* Estilo de la imagen */
 .favorito-img {
@@ -169,8 +189,6 @@ nav a:hover {
     display: block;
     margin: 0 auto;
 }
-
-
 
 /* Info de la card */
 .carte-bien-info {
@@ -188,8 +206,7 @@ nav a:hover {
 }
 
 /* 
-   El precio NO debe ir en amarillo puro. 
-   Uso un dorado oscuro sobre fondo blanco para máximo contraste y estilo premium.
+   Uso un dorado oscuro sobre fondo blanco para máximo contraste .
 */
 .prix-bien {
     font-size: 1.15rem;
@@ -270,6 +287,15 @@ nav a:hover {
     box-shadow: 0 6px 24px var(--luxe-gold);
 }
 
+/* === SEARCH SECTION: margen extra para "Limpiar filtros" === */
+.search-section .btn-warning,
+.search-section .btn-limpiar,
+.search-section .btn-clear {
+    display: inline-block;   /* asegura que margin-top/bottom surta efecto también en <a> */
+    margin-top: 16px;        /* más aire arriba */
+    margin-bottom: 12px;     /* un poco abajo también */
+}
+
 /* =============================
    AVISOS Y ALERTAS
    ============================= */
@@ -297,8 +323,10 @@ footer {
     padding: 40px 0 18px 0;
     text-align: center;
     font-size: 1rem;
-    margin-top: 54px;
     border-top: 2px solid var(--luxe-gold);
+
+    /* STICKY FOOTER: se pega al fondo del viewport cuando hay poco contenido */
+    margin-top: auto;
 }
 .footer-section {
     display: flex;
@@ -311,7 +339,7 @@ footer {
 }
 
 /* =============================
-   PAGINACIÓN DORADA (centrada, sin azul)
+   PAGINACIÓN DORADA (centrada,)
    ============================= */
 .pagination-wrapper {
     display: flex;
@@ -375,6 +403,7 @@ footer {
     box-shadow: none;
     pointer-events: none;
 }
+
 /* ========== DETALLE DE BIEN ========= */
 .detalle-bien {
     display: flex;
@@ -421,9 +450,6 @@ footer {
     padding-bottom: 0.4em;
 }
 
-
-
-
 /* =============================
    RESPONSIVE
    ============================= */
@@ -452,7 +478,6 @@ footer {
         gap: 10px;
     }
 }
-
 
 /* =============================
    ADMIN PANEL - Tablas y Acciones
@@ -493,7 +518,6 @@ footer {
 }
 
 /* para el graico estdisticas en perfil admin */
-
 .admin-table, .tabla-estadisticas {
     width: 100%;
     border-collapse: collapse;
@@ -521,6 +545,7 @@ footer {
 .admin-table tr:hover, .tabla-estadisticas tr:hover {
     background: var(--luxe-grey);
 }
+
 /* =========================================================
    SECCIÓN CONTACTO (Opción 2: fondo blanco solo hasta email)
    ========================================================= */
@@ -622,7 +647,6 @@ footer {
     box-shadow: var(--shadow-gold);
 }
 
-
 /* =============================
    BOTÓN DARK MODE PERSONALIZADO
    ============================= */
@@ -643,7 +667,6 @@ footer {
     transition: all 0.2s ease-in-out;
     box-shadow: 0 1px 4px #c19d5366; 
 }
-
 
 #darkModeToggle:hover {
     background: linear-gradient(90deg, var(--luxe-gold-bright), var(--luxe-gold));
@@ -683,6 +706,22 @@ html.light-mode .carte-bien {
     border-color: #C19D53;
 }
 
+/* === Light Mode: Search Section === */
+html.light-mode .search-section {
+    background-color: #fffdf8;
+    border-bottom-color: var(--luxe-gold);
+}
+
+/* ===== Light Mode: arreglos específicos para el footer de HOME ===== */
+html.light-mode .footer-gallery-container {
+    background: #fffdf8;                /* mismo tono claro que nav/footer */
+    border-top-color: var(--luxe-gold);
+}
+html.light-mode .footer-info-columns {
+    background-color: #fffdf8;          /* fondo claro */
+    color: #1A181A;                     /* texto oscuro para contraste */
+    border-top-color: var(--luxe-gold);
+}
 
 /* === Galería horizontal tipo banda === */
 .footer-gallery-container {
@@ -755,3 +794,32 @@ html.light-mode .carte-bien {
     color: var(--luxe-gold);
     text-decoration: none;
 }
+
+/* === ABOUT: centrar texto e imagen  === */
+.section-texto {
+    text-align: center;           /* centro títulos y párrafos del bloque */
+}
+.img-info {
+    display: block;               /* hace que el margin auto funcione */
+    margin: 0 auto;               /* centra la imagen horizontalmente */
+}
+/* === ABOUT: arreglar viñetas dentro de .section-texto === */
+.section-texto ul,
+.section-texto ol {
+    /* Centro la lista como bloque, pero dejo el texto alineado a la izquierda */
+    display: inline-block;
+    text-align: left;
+    margin: 0 auto 1em;
+
+    /* Hago que el punto/número forme parte del bloque (así no se va a la izquierda) */
+    list-style-position: inside;
+
+    /* Evito sangrías raras al usar 'inside' */
+    padding-left: 0;
+}
+
+/* Mantengo el tipo de marcador adecuado por lista */
+.section-texto ul { list-style-type: disc; }
+.section-texto ol { list-style-type: decimal; }
+
+/*comentario test git actions*/

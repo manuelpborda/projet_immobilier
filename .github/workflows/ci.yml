@@ -1,0 +1,86 @@
+name: CI (Symfony + Docker)
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & start services (Docker Compose)
+        run: |
+          docker compose -f docker-compose.yml up -d --build
+          # (Opcional) muestra estado
+          docker compose ps
+
+      - name: Wait for MySQL
+        run: |
+          # Espera básica; si tienes healthchecks puedes mejorarlo
+          for i in {1..60}; do
+            if docker compose exec -T mysql sh -c 'mysqladmin ping --silent' 2>/dev/null; then
+              echo "MySQL is up!"; exit 0
+            fi
+            echo "Waiting for MySQL... ($i)"; sleep 2
+          done
+          echo "MySQL did not become ready in time"
+          docker compose logs mysql
+          exit 1
+
+      - name: Wait for MongoDB
+        run: |
+          for i in {1..60}; do
+            if docker compose exec -T mongodb sh -c 'mongosh --quiet --eval "db.runCommand({ ping: 1 }).ok"' 2>/dev/null | grep -q "1"; then
+              echo "MongoDB is up!"; exit 0
+            fi
+            echo "Waiting for MongoDB... ($i)"; sleep 2
+          done
+          echo "MongoDB did not become ready in time"
+          docker compose logs mongodb
+          exit 1
+
+      - name: PHP dependencies (composer install)
+        run: |
+          docker compose exec -T php bash -lc 'composer install --no-interaction --prefer-dist --no-progress'
+
+      - name: Prepare test database (Doctrine)
+        run: |
+          # Si usas migraciones, reemplaza schema:create por doctrine:migrations:migrate --no-interaction
+          docker compose exec -T php bash -lc 'php bin/console --env=test doctrine:database:create --if-not-exists'
+          docker compose exec -T php bash -lc 'php bin/console --env=test doctrine:schema:create'
+          # (Opcional) cargar fixtures en test:
+          # docker compose exec -T php bash -lc "php bin/console --env=test doctrine:fixtures:load -n"
+
+      - name: Run PHPUnit
+        run: |
+          docker compose exec -T php bash -lc 'php bin/phpunit --testdox'
+
+      # ===== Cobertura opcional =====
+      # (Si generas coverage en var/coverage, este paso lo sube como artefacto)
+      - name: Upload coverage artifact (optional)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpunit-coverage
+          path: var/coverage
+          if-no-files-found: ignore
+
+      - name: Show docker logs on failure
+        if: failure()
+        run: |
+          echo "=== PHP logs ==="
+          docker compose logs php || true
+          echo "=== MySQL logs ==="
+          docker compose logs mysql || true
+          echo "=== MongoDB logs ==="
+          docker compose logs mongodb || true
