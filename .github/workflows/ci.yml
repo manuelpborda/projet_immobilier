@@ -5,68 +5,78 @@ on:
     branches: ["**"]
   pull_request:
     branches: ["**"]
+  workflow_dispatch: {}
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
+
+    # Ajusta estos nombres si tus servicios se llaman distinto en docker-compose.yml
+    env:
+      PHP_SVC: php
+      MYSQL_SVC: mysql
+      MONGO_SVC: mongodb
+      COMPOSER_ALLOW_SUPERUSER: 1
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Docker info
+        run: |
+          docker version
+          docker compose version
 
       - name: Build & start services (Docker Compose)
         run: |
           docker compose -f docker-compose.yml up -d --build
-          # (Opcional) muestra estado
+          echo "=== Servicios detectados ==="
+          docker compose config --services
+          echo "=== Estado ==="
           docker compose ps
 
       - name: Wait for MySQL
         run: |
-          # Espera básica; si tienes healthchecks puedes mejorarlo
-          for i in {1..60}; do
-            if docker compose exec -T mysql sh -c 'mysqladmin ping --silent' 2>/dev/null; then
-              echo "MySQL is up!"; exit 0
-            fi
-            echo "Waiting for MySQL... ($i)"; sleep 2
+          for i in {1..90}; do
+            if docker compose exec -T "$MYSQL_SVC" sh -lc 'mysqladmin ping --silent' 2>/dev/null; then
+              echo "MySQL is up"; exit 0; fi
+            echo "Waiting MySQL ($i/90)"; sleep 2
           done
           echo "MySQL did not become ready in time"
-          docker compose logs mysql
+          docker compose logs "$MYSQL_SVC"
           exit 1
 
       - name: Wait for MongoDB
         run: |
-          for i in {1..60}; do
-            if docker compose exec -T mongodb sh -c 'mongosh --quiet --eval "db.runCommand({ ping: 1 }).ok"' 2>/dev/null | grep -q "1"; then
-              echo "MongoDB is up!"; exit 0
-            fi
-            echo "Waiting for MongoDB... ($i)"; sleep 2
+          for i in {1..90}; do
+            if docker compose exec -T "$MONGO_SVC" sh -lc 'if command -v mongosh >/dev/null 2>&1; then mongosh --quiet --eval "db.runCommand({ ping: 1 }).ok"; else mongo --quiet --eval "db.runCommand({ ping: 1 }).ok"; fi' 2>/dev/null | grep -q "1"; then
+              echo "MongoDB is up"; exit 0; fi
+            echo "Waiting MongoDB ($i/90)"; sleep 2
           done
           echo "MongoDB did not become ready in time"
-          docker compose logs mongodb
+          docker compose logs "$MONGO_SVC"
           exit 1
 
-      - name: PHP dependencies (composer install)
+      - name: Install Composer in PHP container (if missing)
         run: |
-          docker compose exec -T php bash -lc 'composer install --no-interaction --prefer-dist --no-progress'
+          docker compose exec -T "$PHP_SVC" sh -lc 'command -v composer >/dev/null 2>&1 || (php -r "copy(\"https://getcomposer.org/installer\", \"composer-setup.php\");" && php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php)'
+          docker compose exec -T "$PHP_SVC" sh -lc 'composer --version'
+
+      - name: Composer install
+        run: |
+          docker compose exec -T "$PHP_SVC" bash -lc 'composer install --no-interaction --prefer-dist --no-progress'
 
       - name: Prepare test database (Doctrine)
         run: |
-          # Si usas migraciones, reemplaza schema:create por doctrine:migrations:migrate --no-interaction
-          docker compose exec -T php bash -lc 'php bin/console --env=test doctrine:database:create --if-not-exists'
-          docker compose exec -T php bash -lc 'php bin/console --env=test doctrine:schema:create'
-          # (Opcional) cargar fixtures en test:
-          # docker compose exec -T php bash -lc "php bin/console --env=test doctrine:fixtures:load -n"
+          docker compose exec -T "$PHP_SVC" bash -lc 'php bin/console --env=test doctrine:database:create --if-not-exists || true'
+          # Si tienes migraciones, se usarán; si no, cae a schema:create
+          docker compose exec -T "$PHP_SVC" bash -lc 'if php bin/console --env=test list doctrine:migrations:migrate >/dev/null 2>&1; then php bin/console --env=test doctrine:migrations:migrate --no-interaction; else php bin/console --env=test doctrine:schema:create; fi'
 
       - name: Run PHPUnit
         run: |
-          docker compose exec -T php bash -lc 'php bin/phpunit --testdox'
+          docker compose exec -T "$PHP_SVC" bash -lc 'if [ -x bin/phpunit ]; then php bin/phpunit --testdox; else ./vendor/bin/phpunit --testdox; fi'
 
-      # ===== Cobertura opcional =====
-      # (Si generas coverage en var/coverage, este paso lo sube como artefacto)
       - name: Upload coverage artifact (optional)
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
@@ -75,12 +85,10 @@ jobs:
           path: var/coverage
           if-no-files-found: ignore
 
-      - name: Show docker logs on failure
+      - name: Logs on failure
         if: failure()
         run: |
-          echo "=== PHP logs ==="
-          docker compose logs php || true
-          echo "=== MySQL logs ==="
-          docker compose logs mysql || true
-          echo "=== MongoDB logs ==="
-          docker compose logs mongodb || true
+          docker compose ps
+          docker compose logs "$PHP_SVC" || true
+          docker compose logs "$MYSQL_SVC" || true
+          docker compose logs "$MONGO_SVC" || true
