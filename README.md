@@ -74,3 +74,5 @@ Projet réalisé par **[Manuel Pulido dan le cadre de validation d'un project de
 Contact : [manuelpborda@gmail.com]
 
 Licence : Usage pédagogique uniquement. Tous droits réservés.
+
+Demo: activar CI automáticamente.
