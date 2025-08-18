@@ -1,6 +1,8 @@
 name: CI (Symfony + Docker)
 
 on:
+  # Yo configuro el workflow para que se ejecute en cada push, en cada PR
+  # y también manualmente desde la UI (workflow_dispatch) para la demo.
   push:
     branches: ["**"]
   pull_request:
@@ -12,17 +14,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
+      # Habilito composer como root dentro del contenedor PHP (típico en CI)
       COMPOSER_ALLOW_SUPERUSER: 1
 
     steps:
+      # 1) Descargo el código de esta rama/PR
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 2) Muestro versiones de Docker (me sirve para evidenciar entorno al jurado)
       - name: Docker info
         run: |
           docker version
           docker compose version
 
+      # 3) Construyo y arranco mis servicios definidos en docker-compose.yml
       - name: Build & start services (Docker Compose)
         run: |
           docker compose -f docker-compose.yml up -d --build
@@ -31,6 +37,8 @@ jobs:
           echo "=== Estado ==="
           docker compose ps || true
 
+      # 4) Detecto automáticamente cómo se llaman realmente mis servicios
+      #    (por si en mi compose se llaman 'app', 'db', 'mongo', etc.)
       - name: Detect service names from compose
         id: detect
         shell: bash
@@ -51,6 +59,7 @@ jobs:
 
           echo "Detectado -> PHP=${PHP_SVC:-php}  MYSQL=${MYSQL_SVC:-mysql}  MONGO=${MONGO_SVC:-mongodb}"
 
+      # 5) Espero a que MySQL esté listo (ping con mysqladmin)
       - name: Wait for MySQL
         run: |
           for i in {1..90}; do
@@ -62,6 +71,7 @@ jobs:
           docker compose logs "$MYSQL_SVC" || true
           exit 1
 
+      # 6) Espero a MongoDB (si existe el servicio); uso mongosh o mongo, lo que haya
       - name: Wait for MongoDB (skip if service missing)
         run: |
           if docker compose ps "$MONGO_SVC" >/dev/null 2>&1; then
@@ -77,25 +87,53 @@ jobs:
             echo "Mongo service '$MONGO_SVC' not found in compose. Skipping Mongo wait."
           fi
 
+      # 7) Instalo Composer dentro del contenedor PHP si no viene en la imagen
       - name: Install Composer in PHP container (if missing)
         run: |
           docker compose exec -T "$PHP_SVC" sh -lc 'if ! command -v composer >/dev/null 2>&1; then php -r "copy(\"https://getcomposer.org/installer\", \"composer-setup.php\");" && php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php; fi'
           docker compose exec -T "$PHP_SVC" sh -lc 'composer --version'
 
+      # 8) Instalo dependencias del proyecto (Composer)
       - name: Composer install
         run: |
           docker compose exec -T "$PHP_SVC" bash -lc 'composer install --no-interaction --prefer-dist --no-progress'
 
+      # 9) (CLAVE) Sobrescribo DATABASE_URL en .env.test.local dentro del contenedor
+      #    Aquí explico al jurado: a veces mi archivo .env.test trae "mysql" como host,
+      #    pero en Docker mi servicio realmente se llama, por ejemplo, "db".
+      #    En este paso yo leo la DATABASE_URL original y sustituyo solo el host para
+      #    apuntar al nombre real detectado (MYSQL_SVC). Así evito el error "getaddrinfo".
+      - name: Override DATABASE_URL for test with detected DB host
+        run: |
+          docker compose exec -T "$PHP_SVC" bash -lc "
+            set -e
+            SRC_FILE=.env.test
+            [ -f .env.test ] || SRC_FILE=.env
+            # Leo la DATABASE_URL del archivo fuente (.env.test o .env)
+            DB_URL=\$(grep -E '^DATABASE_URL=' \"\$SRC_FILE\" | head -n1 | cut -d= -f2-)
+            # Limpio comillas si existen
+            DB_URL_CLEAN=\$(echo \"\$DB_URL\" | sed -e 's/^\"//' -e 's/\"$//')
+            # Reemplazo SOLO el host entre '@' y ':' por el servicio real MYSQL_SVC
+            DB_URL_OVR=\$(echo \"\$DB_URL_CLEAN\" | sed -E 's/@[^:]+:/@'${MYSQL_SVC}':/')
+            # Escribo el override en .env.test.local (solo afecta al entorno de test en CI)
+            printf 'DATABASE_URL=\"%s\"\\n' \"\$DB_URL_OVR\" > .env.test.local
+            echo '--- Override aplicado (.env.test.local) ---'
+            cat .env.test.local
+          "
+
+      # 10) Creo la BD de test y preparo el esquema (o migraciones, si existen)
       - name: Prepare test database (Doctrine)
         run: |
           docker compose exec -T "$PHP_SVC" bash -lc 'php bin/console --env=test doctrine:database:create --if-not-exists || true'
-          # Si tienes migraciones, se usarán; si no, cae a schema:create
+          # Si tengo migraciones, las uso; si no, caigo a schema:create para ir a lo simple
           docker compose exec -T "$PHP_SVC" bash -lc 'if php bin/console --env=test list doctrine:migrations:migrate >/dev/null 2>&1; then php bin/console --env=test doctrine:migrations:migrate --no-interaction; else php bin/console --env=test doctrine:schema:create; fi'
 
+      # 11) Ejecuto PHPUnit en modo testdox (salida legible para demo)
       - name: Run PHPUnit
         run: |
           docker compose exec -T "$PHP_SVC" bash -lc 'if [ -x bin/phpunit ]; then php bin/phpunit --testdox; elif [ -x vendor/bin/phpunit ]; then vendor/bin/phpunit --testdox; else echo "PHPUnit no encontrado"; exit 2; fi'
 
+      # 12) (Opcional) Subo cobertura como artefacto si existe
       - name: Upload coverage artifact (optional)
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
@@ -104,6 +142,7 @@ jobs:
           path: var/coverage
           if-no-files-found: ignore
 
+      # 13) Si algo falla, muestro logs de contenedores para diagnosticar rápido
       - name: Logs on failure
         if: failure()
         run: |
