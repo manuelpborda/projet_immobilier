@@ -11,12 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-
-    # Ajusta estos nombres si tus servicios se llaman distinto en docker-compose.yml
     env:
-      PHP_SVC: php
-      MYSQL_SVC: mysql
-      MONGO_SVC: mongodb
       COMPOSER_ALLOW_SUPERUSER: 1
 
     steps:
@@ -31,36 +26,60 @@ jobs:
       - name: Build & start services (Docker Compose)
         run: |
           docker compose -f docker-compose.yml up -d --build
-          echo "=== Servicios detectados ==="
-          docker compose config --services
+          echo "=== Servicios declarados ==="
+          docker compose config --services || true
           echo "=== Estado ==="
-          docker compose ps
+          docker compose ps || true
+
+      - name: Detect service names from compose
+        id: detect
+        shell: bash
+        run: |
+          svcs="$(docker compose config --services || true)"
+          echo "Servicios: "
+          echo "$svcs"
+
+          pick() { for n in "$@"; do echo "$svcs" | grep -qx "$n" && { echo "$n"; return; }; done; }
+
+          PHP_SVC=$(pick php app symfony web php-fpm)
+          MYSQL_SVC=$(pick mysql db mariadb)
+          MONGO_SVC=$(pick mongodb mongo)
+
+          echo "PHP_SVC=${PHP_SVC:-php}" >> "$GITHUB_ENV"
+          echo "MYSQL_SVC=${MYSQL_SVC:-mysql}" >> "$GITHUB_ENV"
+          echo "MONGO_SVC=${MONGO_SVC:-mongodb}" >> "$GITHUB_ENV"
+
+          echo "Detectado -> PHP=${PHP_SVC:-php}  MYSQL=${MYSQL_SVC:-mysql}  MONGO=${MONGO_SVC:-mongodb}"
 
       - name: Wait for MySQL
         run: |
           for i in {1..90}; do
-            if docker compose exec -T "$MYSQL_SVC" sh -lc 'mysqladmin ping --silent' 2>/dev/null; then
+            if docker compose exec -T "$MYSQL_SVC" sh -lc 'command -v mysqladmin >/dev/null 2>&1 && mysqladmin ping --silent' 2>/dev/null; then
               echo "MySQL is up"; exit 0; fi
             echo "Waiting MySQL ($i/90)"; sleep 2
           done
           echo "MySQL did not become ready in time"
-          docker compose logs "$MYSQL_SVC"
+          docker compose logs "$MYSQL_SVC" || true
           exit 1
 
-      - name: Wait for MongoDB
+      - name: Wait for MongoDB (skip if service missing)
         run: |
-          for i in {1..90}; do
-            if docker compose exec -T "$MONGO_SVC" sh -lc 'if command -v mongosh >/dev/null 2>&1; then mongosh --quiet --eval "db.runCommand({ ping: 1 }).ok"; else mongo --quiet --eval "db.runCommand({ ping: 1 }).ok"; fi' 2>/dev/null | grep -q "1"; then
-              echo "MongoDB is up"; exit 0; fi
-            echo "Waiting MongoDB ($i/90)"; sleep 2
-          done
-          echo "MongoDB did not become ready in time"
-          docker compose logs "$MONGO_SVC"
-          exit 1
+          if docker compose ps "$MONGO_SVC" >/dev/null 2>&1; then
+            for i in {1..90}; do
+              if docker compose exec -T "$MONGO_SVC" sh -lc 'if command -v mongosh >/dev/null 2>&1; then mongosh --quiet --eval "db.runCommand({ ping: 1 }).ok"; elif command -v mongo >/dev/null 2>&1; then mongo --quiet --eval "db.runCommand({ ping: 1 }).ok"; else echo 1; fi' 2>/dev/null | grep -q "1"; then
+                echo "MongoDB is up"; exit 0; fi
+              echo "Waiting MongoDB ($i/90)"; sleep 2
+            done
+            echo "MongoDB did not become ready in time"
+            docker compose logs "$MONGO_SVC" || true
+            exit 1
+          else
+            echo "Mongo service '$MONGO_SVC' not found in compose. Skipping Mongo wait."
+          fi
 
       - name: Install Composer in PHP container (if missing)
         run: |
-          docker compose exec -T "$PHP_SVC" sh -lc 'command -v composer >/dev/null 2>&1 || (php -r "copy(\"https://getcomposer.org/installer\", \"composer-setup.php\");" && php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php)'
+          docker compose exec -T "$PHP_SVC" sh -lc 'if ! command -v composer >/dev/null 2>&1; then php -r "copy(\"https://getcomposer.org/installer\", \"composer-setup.php\");" && php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php; fi'
           docker compose exec -T "$PHP_SVC" sh -lc 'composer --version'
 
       - name: Composer install
@@ -75,7 +94,7 @@ jobs:
 
       - name: Run PHPUnit
         run: |
-          docker compose exec -T "$PHP_SVC" bash -lc 'if [ -x bin/phpunit ]; then php bin/phpunit --testdox; else ./vendor/bin/phpunit --testdox; fi'
+          docker compose exec -T "$PHP_SVC" bash -lc 'if [ -x bin/phpunit ]; then php bin/phpunit --testdox; elif [ -x vendor/bin/phpunit ]; then vendor/bin/phpunit --testdox; else echo "PHPUnit no encontrado"; exit 2; fi'
 
       - name: Upload coverage artifact (optional)
         if: ${{ always() }}
@@ -88,7 +107,7 @@ jobs:
       - name: Logs on failure
         if: failure()
         run: |
-          docker compose ps
+          docker compose ps || true
           docker compose logs "$PHP_SVC" || true
           docker compose logs "$MYSQL_SVC" || true
           docker compose logs "$MONGO_SVC" || true
