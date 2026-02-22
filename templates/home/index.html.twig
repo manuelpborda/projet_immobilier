@@ -6,7 +6,7 @@
 
 {% block body %}
 <header>
-    {# Puedes dejar tu nav aquí si quieres menú fijo en cada página #}
+   
 </header>
 
 <div class="search-section">
@@ -102,7 +102,7 @@
 
 </main>
 {% if app.request.attributes.get('_route') == 'home' %}
-  <script src="{{ asset('js/weather_widget.js') }}"></script>
+  <script src="{{ asset('js/weather_widget.js') }}" defer></script>
 {% endif %}
 
 

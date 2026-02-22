@@ -71,7 +71,7 @@ class AppFixtures extends Fixture
         $bien1->setSurfaceM2(90);
         $bien1->setEtatDuBien('Neuf');
         $bien1->setTipoTransaccion('venta');
-        $bien1->setFoto('assets/img/apartamentos/apto1.jpg');
+        $bien1->setFoto('assets/img/apartamentos/apto1.webp');
         $bien1->setProprietaire($agent1); // Asigno el agente como propietario
         $manager->persist($bien1);
 
@@ -117,9 +117,9 @@ class AppFixtures extends Fixture
             $bien->setTipoTransaccion($tipoTransaccion);
 
             if ($tipo === 'Maison') {
-                $bien->setFoto('assets/img/casas/casa' . rand(1, 16) . '.jpg');
+                $bien->setFoto('assets/img/casas/casa' . rand(1, 16) . '.webp');
             } else {
-                $bien->setFoto('assets/img/apartamentos/apto' . rand(1, 16) . '.jpg');
+                $bien->setFoto('assets/img/apartamentos/apto' . rand(1, 16) . '.webp');
             }
 
             // Asigno propietario aleatorio (agente1 o agente2)
