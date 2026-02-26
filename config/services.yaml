@@ -1,0 +1,37 @@
+
+# Este archivo configura los servicios de Symfony y nuestros propios servicios personalizados.
+# ==========================================
+
+
+parameters:
+    mongo_db_name: '%env(string:MONGO_DB)%' # Nombre de la BD MongoDB tomado de variables de entorno (.env)
+
+services:
+    # === Configuración por defecto para todos los servicios de este archivo ===
+    # Justificación: Symfony inyectará automáticamente las dependencias y configurará los servicios.
+    _defaults:
+        autowire: true      # Inyección automática de dependencias en constructores
+        autoconfigure: true # Symfony registra automáticamente tags según el tipo de clase
+
+    # === Registro automático de todas las clases de /src como servicios ===
+    # Justificación: así no tengo que registrar cada clase manualmente.
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # === Servicio MongoDB\Client ===
+    # Justificación: Este cliente es el que nos permite conectar con MongoDB usando la librería oficial.
+    MongoDB\Client:
+        class: MongoDB\Client
+        arguments:
+            - '%env(string:MONGO_URI)%' # URI de conexión a MongoDB definida en .env
+
+    # === Servicio personalizado para registrar contactos en MongoDB ===
+    # Justificación: encapsulo la lógica de guardado NoSQL para cumplir con requisitos UC.
+    App\Service\MongoContactLogger:
+        arguments:
+            - '@MongoDB\Client' # Inyección del cliente MongoDB
+            - '%mongo_db_name%' # Nombre de la base de datos

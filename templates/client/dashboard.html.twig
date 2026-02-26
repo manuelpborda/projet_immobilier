@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel Cliente{% endblock %}
+
+{% block body %}
+    <h1>Bienvenido, {{ user.firstName }}</h1>
+    <p>Este es tu panel como cliente. Aquí puedes buscar propiedades, marcar favoritos o hacer ofertas.</p>
+
+    <ul>
+        <li>Tu email: <strong>{{ user.email }}</strong></li>
+        <li>Tipo de usuario: <strong>{{ user.typeUser }}</strong></li>
+        <li>Roles asignados: {{ user.roles|join(', ') }}</li>
+    </ul>
+{% endblock %}

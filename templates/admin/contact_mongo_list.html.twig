@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mensajes (MongoDB){% endblock %}
+
+{% block body %}
+  <h1>Mensajes de contacto (MongoDB)</h1>
+  <table>
+    <thead>
+      <tr><th>Fecha</th><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Mensaje</th></tr>
+    </thead>
+    <tbody>
+      {% for m in logs %}
+        <tr>
+          <td>{{ m.createdAt|date('Y-m-d H:i') }}</td>
+          <td>{{ m.name }}</td>
+          <td>{{ m.email }}</td>
+          <td>{{ m.phone ?? '-' }}</td>
+          <td>{{ m.message }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5">Sin mensajes.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+ {#con esta vista en http://localhost:8080/admin/contact/mongo puedo ver desdela pagina admin la lista de mensajes dejados en mongo sin pasar ppor phpmyadmin #}

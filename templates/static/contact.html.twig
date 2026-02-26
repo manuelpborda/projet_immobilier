@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+{% block title %}Contacto - CONSORIA Inmobiliaria{% endblock %}
+
+{% block body %}
+
+  {# Flashes discretos #}
+  {% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+  {% endfor %}
+  {% for message in app.flashes('info') %}
+    <div class="alert alert-info">{{ message }}</div>
+  {% endfor %}
+  {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+  {% endfor %}
+
+  <section class="contact-section">
+    <div class="contact-info-block">
+      <h1>Contacto directo con CONSORIA Inmobiliaria</h1>
+      <p>Completa el formulario y te responderé.</p>
+
+      {# Botón MUY pequeño para alternar entre Mongo y MySQL + badge discreto #}
+      {% set current  = storageMode is defined ? storageMode : 'mongo' %}
+      {% set toggleTo = current == 'mongo' ? 'mysql' : 'mongo' %}
+      <div class="mode-toggle">
+        <a href="{{ path('contact_mode', {'mode': toggleTo}) }}"
+           class="btn btn-sm btn-outline-secondary"
+           title="Cambiar modo de almacenamiento">
+           {% if current == 'mongo' %}Usar MySQL{% else %}Usar Mongo{% endif %}
+        </a>
+        <span class="mode-badge">Modo: {{ current|upper }}</span>
+      </div>
+
+      {# Form: posteo a la misma ruta 'contact' (GET/POST) #}
+      <form method="post" action="{{ path('contact') }}" class="contact-form">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('contact_form') }}">
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required maxlength="100">
+
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" maxlength="20">
+
+        <label for="correo">Correo electrónico:</label>
+        <input type="email" id="correo" name="correo" required maxlength="120">
+
+        <label for="mensaje">Mensaje:</label>
+        <textarea id="mensaje" name="mensaje" rows="4" required maxlength="1000"></textarea>
+
+        <button type="submit" class="btn-primary">Enviar mensaje</button>
+      </form>
+    </div>
+  </section>
+
+  <style>
+    /* Posiciono el toggle en la esquina del bloque, discreto */
+    .contact-info-block { position: relative; }
+    .mode-toggle{
+      display:flex; gap:.5rem; align-items:center;
+      position:absolute; right:12px; top:12px;
+    }
+    .mode-toggle .btn{ padding:.15rem .4rem; font-size:.75rem; line-height:1; }
+    .mode-badge{
+      font-size:.7rem; color:#6c757d; background:#f8f9fa; border:1px solid #e5e7eb;
+      padding:.1rem .35rem; border-radius:999px;
+    }
+  </style>
+
+{% endblock %}

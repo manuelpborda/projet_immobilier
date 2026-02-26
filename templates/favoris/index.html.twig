@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mis Inmuebles Favoritos{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Mis Inmuebles Favoritos</h1>
+
+    {# Mensajes flash para informar al usuario #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} mb-3">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% if favoritos|length == 0 %}
+        <div class="alert alert-info">
+            Aún no tienes inmuebles en favoritos.
+        </div>
+    {% else %}
+        <div class="row">
+            {% for favorito in favoritos %}
+                {% set bien = favorito.bien %}
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm favorito-card">
+                        <div class="favorito-img-wrapper">
+                            <img src="{{ asset(bien.foto) }}" class="favorito-img" alt="Foto del bien">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ bien.typeDeBien|capitalize }} en {{ bien.ville }}
+                            </h5>
+                            <p class="card-text mb-1"><strong>Dirección:</strong> {{ bien.adresse }}</p>
+                            <p class="card-text mb-1"><strong>Precio:</strong> {{ bien.prix|number_format(0, ',', ' ') }} €</p>
+                            <p class="card-text mb-2"><strong>Superficie:</strong> {{ bien.surfaceM2 }} m²</p>
+
+                            <a href="{{ path('bien_show', {id: bien.id}) }}" class="btn btn-sm btn-primary">Ver detalle</a>
+
+                            <form method="post" action="{{ path('quitar_favorito', {id: bien.id}) }}" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm ms-2">
+                                    Quitar de favoritos
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <a href="{{ path('home') }}" class="btn btn-secondary mt-4">← Volver al inicio</a>
+</div>
+{% endblock %}

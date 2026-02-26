@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle de la Propiedad - CONSORIA{% endblock %}
+
+{% block body %}
+<div class="detalle-bien-container">
+    {# Sección izquierda: imagen del inmueble. Uso clase dedicada para diseño #}
+    <div class="detalle-bien-imagen">
+        <img src="{{ asset(bien.foto) }}" alt="Detalle de {{ bien.typeDeBien }} en {{ bien.ville }}" class="img-detalle">
+    </div>
+
+    {# Sección derecha: información detallada, botones y acciones #}
+    <div class="detalle-bien-info">
+        <h1>{{ bien.typeDeBien|capitalize }} en {{ bien.ville }}</h1>
+
+        <ul>
+            <li><strong>Dirección:</strong> {{ bien.adresse }}</li>
+            <li><strong>Precio:</strong> {{ bien.prix|number_format(0, ',', '.') }} COP</li>
+            <li><strong>Superficie:</strong> {{ bien.surfaceM2 }} m²</li>
+            <li><strong>Estado:</strong> {{ bien.etatDuBien }}</li>
+            <li><strong>Transacción:</strong> {{ bien.tipoTransaccion }}</li>
+        </ul>
+
+        {# Botones: volver, favoritos (cliente) y contactar agente #}
+        <div style="margin-top:1.5em;">
+            <a href="{{ path('home') }}" class="btn-warning">← Volver al listado</a>
+
+            {% if app.user and 'ROLE_CLIENT' in app.user.roles %}
+                <button
+                    class="btn-proprietaire"
+                    data-id="{{ bien.id }}"
+                    onclick="toggleFavorito({{ bien.id }})"
+                    style="margin-left:12px;"
+                >
+                    <span id="icon-{{ bien.id }}">{{ esFavorito ? '❤️' : '🤍 Agregar a Favoritos' }}</span>
+                </button>
+            {% endif %}
+
+            <button class="btn-primary" style="margin-left:12px;" onclick="abrirModalContacto()">Contactar un agente</button>
+        </div>
+    </div>
+</div>
+
+{# Modal de contacto (estilo premium), controlado desde JS externo #}
+<div id="contactModal" class="popup-terms">
+    <h2>Contactar un agente</h2>
+    <p><strong>Email:</strong> manuelpborda@gmail.com</p>
+    <p>
+        <a href="mailto:manuelpborda@gmail.com?subject=Consulta sobre '{{ bien.typeDeBien }}' en '{{ bien.adresse }}'">Enviar correo</a>
+    </p>
+    <p><strong>WhatsApp:</strong> +57 312 450 49 82</p>
+    <p>
+        <a href="https://wa.me/573124504982?text=Hola, quiero información sobre '{{ bien.typeDeBien }}' en '{{ bien.adresse }}'" target="_blank">
+            Escribir por WhatsApp
+        </a>
+    </p>
+    <button onclick="cerrarModalContacto()" class="btn-warning" style="margin-top:1em;">Cerrar</button>
+</div>
+
+{# Scripts externos necesarios para favoritos y modal #}
+<script src="{{ asset('js/contactModal.js') }}"></script>
+<script src="{{ asset('js/favoris.js') }}"></script>
+{% endblock %}

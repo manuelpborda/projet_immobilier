@@ -1,0 +1,825 @@
+/* =========================
+   CONSORIA - ESTILO GLOBAL
+   ========================= */
+
+/*
+   Uso variables CSS centralizadas para la paleta dorado-negro,
+*/
+:root {
+    --luxe-black: #1A181A;        
+    --luxe-gold: #C19D53;         
+    --luxe-gold-bright: #FFD700;  
+    --luxe-white: #FFFDF8;        
+    --luxe-grey: #E0E0E0;         
+    --luxe-yellow: #FFD600;      
+    --luxe-green: #223A2F;        
+    --shadow-gold: 0 6px 18px #c19d5333; 
+}
+
+/* 
+   FONDO GENERAL Y TIPOGRAFÍA
+*/
+html, body { height: 100%; } /* base para sticky footer */
+body {
+    background: var(--luxe-black);
+    color: var(--luxe-white);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+
+    /* STICKY FOOTER: cuerpo como contenedor flex vertical */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Si usas <main> en tus templates, se expandirá para empujar el footer al fondo */
+main { flex: 1 0 auto; }
+
+/* 
+   NAVBAR PRINCIPAL
+*/
+nav {
+    background: var(--luxe-black);
+    color: var(--luxe-gold);
+    padding: 18px 36px;
+    border-bottom: 2px solid var(--luxe-gold);
+    box-shadow: 0 4px 18px #0002;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+nav a {
+    color: var(--luxe-gold);
+    text-decoration: none;
+    font-weight: 500;
+    margin-right: 14px;
+    transition: color 0.18s;
+}
+nav a:hover {
+    color: var(--luxe-gold-bright);
+    text-shadow: 0 0 14px var(--luxe-gold-bright);
+}
+
+/* 
+   SECCIÓN DE FILTROS/BÚSQUEDA
+*/
+.search-section {
+    background: var(--luxe-black);
+    border-bottom: 2px solid var(--luxe-gold);
+    padding: 28px 0 12px 0;
+    margin-bottom: 24px;
+    text-align: center;
+}
+.search-section form select,
+.search-section form input[type="text"] {
+    background: var(--luxe-white);
+    border: 1.5px solid var(--luxe-gold);
+    color: var(--luxe-black);
+    border-radius: 7px;
+    padding: 8px 13px;
+    margin: 0 8px 12px 0;
+    font-size: 1em;
+}
+.search-section form button,
+.search-section form a {
+    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
+    color: var(--luxe-black);
+    border: none;
+    border-radius: 7px;
+    padding: 8px 18px;
+    font-weight: bold;
+    font-size: 1em;
+    margin-right: 8px;
+    box-shadow: 0 2px 10px #c19d5360;
+    cursor: pointer;
+    transition: box-shadow 0.16s, background 0.16s, color 0.16s;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+}
+.search-section form button:hover,
+.search-section form a:hover {
+    background: linear-gradient(90deg, var(--luxe-gold-bright), var(--luxe-gold));
+    color: var(--luxe-black);
+    filter: brightness(1.10);
+}
+
+/* === SEARCH SECTION: corregir viñetas cuando el contenedor está centrado === */
+.search-section ul,
+.search-section ol {
+    display: inline-block;   /* el bloque de la lista queda centrado */
+    text-align: left;        /* el texto se lee alineado a la izquierda */
+    margin: 0 auto 1em;
+    list-style-position: inside; /* viñetas/números junto al texto */
+    padding-left: 0;
+}
+.search-section ul { list-style-type: disc; }
+.search-section ol { list-style-type: decimal; }
+
+/* 
+   GRID DE PROPIEDADES:  3x3 DESKTOP
+*/
+.grille-biens {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /*  3 columnas desktop */
+    gap: 32px 24px;
+    margin: 24px 0 40px 0;
+    padding: 0 8vw;
+    align-items: stretch;
+}
+
+/* Card individual: bordes oro, sombra dorada */
+.carte-bien {
+    display: flex;
+    flex-direction: column;
+    background: var(--luxe-white);
+    color: var(--luxe-black);
+    border: 2px solid var(--luxe-gold);
+    border-radius: 18px;
+    box-shadow: var(--shadow-gold);
+    transition: box-shadow 0.22s, border-color 0.18s;
+    overflow: hidden;
+    height: 100%;
+}
+.carte-bien:hover {
+    box-shadow: 0 8px 32px var(--luxe-gold-bright);
+    border-color: var(--luxe-gold-bright);
+}
+
+/* Imagen de la card  */
+.carte-bien-image {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: var(--luxe-grey);
+    border-radius: 18px 18px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.carte-bien-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 2px 12px #0001;
+}
+
+.favorito-img-wrapper {
+    text-align: center;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 100%;
+}
+
+/* Estilo de la tarjeta del bien en favoritos */
+.favorito-card {
+    background: transparent !important;
+}
+
+/* Estilo de la imagen */
+.favorito-img {
+    max-width: 380px;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #0002;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Info de la card */
+.carte-bien-info {
+    padding: 18px 18px 24px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+.carte-bien-info h3 {
+    font-size: 1.22rem;
+    color: var(--luxe-black);
+    font-weight: bold;
+    margin-bottom: 8px;
+    line-height: 1.24;
+}
+
+/* 
+   Uso un dorado oscuro sobre fondo blanco para máximo contraste .
+*/
+.prix-bien {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--luxe-gold);
+    background: #f6efe2;
+    padding: 7px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #c19d5333;
+    margin-bottom: 8px;
+    display: inline-block;
+    border: 1.5px solid var(--luxe-gold-bright);
+    letter-spacing: 0.08em;
+}
+
+.carte-bien-info p {
+    color: #222;
+    margin: 4px 0 6px 0;
+    font-size: 0.97em;
+}
+
+.carte-bien-info a.btn-primary {
+    align-self: flex-end;
+    margin-top: 8px;
+}
+
+/* =============================
+   BOTONES LUXE DORADO
+   ============================= */
+.btn-primary {
+    background: linear-gradient(90deg, var(--luxe-gold) 20%, var(--luxe-gold-bright) 80%);
+    color: var(--luxe-black);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 28px;
+    font-weight: bold;
+    font-size: 1.07em;
+    letter-spacing: 0.6px;
+    box-shadow: 0 4px 16px var(--luxe-gold-bright);
+    cursor: pointer;
+    transition: box-shadow 0.16s, background 0.16s, color 0.16s;
+}
+.btn-primary:hover {
+    background: linear-gradient(90deg, var(--luxe-gold-bright) 10%, var(--luxe-gold) 90%);
+    color: var(--luxe-black);
+    box-shadow: 0 8px 28px var(--luxe-gold-bright);
+    filter: brightness(1.08);
+}
+
+/* Botón de alerta/acción importante (amarillo suave) */
+.btn-warning {
+    background: var(--luxe-yellow);
+    color: var(--luxe-black);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: bold;
+    font-size: 1em;
+}
+.btn-warning:hover {
+    background: var(--luxe-gold-bright);
+    color: var(--luxe-black);
+    filter: brightness(1.11);
+}
+
+/* Boton EXCLUSIVO para propietario mas visible */
+.btn-proprietaire {
+    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
+    color: var(--luxe-black);
+    border-radius: 8px;
+    padding: 6px 18px;
+    font-weight: bold;
+    margin-left: 12px;
+}
+.btn-proprietaire:hover {
+    background: linear-gradient(90deg, var(--luxe-gold-bright), var(--luxe-gold));
+    color: var(--luxe-black);
+    box-shadow: 0 6px 24px var(--luxe-gold);
+}
+
+/* === SEARCH SECTION: margen extra para "Limpiar filtros" === */
+.search-section .btn-warning,
+.search-section .btn-limpiar,
+.search-section .btn-clear {
+    display: inline-block;   /* asegura que margin-top/bottom surta efecto también en <a> */
+    margin-top: 16px;        /* más aire arriba */
+    margin-bottom: 12px;     /* un poco abajo también */
+}
+
+/* =============================
+   AVISOS Y ALERTAS
+   ============================= */
+.alert {
+    background: var(--luxe-yellow);
+    color: var(--luxe-black);
+    border: 1.5px solid var(--luxe-gold);
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin: 16px 0;
+    font-size: 1.1em;
+}
+.alert-success {
+    background: var(--luxe-green);
+    color: var(--luxe-gold-bright);
+    border: 1.5px solid var(--luxe-gold);
+}
+
+/* =============================
+   FOOTER
+   ============================= */
+footer {
+    background: var(--luxe-black);
+    color: var(--luxe-gold-bright);
+    padding: 40px 0 18px 0;
+    text-align: center;
+    font-size: 1rem;
+    border-top: 2px solid var(--luxe-gold);
+
+    /* STICKY FOOTER: se pega al fondo del viewport cuando hay poco contenido */
+    margin-top: auto;
+}
+.footer-section {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+}
+.footer-section > div {
+    min-width: 180px;
+}
+
+/* =============================
+   PAGINACIÓN DORADA (centrada,)
+   ============================= */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 32px 0 0 0;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    list-style: none;
+}
+.pagination li {
+    margin: 0 2px;
+}
+.pagination li > a,
+.pagination li > span {
+    display: inline-block;
+    min-width: 48px;
+    height: 48px;
+    line-height: 48px;
+    background: var(--luxe-white);
+    color: var(--luxe-gold);
+    border: 2px solid var(--luxe-gold);
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        background 0.18s,
+        color 0.18s,
+        border-color 0.18s,
+        box-shadow 0.18s;
+    box-shadow: 0 2px 8px #c19d5333;
+    cursor: pointer;
+}
+.pagination li > a:hover {
+    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
+    color: var(--luxe-black);
+    border-color: var(--luxe-gold-bright);
+    box-shadow: 0 4px 14px var(--luxe-gold-bright);
+}
+.pagination li.active > span,
+.pagination li.current > span {
+    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
+    color: #fff; /* blanco puro, página activa resalta */
+    border-color: var(--luxe-gold-bright);
+    box-shadow: 0 4px 18px var(--luxe-gold-bright);
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+.pagination li.disabled > span,
+.pagination li.disabled > a {
+    background: var(--luxe-grey);
+    color: #aaa;
+    cursor: not-allowed;
+    border-color: var(--luxe-grey);
+    box-shadow: none;
+    pointer-events: none;
+}
+
+/* ========== DETALLE DE BIEN ========= */
+.detalle-bien {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    margin: 3em auto;
+    max-width: 1000px;
+    padding: 0 1em;
+    justify-content: center;
+}
+
+.detalle-bien-imagen {
+    flex: 1 1 450px;
+    text-align: center;
+}
+
+.detalle-img {
+    max-width: 100%;
+    border-radius: 16px;
+    box-shadow: var(--shadow-gold);
+    height: auto; /* Permite altura proporcional */
+}
+
+.detalle-bien-info {
+    flex: 1 1 450px;
+    color: var(--luxe-white);
+    font-size: 1.05em;
+    line-height: 1.7em;
+}
+
+.detalle-bien-info h1 {
+    color: var(--luxe-gold);
+    margin-bottom: 0.5em;
+}
+
+.detalle-bien-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.detalle-bien-info li {
+    margin-bottom: 0.8em;
+    border-bottom: 1px solid var(--luxe-gold);
+    padding-bottom: 0.4em;
+}
+
+/* =============================
+   RESPONSIVE
+   ============================= */
+@media (max-width: 1100px) {
+    .grille-biens {
+        grid-template-columns: repeat(2, 1fr); /* 2 cards en tablet */
+        padding: 0 4vw;
+    }
+    .footer-section {
+        gap: 20px;
+    }
+}
+@media (max-width: 700px) {
+    nav {
+        flex-direction: column;
+        gap: 8px;
+        padding: 16px 4vw;
+    }
+    .grille-biens {
+        grid-template-columns: 1fr; /* 1 card en móvil */
+        gap: 20px;
+        padding: 0 1vw;
+    }
+    .footer-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* =============================
+   ADMIN PANEL - Tablas y Acciones
+   ============================= */
+.admin-panel {
+    display: flex;
+    gap: 16px;
+    margin-top: 1.5em;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2em;
+    background: var(--luxe-white);
+    color: var(--luxe-black);
+    border: 2px solid var(--luxe-gold);
+    box-shadow: var(--shadow-gold);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.admin-table th, .admin-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--luxe-gold);
+    text-align: left;
+}
+
+.admin-table th {
+    background: var(--luxe-gold);
+    color: var(--luxe-black);
+    font-weight: bold;
+}
+
+.admin-table tr:hover {
+    background: var(--luxe-gold-bright);
+    color: var(--luxe-black);
+}
+
+/* para el graico estdisticas en perfil admin */
+.admin-table, .tabla-estadisticas {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2em auto;
+    background: var(--luxe-white);
+    color: var(--luxe-black);
+    box-shadow: var(--shadow-gold);
+}
+
+.admin-table th, .tabla-estadisticas th,
+.admin-table td, .tabla-estadisticas td {
+    border: 1px solid var(--luxe-gold);
+    padding: 10px;
+}
+
+.admin-table th, .tabla-estadisticas th {
+    background: var(--luxe-gold);
+    color: var(--luxe-black);
+}
+
+.admin-table tr:nth-child(even), .tabla-estadisticas tr:nth-child(even) {
+    background: #fdfaf0;
+}
+
+.admin-table tr:hover, .tabla-estadisticas tr:hover {
+    background: var(--luxe-grey);
+}
+
+/* =========================================================
+   SECCIÓN CONTACTO (Opción 2: fondo blanco solo hasta email)
+   ========================================================= */
+
+/* Contenedor general de la página de contacto */
+.contact-section {
+    max-width: 900px;
+    margin: 2em auto;
+}
+
+/* Bloque interno que sí lleva fondo blanco */
+.contact-info-block {
+    background: var(--luxe-white);
+    color: var(--luxe-black);
+    border-radius: 12px;
+    padding: 1.5em;
+    box-shadow: var(--shadow-gold);
+    margin-bottom: 2em;
+}
+
+.contact-info-block h1 {
+    color: var(--luxe-gold);
+    text-align: center;
+    margin-bottom: 0.8em;
+}
+
+.contact-info-block p {
+    text-align: center;
+    margin-bottom: 2em;
+    font-size: 1.05em;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin-bottom: 2em;
+}
+
+.contact-form label {
+    font-weight: bold;
+    color: var(--luxe-black);
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 10px;
+    border: 1.5px solid var(--luxe-gold);
+    border-radius: 8px;
+    font-size: 1em;
+    background: var(--luxe-white);
+    color: var(--luxe-black);
+    box-shadow: 0 2px 6px #c19d5320;
+}
+
+.contact-form textarea {
+    resize: vertical;
+}
+
+.contact-info {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 0; /* Ajuste para que no se coma margen extra antes de imagen */
+}
+
+.contact-info li {
+    margin-bottom: 0.6em;
+}
+
+.contact-info a {
+    color: var(--luxe-gold);
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+/* Imagen y mapa se mantienen fuera del bloque blanco */
+.contact-image {
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+.contact-image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--shadow-gold);
+}
+
+.contact-map {
+    text-align: center;
+}
+
+.contact-map iframe {
+    border: none;
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--shadow-gold);
+}
+
+/* =============================
+   BOTÓN DARK MODE PERSONALIZADO
+   ============================= */
+/* Explico: coloco el botón fijo en la parte superior derecha, separado del nav, estilo dorado coherente */
+#darkModeToggle {
+    position: fixed;
+    top: 15px; /* un poco más cerca del borde superior */
+    right: 15px; /* un poco más cerca del borde derecho */
+    z-index: 999;
+    padding: 4px 10px; 
+    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
+    color: var(--luxe-black);
+    border: 1px solid var(--luxe-gold-bright); 
+    border-radius: 6px; 
+    font-weight: bold;
+    font-size: 0.8rem; 
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 4px #c19d5366; 
+}
+
+#darkModeToggle:hover {
+    background: linear-gradient(90deg, var(--luxe-gold-bright), var(--luxe-gold));
+    box-shadow: 0 4px 14px var(--luxe-gold-bright);
+    color: var(--luxe-black);
+    transform: scale(1.05);
+}
+
+/* MODO CLARO (cuando NO hay dark-mode) ------------ */
+/* Explico al jurado: uso body:not(.dark-mode) para mantener sitio oscuro por defecto y aplicar claro solo cuando cambia */
+
+/* === CLARO cuando hay .light-mode === */
+html.light-mode body {
+    background-color: #f5f5f5;
+    color: #1A181A;
+}
+
+html.light-mode nav,
+html.light-mode footer {
+    background-color: #fffdf8;
+    color: #1A181A;
+    border-color: #C19D53;
+}
+
+html.light-mode a {
+    color: #1A181A;
+}
+
+html.light-mode .btn-primary {
+    background: linear-gradient(90deg, #FFD700, #C19D53);
+    color: #1A181A;
+}
+
+html.light-mode .carte-bien {
+    background: #ffffff;
+    color: #1A181A;
+    border-color: #C19D53;
+}
+
+/* === Light Mode: Search Section === */
+html.light-mode .search-section {
+    background-color: #fffdf8;
+    border-bottom-color: var(--luxe-gold);
+}
+
+/* ===== Light Mode: arreglos específicos para el footer de HOME ===== */
+html.light-mode .footer-gallery-container {
+    background: #fffdf8;                /* mismo tono claro que nav/footer */
+    border-top-color: var(--luxe-gold);
+}
+html.light-mode .footer-info-columns {
+    background-color: #fffdf8;          /* fondo claro */
+    color: #1A181A;                     /* texto oscuro para contraste */
+    border-top-color: var(--luxe-gold);
+}
+
+/* === Galería horizontal tipo banda === */
+.footer-gallery-container {
+    overflow: hidden;
+    width: 100%;
+    background: #000;
+    border-top: 2px solid var(--luxe-gold);
+}
+
+.footer-gallery {
+    display: flex;
+    width: fit-content;
+    animation: scrollGallery 25s linear infinite;
+}
+
+.footer-gallery img {
+    height: 100px;
+    margin: 10px 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.footer-gallery img:hover {
+    transform: scale(1.05);
+}
+
+@keyframes scrollGallery {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Información del footer en columnas  y contacto con agente whatsaap lo dejo al a derecha */
+/* === Estructura del footer === */
+.footer-info-columns {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 24px 16px;
+    background-color: var(--luxe-black);
+    border-top: 2px solid var(--luxe-gold);
+    color: var(--luxe-white);
+}
+
+.footer-office,
+.footer-contact {
+    flex: 1;
+    min-width: 220px;
+    margin: 12px;
+}
+
+.footer-contact a {
+    color: var(--luxe-gold);
+    text-decoration: none;
+}
+
+.footer-contact a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 16px;
+    padding-bottom: 16px;
+}
+
+.footer-bottom a {
+    color: var(--luxe-gold);
+    text-decoration: none;
+}
+
+/* === ABOUT: centrar texto e imagen  === */
+.section-texto {
+    text-align: center;           /* centro títulos y párrafos del bloque */
+}
+.img-info {
+    display: block;               /* hace que el margin auto funcione */
+    margin: 0 auto;               /* centra la imagen horizontalmente */
+}
+/* === ABOUT: arreglar viñetas dentro de .section-texto === */
+.section-texto ul,
+.section-texto ol {
+    /* Centro la lista como bloque, pero dejo el texto alineado a la izquierda */
+    display: inline-block;
+    text-align: left;
+    margin: 0 auto 1em;
+
+    /* Hago que el punto/número forme parte del bloque (así no se va a la izquierda) */
+    list-style-position: inside;
+
+    /* Evito sangrías raras al usar 'inside' */
+    padding-left: 0;
+}
+
+/* Mantengo el tipo de marcador adecuado por lista */
+.section-texto ul { list-style-type: disc; }
+.section-texto ol { list-style-type: decimal; }
+
+/*comentario test git actions*/

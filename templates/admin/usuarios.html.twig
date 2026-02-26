@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block title %}Gestión Usuarios{% endblock %}
+{% block body %}
+<div class="section-texto">
+    <h1>Gestión de Usuarios</h1>
+    <p>Listado completo con rol principal</p>
+    <table class="admin-table">
+        <thead>
+            <tr><th>ID</th><th>Email</th><th>Rol</th></tr>
+        </thead>
+        <tbody>
+            {% for u in usuarios %}
+                {% set rol = u.roles[0]|default('Desconocido') %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ rol }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="3">No hay usuarios registrados.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('admin_dashboard') }}" class="btn-warning" style="margin-top: 1.5em; display: inline-block;">
+    ← Volver al Panel
+</a>
+
+</div>
+{% endblock %}

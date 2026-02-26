@@ -1,0 +1,109 @@
+{# templates/home/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Inicio - CONSORIA Inmobiliaria{% endblock %}
+
+{% block body %}
+<header>
+    {# Puedes dejar tu nav aquí si quieres menú fijo en cada página #}
+</header>
+
+<div class="search-section">
+    <form method="get" action="{{ path('home') }}">
+        <!-- Filtros para búsqueda avanzada -->
+        <select name="typeDeBien" aria-label="Tipo de inmueble">
+            <option value="">Todos los tipos</option>
+            {% for tipo in tiposDeBien %}
+                <option value="{{ tipo }}" {% if app.request.get('typeDeBien') == tipo %}selected{% endif %}>
+                    {% if tipo == 'Appartement' %}Apartamento
+                    {% elseif tipo == 'Maison' %}Casa
+                    {% else %}{{ tipo }}
+                    {% endif %}
+                </option>
+            {% endfor %}
+        </select>
+        <select name="tipoTransaccion" aria-label="Tipo de transacción">
+            <option value="">Todas las operaciones</option>
+            <option value="venta" {% if app.request.get('tipoTransaccion') == 'venta' %}selected{% endif %}>Venta</option>
+            <option value="arriendo" {% if app.request.get('tipoTransaccion') == 'arriendo' %}selected{% endif %}>Arriendo</option>
+            <option value="vacacional" {% if app.request.get('tipoTransaccion') == 'vacacional' %}selected{% endif %}>Alquiler vacacional</option>
+        </select>
+        <select name="ville" aria-label="Ciudad">
+            <option value="">Todas las ciudades</option>
+            {% for ciudad in ciudadesDisponibles %}
+                <option value="{{ ciudad }}" {% if app.request.get('ville') == ciudad %}selected{% endif %}>{{ ciudad }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="adresse" placeholder="Dirección" value="{{ app.request.get('adresse') }}">
+        <select name="rangoPrecio" aria-label="Rango de precios">
+            <option value="">Todos los precios</option>
+            <option value="1-100000000" {% if app.request.get('rangoPrecio') == '1-100000000' %}selected{% endif %}>Hasta 100 millones</option>
+            <option value="100000001-250000000" {% if app.request.get('rangoPrecio') == '100000001-250000000' %}selected{% endif %}>100 a 250 millones</option>
+            <option value="250000001-500000000" {% if app.request.get('rangoPrecio') == '250000001-500000000' %}selected{% endif %}>250 a 500 millones</option>
+            <option value="500000001-750000000" {% if app.request.get('rangoPrecio') == '500000001-750000000' %}selected{% endif %}>500 a 750 millones</option>
+            <option value="750000001-1000000000" {% if app.request.get('rangoPrecio') == '750000001-1000000000' %}selected{% endif %}>750 millones a 1.000 millones</option>
+            <option value="1000000001-9999999999" {% if app.request.get('rangoPrecio') == '1000000001-9999999999' %}selected{% endif %}>Más de 1.000 millones</option>
+        </select>
+        <select name="rangoSuperficie" aria-label="Rango de superficie">
+            <option value="">Todas las superficies</option>
+            <option value="1-49" {% if app.request.get('rangoSuperficie') == '1-49' %}selected{% endif %}>Menos de 50 m²</option>
+            <option value="50-99" {% if app.request.get('rangoSuperficie') == '50-99' %}selected{% endif %}>50 - 99 m²</option>
+            <option value="100-149" {% if app.request.get('rangoSuperficie') == '100-149' %}selected{% endif %}>100 - 149 m²</option>
+            <option value="150-199" {% if app.request.get('rangoSuperficie') == '150-199' %}selected{% endif %}>150 - 199 m²</option>
+            <option value="200-9999" {% if app.request.get('rangoSuperficie') == '200-9999' %}selected{% endif %}>200 m² o más</option>
+        </select>
+        <select name="etatDuBien" aria-label="Estado del inmueble">
+            <option value="">Todos los estados</option>
+            {% for etat in estadosDeBien %}
+                <option value="{{ etat }}" {% if app.request.get('etatDuBien') == etat %}selected{% endif %}>
+                    {% if etat == 'Neuf' %}Nuevo
+                    {% elseif etat == 'Ancien' %}Antiguo
+                    {% else %}{{ etat }}
+                    {% endif %}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-primary">Filtrar</button>
+        <a href="{{ path('home') }}" class="btn-warning">Limpiar filtros</a>
+    </form>
+</div>
+
+<main>
+    <div class="grille-biens">
+        {# Mostramos las propiedades paginadas #}
+        {% for bien in bienes %}
+            <div class="carte-bien">
+                <div class="carte-bien-image">
+                    <img src="{{ asset(bien.foto) }}" alt="{{ bien.typeDeBien }} en venta o arriendo en {{ bien.ville }}, {{ bien.adresse }}" class="carte-bien-img" loading="lazy">
+                </div>
+                <div class="carte-bien-info">
+                    <h3>
+                        {% if bien.typeDeBien == 'Appartement' %}Apartamento
+                        {% elseif bien.typeDeBien == 'Maison' %}Casa
+                        {% else %}{{ bien.typeDeBien }}
+                        {% endif %}
+                        {% if bien.tipoTransaccion %} en {{ bien.tipoTransaccion }}{% endif %}
+                    </h3>
+                    <div class="prix-bien">{{ bien.prix|number_format(0, ',', ' ') }} COP</div>
+                    <p>Ciudad: {{ bien.ville }}</p>
+                    <p>Dirección: {{ bien.adresse }}</p>
+                    <p>Superficie: {{ bien.surfaceM2 }} m²</p>
+                    <a href="{{ path('bien_show', {'id': bien.id}) }}" class="btn-primary">Ver más</a>
+                </div>
+            </div>
+        {% else %}
+            <p>No hay propiedades disponibles.</p>
+        {% endfor %}
+    </div>
+   <div class="pagination-wrapper">
+    {{ knp_pagination_render(bienes) }}
+</div>
+
+</main>
+{% if app.request.attributes.get('_route') == 'home' %}
+  <script src="{{ asset('js/weather_widget.js') }}"></script>
+{% endif %}
+
+
+{% endblock %}

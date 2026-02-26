@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% block title %}Dashboard Admin{% endblock %}
+{% block body %}
+<div class="section-texto">
+    <h1>Panel de Administración</h1>
+    <p>Resumen general del sistema</p>
+    <ul>
+        <li>Total Usuarios: <strong>{{ totalUsuarios }}</strong></li>
+        <li>Clientes: <strong>{{ clientes }}</strong></li>
+        <li>Propietarios: <strong>{{ propietarios }}</strong></li>
+        <li>Administradores: <strong>{{ administradores }}</strong></li>
+        <li>Total Inmuebles: <strong>{{ totalBienes }}</strong></li>
+    </ul>
+    <div class="admin-panel">
+        <a href="{{ path('admin_usuarios') }}" class="btn-primary">Ver Usuarios</a>
+        <a href="{{ path('admin_estadisticas') }}" class="btn-primary">Ver Estadísticas</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inicio - Agencia Inmobiliaria{% endblock %}
+
+{% block body %}
+
+<!-- Buscador -->
+<div class="mb-4">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search">
+        <button class="btn btn-outline-secondary" type="button">
+            <i class="bi bi-search"></i> Buscar
+        </button>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="row mb-4">
+    <div class="col-md-2 mb-2">
+        <select class="form-select">
+            <option>Location</option>
+        </select>
+    </div>
+    <div class="col-md-2 mb-2">
+        <select class="form-select">
+            <option>Property Type</option>
+        </select>
+    </div>
+    <div class="col-md-2 mb-2">
+        <select class="form-select">
+            <option>Bedrooms</option>
+        </select>
+    </div>
+    <div class="col-md-2 mb-2">
+        <select class="form-select">
+            <option>Bathrooms</option>
+        </select>
+    </div>
+    <div class="col-md-2 mb-2">
+        <select class="form-select">
+            <option>Price</option>
+        </select>
+    </div>
+</div>
+
+<!-- Grid de propiedades -->
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for i in 1..6 %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ asset('assets/img/placeholder.jpg') }}" class="card-img-top" alt="Propiedad">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="card-title">Maison à vendre</h5>
+                        <span class="fw-bold">420 000 €</span>
+                    </div>
+                    <p class="card-text small text-muted">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse euismod.
+                    </p>
+                    <div class="mt-auto text-center">
+                        <a href="#" class="btn btn-outline-primary">Voir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Paginación -->
+<nav class="mt-5 d-flex justify-content-center">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">4</a></li>
+    </ul>
+</nav>
+
+{% endblock %}

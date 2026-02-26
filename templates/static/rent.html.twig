@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Arriendo de Inmuebles - CONSORIA Inmobiliaria{% endblock %}
+
+{% block body %}
+
+<div class="section-texto">
+
+    {# Título principal con dorado y bloque informativo de inicio #}
+    <h1>Arrienda tu inmueble fácil y seguro</h1>
+    <p>
+        Con <strong>CONSORIA Inmobiliaria</strong> puedes arrendar tu apartamento, casa, oficina o local comercial en las principales ciudades de Colombia con total respaldo.<br>
+        Encontramos el arrendatario ideal y te acompañamos en cada paso.
+    </p>
+
+    {# Beneficios explicados con lista semántica #}
+    <h2>¿Por qué arrendar con nosotros?</h2>
+    <ul>
+        <li>Promoción en los principales portales inmobiliarios</li>
+        <li>Selección y validación de inquilinos</li>
+        <li>Gestión completa de contratos de arriendo</li>
+        <li>Asesoría legal durante todo el proceso</li>
+        <li>Gestión de cobro y seguimiento mensual</li>
+    </ul>
+
+    {# Condiciones de comisión claramente explicadas #}
+    <h3>Condiciones de corretaje para arriendo</h3>
+    <ul>
+        <li>Comisión: <strong>50% del primer canon + IVA</strong> (solo si se concreta el arriendo)</li>
+        <li>No cobramos anticipos. Solo si el arriendo es exitoso</li>
+    </ul> <br>
+
+    {# Botón destacado para volver a buscar propiedades en este caso solo en arriendo  usando Get #}
+    <a href="{{ path('home') ~ '?tipo=arriendo' }}" class="btn-warning" style="margin-top: 1em;">Ver inmuebles en arriendo</a>
+
+
+    <hr style="margin: 3em 0; border-top: 1px solid var(--luxe-gold);">
+
+    {# Sección alquiler vacacional, visualmente diferenciada #}
+    <h2>¿Buscas alquilar tu propiedad por temporadas (vacacional)?</h2>
+    <p>
+        También te ayudamos a promocionar y gestionar tu inmueble en alquiler vacacional, para estadías cortas en plataformas como Airbnb o Booking.
+    </p>
+    <ul>
+        <li>Gestión completa de reservas, check-in y check-out</li>
+        <li>Promoción en plataformas internacionales</li>
+        <li>Asesoría para optimizar ocupación y precio</li>
+        <li>Comisión: <strong>10% del valor del alquiler</strong></li>
+    </ul>
+
+    {# Datos de contacto secundarios #}
+    <h3>¿Quieres que te asesoremos? Contáctanos:</h3>
+    <ul>
+        <li><strong>Teléfono/WhatsApp:</strong> <a href="https://wa.me/573124504982" target="_blank">+57 312 4504982</a></li>
+        <li><strong>Oficina:</strong> Cra 7D # 151-42, oficina 201 Bogotá</li>
+        <li><strong>Email:</strong> <a href="mailto:gabrielpulido1984@gmail.com">gabrielpulido1984@gmail.com</a></li>
+    </ul>
+
+    {# Imagen destacada al final para cierre visual elegante #}
+    <img src="assets/img/static_pages/location_vacances.png" alt="Arriendo de Inmuebles" class="img-info">
+
+</div>
+
+{% endblock %}
