@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Archivero de Propietarios - Administración{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="card shadow border-0 rounded-3 mb-4 bg-body-tertiary">
+        <div class="card-header bg-dark text-white p-4">
+            <h2 class="mb-0"><i class="fas fa-vault me-2"></i> Archivero Digital de Documentos Privados</h2>
+            <p class="mb-0 text-white-50 mt-1">Accede de forma exclusiva y confidencial a los contratos, escrituras y facturas de cada propietario.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for data in propietariosData %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm border h-100 bg-body-tertiary">
+                    <div class="card-header bg-body py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-user-tie me-2"></i>{{ data.usuario.userIdentifier }}</h5>
+                            <small class="opacity-75">ID Propietario: #{{ data.usuario.id }}</small>
+                        </div>
+                        <span class="badge bg-secondary rounded-pill px-3 py-2">{{ data.documentos|length }} archivos</span>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if data.documentos is empty %}
+                            <p class="text-center opacity-75 small p-4 my-0">Este propietario no ha subido ningún documento legal.</p>
+                        {% else %}
+                            <div class="list-group list-group-flush">
+                                {% for doc in data.documentos %}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center bg-transparent py-3 border-bottom">
+                                        <div class="min-w-0 flex-grow-1 pe-2">
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <i class="fas {{ doc.nombreOriginal|split('.')|last|lower == 'pdf' ? 'fa-file-pdf text-danger' : 'fa-file-image text-warning' }}"></i>
+                                                <span class="fw-bold text-truncate d-inline-block small" style="max-width: 220px;" title="{{ doc.nombreOriginal }}">
+                                                    {{ doc.nombreOriginal }}
+                                                </span>
+                                            </div>
+                                            <small class="opacity-75 d-block" style="font-size: 0.75rem;">
+                                                Tipo: <span class="badge bg-body border text-body">{{ doc.tipoDocumento }}</span> | Subido: {{ doc.fechaSubida|date('d/m/Y') }}
+                                            </small>
+                                        </div>
+                                        <div class="d-flex gap-1">
+                                            <a href="{{ path('documento_descargar', {'id': doc.id}) }}" class="btn btn-sm btn-primary" title="Descargar de forma segura">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <p class="opacity-75">No se encontraron usuarios propietarios registrados en el sistema.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

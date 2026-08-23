@@ -3,92 +3,151 @@
 <head>
     <meta charset="UTF-8">
 
-    {# === EVITO PARPADEO BLANCO (dark-mode aplicado antes de cargar estilos) ===
-       Justifico al jurado: Técnica profesional (pre-render script) que mejora la experiencia 
-       visual inicial (UX) leyendo el localStorage antes de pintar el DOM.
-    #}
+    {# === EVITO PARPADEO BLANCO (dark-mode aplicado antes de cargar estilos) === #}
     <script>
-    // Oscuro por defecto, pero si se guardó light-mode => aplico clase
     if (localStorage.getItem('lightMode') === 'true') {
         document.documentElement.classList.add('light-mode');
     }
     </script>
 
-    {# === SEO: Título Dinámico === 
-       Uso 'block title' para personalizar el título dependiendo de la página renderizada. #}
+    {# === SEO: Título Dinámico === #}
     <title>{% block title %}CONSORIA Inmobiliaria{% endblock %}</title>
     
-    {# === SEO: Meta Descripción Dinámica ===
-       Justifico al jurado: Uso un bloque Twig para la meta descripción. Así tengo un texto 
-       fuerte por defecto (para Lighthouse/Google), pero permito que vistas hijas lo sobrescriban. 
-    #}
+    {# === SEO: Meta Descripción Dinámica === #}
     <meta name="description" content="{% block meta_description %}Encuentra las mejores casas y apartamentos en venta y arriendo con Consoria Inmobiliaria en Colombia y Francia. Descubre propiedades exclusivas adaptadas a tus necesidades.{% endblock %}">
      
-    {# === SEO & RESPONSIVE === 
-       Garantiza la correcta visualización en móviles y da luz verde a los bots de Google para indexar. #}
+    {# === SEO & RESPONSIVE === #}
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <meta name="robots" content="index, follow">
     
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome (Iconos para UX) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    {# MEJORAS UX/UI PARA LA BARRA DE NAVEGACIÓN #}
+    <style>
+        .nav-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding: 0.5rem 1rem;
+        }
+        .nav-enlaces a {
+            font-size: 1.1rem; 
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .nav-enlaces a:hover {
+            opacity: 0.8;
+        }
+        .user-zone {
+            margin-left: auto; 
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            padding-left: 1rem;
+        }
+        .text-gold {
+            color: #d4af37 !important; /* Dorado Premium Inmobiliario */
+        }
+    </style>
 </head>
 <body>
 
-    <nav>
-        {# LOGO DE LA EMPRESA con eco-concepción
-           Aplico loading="lazy" para cargarlo solo cuando sea necesario y defino width/height para evitar repintados.
-           Esto reduce consumo de datos y energía, y acelera el renderizado inicial. #}
-        <a href="{{ path('home') }}">
-    <img src="/assets/img/logo.webp" alt="Logo CONSORIA Inmobiliaria" width="150" height="100" style="vertical-align:middle; object-fit: contain;">
-</a>
+    <nav class="nav-wrapper">
+        {# LOGO DE LA EMPRESA con eco-concepción #}
+        <a href="{{ path('home') }}" class="me-3">
+            <img src="{{ asset('assets/img/logo.webp') }}" alt="Logo CONSORIA Inmobiliaria" width="150" height="100" style="vertical-align:middle; object-fit: contain;">
+        </a>
 
-        {% if app.user %}
-            {% if 'ROLE_ADMIN' in app.user.roles %}
-                <a href="{{ path('admin_dashboard') }}">Panel Admin</a>
-                <a href="{{ path('admin_usuarios') }}">Usuarios</a>
-                <a href="{{ path('admin_estadisticas') }}">Estadísticas</a>
-                <span>Bienvenido, {{ app.user.email }}</span>
-                <a href="{{ path('app_logout') }}">Cerrar sesión</a>
-            {% elseif 'ROLE_PROPRIETAIRE' in app.user.roles %}
+        <div class="nav-enlaces d-flex flex-wrap align-items-center gap-3 flex-grow-1">
+            {% if app.user %}
+                {% if 'ROLE_ADMIN' in app.user.roles %}
+                    <a href="{{ path('admin_dashboard') }}">Panel Admin</a>
+                    <a href="{{ path('admin_usuarios') }}">Usuarios</a>
+                    <a href="{{ path('admin_estadisticas') }}">Estadísticas</a>
+                    <a href="{{ path('admin_documentos_index') }}" class="fw-bold">
+    <i class="fas fa-folder-open me-1 text-warning"></i> Documentos
+</a>
+                    <a href="{{ path('admin_interacciones_index') }}" class="fw-bold">
+    <i class="fas fa-envelope-open-text me-1 text-warning"></i> Solicitudes
+</a>
+                    {# === NOMBRE CORREGIDO: MÁS CLARO PARA TU HERMANO === #}
+                    <a href="{{ path('admin_estudios_index') }}" class="text-success fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Estudios de Crédito</a>
+                    
+                    {# ZONA DE PERFIL RESALTADA #}
+                    <div class="user-zone">
+                        <span class="text-gold fw-bold"><i class="fas fa-user-shield me-1"></i> Hola, {{ app.user.email|split('@')[0]|capitalize }}</span>
+                        <a href="{{ path('app_logout') }}" class="btn btn-outline-danger btn-sm rounded-pill px-3"><i class="fas fa-sign-out-alt me-1"></i> Salir</a>
+                    </div>
+
+                {% elseif 'ROLE_PROPRIETAIRE' in app.user.roles %}
+                    <a href="{{ path('home') }}">Inicio</a>
+                    <a href="{{ path('buy') }}">Comprar</a>
+                    <a href="{{ path('sell') }}">Vender</a>
+                    <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
+                    <a href="{{ path('estudio_credito') }}" class="text-success fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Estudio de Crédito</a>
+                    <a href="{{ path('proprietaire_dashboard') }}">Panel Propietario</a>
+                    <a href="{{ path('proprietaire_bien_nuevo') }}">Publicar Bien</a>
+                    <a href="{{ path('proprietaire_documentos') }}" class="text-gold fw-bold"><i class="fas fa-folder-open me-1"></i> Mis Documentos</a>
+                    <a href="{{ path('contact') }}">Contacto</a>
+
+                    {# ZONA DE PERFIL RESALTADA #}
+                    <div class="user-zone">
+                        <span class="text-gold fw-bold"><i class="fas fa-user-tie me-1"></i> Bienvenido, {{ app.user.email|split('@')[0]|capitalize }}</span>
+                        <a href="{{ path('app_logout') }}" class="btn btn-outline-danger btn-sm rounded-pill px-3"><i class="fas fa-sign-out-alt me-1"></i> Salir</a>
+                    </div>
+
+                {% elseif 'ROLE_CLIENT' in app.user.roles %}
+                    <a href="{{ path('home') }}">Inicio</a>
+                    <a href="{{ path('buy') }}">Comprar</a>
+                    <a href="{{ path('sell') }}">Vender</a>
+                    <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
+                    <a href="{{ path('estudio_credito') }}" class="text-success fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Estudio de Crédito</a>
+                    <a href="{{ path('client_dashboard') }}">Mi Panel</a>
+                    <a href="{{ path('favoritos_index') }}">Mis Favoritos</a>
+                    <a href="{{ path('contact') }}">Contacto</a>
+
+                    {# ZONA DE PERFIL RESALTADA #}
+                    <div class="user-zone">
+                        <span class="text-gold fw-bold"><i class="fas fa-user me-1"></i> Hola, {{ app.user.email|split('@')[0]|capitalize }}</span>
+                        <a href="{{ path('app_logout') }}" class="btn btn-outline-danger btn-sm rounded-pill px-3"><i class="fas fa-sign-out-alt me-1"></i> Salir</a>
+                    </div>
+                {% endif %}
+            {% else %}
                 <a href="{{ path('home') }}">Inicio</a>
                 <a href="{{ path('buy') }}">Comprar</a>
                 <a href="{{ path('sell') }}">Vender</a>
                 <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
-                <a href="{{ path('proprietaire_dashboard') }}">Panel Propietario</a>
-                <a href="{{ path('proprietaire_publicar_bien') }}">Publicar Bien</a>
+                <a href="{{ path('estudio_credito') }}" class="text-success fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Estudio de Crédito</a>
+                <a href="{{ path('about') }}">Nosotros</a>
                 <a href="{{ path('contact') }}">Contacto</a>
-                <span>Bienvenido, {{ app.user.email }}</span>
-                <a href="{{ path('app_logout') }}">Cerrar sesión</a>
-            {% elseif 'ROLE_CLIENT' in app.user.roles %}
-                <a href="{{ path('home') }}">Inicio</a>
-                <a href="{{ path('buy') }}">Comprar</a>
-                <a href="{{ path('sell') }}">Vender</a>
-                <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
-                <a href="{{ path('client_dashboard') }}">Mi Panel</a>
-                <a href="{{ path('favoritos_index') }}">Mis Favoritos</a>
-                <a href="{{ path('contact') }}">Contacto</a>
-                <span>Bienvenido, {{ app.user.email }}</span>
-                <a href="{{ path('app_logout') }}">Cerrar sesión</a>
+                
+                <div class="user-zone border-0">
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-primary rounded-pill px-4">Iniciar sesión</a>
+                    <a href="{{ path('app_register') }}" class="btn btn-primary rounded-pill px-4">Registrarse</a>
+                </div>
             {% endif %}
-        {% else %}
-            <a href="{{ path('home') }}">Inicio</a>
-            <a href="{{ path('buy') }}">Comprar</a>
-            <a href="{{ path('sell') }}">Vender</a>
-            <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
-            <a href="{{ path('about') }}">Nosotros</a>
-            <a href="{{ path('contact') }}">Contacto</a>
-            <a href="{{ path('app_login') }}" class="btn btn-outline-primary">Iniciar sesión</a>
-            <a href="{{ path('app_register') }}" class="btn btn-primary">Registrarse</a>
-        {% endif %}
-        
-        <button id="darkModeToggle">
-            Modo Oscuro / Claro
-        </button>
+            
+            <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary ms-2 rounded-circle" title="Modo Oscuro / Claro" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
     </nav>
 
-    <div class="container">
+    <div class="container mt-4">
+        {# === GESTIÓN DE MENSAJES FLASH === #}
         {% for label, messages in app.flashes %}
             {% for msg in messages %}
-                <div class="alert alert-{{ label }}">{{ msg }}</div>
+                <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show shadow-sm" role="alert">
+                    {{ msg }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             {% endfor %}
         {% endfor %}
 
@@ -98,23 +157,21 @@
 <footer>
     <div class="footer-gallery-container">
         <div class="footer-gallery">
-            {# ----Eco-concepción aplicada--: uso loading="lazy" en todas las imágenes del footer
-               para que se carguen solo cuando estén cerca de entrar en pantalla. #}
-            <img src="/assets/footer-gallery/img7.webp" alt="Galería 1" loading="lazy"> {# uso loading lazy paa que se carguen solo al llegar a esta seccion #}
-            <img src="/assets/footer-gallery/img5.webp" alt="Galería 2" loading="lazy">
-            <img src="/assets/footer-gallery/img3.webp" alt="Galería 3" loading="lazy">
-            <img src="/assets/footer-gallery/img4.webp" alt="Galería 4" loading="lazy">
-            <img src="/assets/footer-gallery/img6.webp" alt="Galería 5" loading="lazy">
-            <img src="/assets/footer-gallery/img1.webp" alt="Galería 6" loading="lazy">
-            <img src="/assets/footer-gallery/img8.webp" alt="Galería 7" loading="lazy">
-            <img src="/assets/footer-gallery/img9.webp" alt="Galería 8" loading="lazy">
-            <img src="/assets/footer-gallery/img10.webp" alt="Galería 1 duplicado" loading="lazy">
-            <img src="/assets/footer-gallery/img7.webp" alt="Galería 2 duplicado" loading="lazy">
-            <img src="/assets/footer-gallery/img4.webp" alt="Galería 3 duplicado" loading="lazy">
-            <img src="/assets/footer-gallery/img9.webp" alt="Galería 4 duplicado" loading="lazy">
-            <img src="/assets/footer-gallery/img6.webp" alt="Galería 5 duplicado" loading="lazy">
-            <img src="/assets/footer-gallery/img8.webp" alt="Galería 6 duplicado" loading="lazy">
-            <img src="/assets/footer-gallery/img3.webp" alt="Galería 7 duplicado" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 1" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 2" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 5" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 6" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 7" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img9.webp') }}" alt="Galería 8" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img10.webp') }}" alt="Galería 1 duplicado" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 2 duplicado" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 3 duplicado" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img9.webp') }}" alt="Galería 4 duplicado" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 5 duplicado" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 6 duplicado" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 7 duplicado" loading="lazy">
         </div>
     </div>
 
@@ -140,10 +197,12 @@
     </div>
 
     <div class="footer-bottom">
-        <p><a href="{{ path('mentions_legales') }}">Mentions légales</a></p>
+        <p><a href="{{ path('mentions_legales') }}">Aviso Legal y Términos de Uso</a></p>
     </div>
 </footer>
 
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ asset('js/darkmode_toggle.js') }}"></script>
 </body>
 </html>

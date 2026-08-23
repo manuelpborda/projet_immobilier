@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Controller;
+namespace App\Controller\Frontend;
 
 use App\Repository\BienRepository;
 use App\Repository\FavoritoRepository;
@@ -17,19 +17,19 @@ final class FavorisController extends AbstractController
     #[Route('/favoritos', name: 'favoritos_index')]
     public function index(FavoritoRepository $favoritoRepository): Response
     {
-        // Solo permito acceso a clientes autenticados
         $this->denyAccessUnlessGranted('ROLE_CLIENT');
 
-        // Obtengo los favoritos del usuario autenticado
-        $favoritos = $favoritoRepository->findBy(['user' => $this->getUser()]);
+        $favoritos = $favoritoRepository->findBy(
+            ['user' => $this->getUser()],
+            ['createdAt' => 'DESC']
+        );
 
-        // Renderizo la plantilla con la lista
         return $this->render('favoris/index.html.twig', [
             'favoritos' => $favoritos,
         ]);
     }
 
-    // Acción para agregar un bien a favoritos (modo normal y AJAX)
+    // Acción para agregar un bien a favoritos
     #[Route('/favorito/agregar/{id}', name: 'agregar_favorito', methods: ['POST'])]
     public function agregarFavorito(
         int $id,
@@ -42,31 +42,32 @@ final class FavorisController extends AbstractController
         $user = $this->getUser();
         $bien = $bienRepository->find($id);
 
+        $isAjax = $request->headers->get('X-Requested-With') === 'XMLHttpRequest' || 
+                  str_contains($request->headers->get('Accept', ''), 'application/json');
+
         if (!$bien) {
-            if ($request->isXmlHttpRequest()) {
+            if ($isAjax) {
                 return $this->json(['success' => false, 'message' => 'Bien no encontrado']);
             }
             $this->addFlash('error', 'El bien no existe.');
             return $this->redirectToRoute('favoritos_index');
         }
 
-        // Evito duplicados
         if ($favoritoRepository->findOneBy(['user' => $user, 'bien' => $bien])) {
-            if ($request->isXmlHttpRequest()) {
+            if ($isAjax) {
                 return $this->json(['success' => false, 'message' => 'Ya es favorito']);
             }
             $this->addFlash('info', 'Este bien ya está en tus favoritos.');
             return $this->redirectToRoute('favoritos_index');
         }
 
-        // Creo el nuevo favorito
         $favorito = new Favorito();
         $favorito->setUser($user);
         $favorito->setBien($bien);
         $em->persist($favorito);
         $em->flush();
 
-        if ($request->isXmlHttpRequest()) {
+        if ($isAjax) {
             return $this->json(['success' => true, 'message' => 'Favorito agregado']);
         }
 
@@ -74,7 +75,7 @@ final class FavorisController extends AbstractController
         return $this->redirectToRoute('favoritos_index');
     }
 
-    // Acción para quitar un bien de favoritos (modo normal y AJAX)
+    // Acción para quitar un bien de favoritos
     #[Route('/favorito/quitar/{id}', name: 'quitar_favorito', methods: ['POST'])]
     public function quitarFavorito(
         int $id,
@@ -87,8 +88,11 @@ final class FavorisController extends AbstractController
         $user = $this->getUser();
         $bien = $bienRepository->find($id);
 
+        $isAjax = $request->headers->get('X-Requested-With') === 'XMLHttpRequest' || 
+                  str_contains($request->headers->get('Accept', ''), 'application/json');
+
         if (!$bien) {
-            if ($request->isXmlHttpRequest()) {
+            if ($isAjax) {
                 return $this->json(['success' => false, 'message' => 'Bien no encontrado']);
             }
             $this->addFlash('error', 'El inmueble no existe.');
@@ -100,12 +104,12 @@ final class FavorisController extends AbstractController
         if ($favorito) {
             $em->remove($favorito);
             $em->flush();
-            if ($request->isXmlHttpRequest()) {
+            if ($isAjax) {
                 return $this->json(['success' => true, 'message' => 'Favorito quitado']);
             }
             $this->addFlash('success', 'Inmueble retirado de tus favoritos.');
         } else {
-            if ($request->isXmlHttpRequest()) {
+            if ($isAjax) {
                 return $this->json(['success' => false, 'message' => 'No era favorito']);
             }
             $this->addFlash('warning', 'Este inmueble no estaba en tus favoritos.');

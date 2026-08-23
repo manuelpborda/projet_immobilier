@@ -1,109 +1,237 @@
-{# templates/home/index.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Inicio - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
-<header>
-    {# Puedes dejar tu nav aquí si quieres menú fijo en cada página #}
-</header>
+{# ========================================================================= #}
+{# === HERO SECTION Y BUSCADOR AVANZADO (DISEÑO PREMIUM GLASSMORPHISM) === #}
+{# ========================================================================= #}
+<div class="hero-section py-5 mb-5 border-bottom">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3">Encuentra tu Inmueble Ideal</h1>
+            <p class="lead opacity-75">Explora miles de propiedades exclusivas en Colombia y Francia</p>
+        </div>
 
-<div class="search-section">
-    <form method="get" action="{{ path('home') }}">
-        <!-- Filtros para búsqueda avanzada -->
-        <select name="typeDeBien" aria-label="Tipo de inmueble">
-            <option value="">Todos los tipos</option>
-            {% for tipo in tiposDeBien %}
-                <option value="{{ tipo }}" {% if app.request.get('typeDeBien') == tipo %}selected{% endif %}>
-                    {% if tipo == 'Appartement' %}Apartamento
-                    {% elseif tipo == 'Maison' %}Casa
-                    {% else %}{{ tipo }}
-                    {% endif %}
-                </option>
-            {% endfor %}
-        </select>
-        <select name="tipoTransaccion" aria-label="Tipo de transacción">
-            <option value="">Todas las operaciones</option>
-            <option value="venta" {% if app.request.get('tipoTransaccion') == 'venta' %}selected{% endif %}>Venta</option>
-            <option value="arriendo" {% if app.request.get('tipoTransaccion') == 'arriendo' %}selected{% endif %}>Arriendo</option>
-            <option value="vacacional" {% if app.request.get('tipoTransaccion') == 'vacacional' %}selected{% endif %}>Alquiler vacacional</option>
-        </select>
-        <select name="ville" aria-label="Ciudad">
-            <option value="">Todas las ciudades</option>
-            {% for ciudad in ciudadesDisponibles %}
-                <option value="{{ ciudad }}" {% if app.request.get('ville') == ciudad %}selected{% endif %}>{{ ciudad }}</option>
-            {% endfor %}
-        </select>
-        <input type="text" name="adresse" placeholder="Dirección" value="{{ app.request.get('adresse') }}">
-        <select name="rangoPrecio" aria-label="Rango de precios">
-            <option value="">Todos los precios</option>
-            <option value="1-100000000" {% if app.request.get('rangoPrecio') == '1-100000000' %}selected{% endif %}>Hasta 100 millones</option>
-            <option value="100000001-250000000" {% if app.request.get('rangoPrecio') == '100000001-250000000' %}selected{% endif %}>100 a 250 millones</option>
-            <option value="250000001-500000000" {% if app.request.get('rangoPrecio') == '250000001-500000000' %}selected{% endif %}>250 a 500 millones</option>
-            <option value="500000001-750000000" {% if app.request.get('rangoPrecio') == '500000001-750000000' %}selected{% endif %}>500 a 750 millones</option>
-            <option value="750000001-1000000000" {% if app.request.get('rangoPrecio') == '750000001-1000000000' %}selected{% endif %}>750 millones a 1.000 millones</option>
-            <option value="1000000001-9999999999" {% if app.request.get('rangoPrecio') == '1000000001-9999999999' %}selected{% endif %}>Más de 1.000 millones</option>
-        </select>
-        <select name="rangoSuperficie" aria-label="Rango de superficie">
-            <option value="">Todas las superficies</option>
-            <option value="1-49" {% if app.request.get('rangoSuperficie') == '1-49' %}selected{% endif %}>Menos de 50 m²</option>
-            <option value="50-99" {% if app.request.get('rangoSuperficie') == '50-99' %}selected{% endif %}>50 - 99 m²</option>
-            <option value="100-149" {% if app.request.get('rangoSuperficie') == '100-149' %}selected{% endif %}>100 - 149 m²</option>
-            <option value="150-199" {% if app.request.get('rangoSuperficie') == '150-199' %}selected{% endif %}>150 - 199 m²</option>
-            <option value="200-9999" {% if app.request.get('rangoSuperficie') == '200-9999' %}selected{% endif %}>200 m² o más</option>
-        </select>
-        <select name="etatDuBien" aria-label="Estado del inmueble">
-            <option value="">Todos los estados</option>
-            {% for etat in estadosDeBien %}
-                <option value="{{ etat }}" {% if app.request.get('etatDuBien') == etat %}selected{% endif %}>
-                    {% if etat == 'Neuf' %}Nuevo
-                    {% elseif etat == 'Ancien' %}Antiguo
-                    {% else %}{{ etat }}
-                    {% endif %}
-                </option>
-            {% endfor %}
-        </select>
-        <button type="submit" class="btn-primary">Filtrar</button>
-        <a href="{{ path('home') }}" class="btn-warning">Limpiar filtros</a>
-    </form>
+        <div class="premium-search-card rounded-4 p-4 p-md-5 mx-auto shadow-lg" style="max-width: 1100px;">
+            <form method="get" action="{{ path('home') }}" class="row g-4 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-home me-2 text-primary"></i>Tipo de Inmueble</label>
+                    <select name="typeDeBien" class="form-select custom-input shadow-sm">
+                        <option value="">Todos los tipos</option>
+                        {% for tipo in tiposDeBien %}
+                            <option value="{{ tipo }}" {% if app.request.get('typeDeBien') == tipo %}selected{% endif %}>
+                                {% if tipo == 'Appartement' %}Apartamento
+                                {% elseif tipo == 'Maison' %}Casa
+                                {% else %}{{ tipo }}
+                                {% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-handshake me-2 text-primary"></i>Transacción</label>
+                    <select name="tipoTransaccion" class="form-select custom-input shadow-sm">
+                        <option value="">Todas las operaciones</option>
+                        <option value="venta" {% if app.request.get('tipoTransaccion') == 'venta' %}selected{% endif %}>Venta</option>
+                        <option value="arriendo" {% if app.request.get('tipoTransaccion') == 'arriendo' %}selected{% endif %}>Arriendo</option>
+                        <option value="vacacional" {% if app.request.get('tipoTransaccion') == 'vacacional' %}selected{% endif %}>Alquiler Vacacional</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-city me-2 text-primary"></i>Ciudad</label>
+                    <select name="ville" class="form-select custom-input shadow-sm">
+                        <option value="">Todas las ciudades</option>
+                        {% for ciudad in ciudadesDisponibles %}
+                            <option value="{{ ciudad }}" {% if app.request.get('ville') == ciudad %}selected{% endif %}>{{ ciudad }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Dirección / Barrio</label>
+                    <input type="text" name="adresse" class="form-control custom-input shadow-sm" placeholder="Ej. Chapinero..." value="{{ app.request.get('adresse') }}">
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-tags me-2 text-primary"></i>Presupuesto</label>
+                    <select name="rangoPrecio" class="form-select custom-input shadow-sm">
+                        <option value="">Cualquier precio</option>
+                        <option value="1-100000000" {% if app.request.get('rangoPrecio') == '1-100000000' %}selected{% endif %}>Hasta $100 Millones</option>
+                        <option value="100000001-250000000" {% if app.request.get('rangoPrecio') == '100000001-250000000' %}selected{% endif %}>$100 a $250 Millones</option>
+                        <option value="250000001-500000000" {% if app.request.get('rangoPrecio') == '250000001-500000000' %}selected{% endif %}>$250 a $500 Millones</option>
+                        <option value="500000001-750000000" {% if app.request.get('rangoPrecio') == '500000001-750000000' %}selected{% endif %}>$500 a $750 Millones</option>
+                        <option value="750000001-1000000000" {% if app.request.get('rangoPrecio') == '750000001-1000000000' %}selected{% endif %}>$750 a $1.000 Millones</option>
+                        <option value="1000000001-9999999999" {% if app.request.get('rangoPrecio') == '1000000001-9999999999' %}selected{% endif %}>Más de $1.000 Millones</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-ruler-combined me-2 text-primary"></i>Superficie</label>
+                    <select name="rangoSuperficie" class="form-select custom-input shadow-sm">
+                        <option value="">Cualquier tamaño</option>
+                        <option value="1-49" {% if app.request.get('rangoSuperficie') == '1-49' %}selected{% endif %}>Menos de 50 m²</option>
+                        <option value="50-99" {% if app.request.get('rangoSuperficie') == '50-99' %}selected{% endif %}>50 - 99 m²</option>
+                        <option value="100-149" {% if app.request.get('rangoSuperficie') == '100-149' %}selected{% endif %}>100 - 149 m²</option>
+                        <option value="150-199" {% if app.request.get('rangoSuperficie') == '150-199' %}selected{% endif %}>150 - 199 m²</option>
+                        <option value="200-9999" {% if app.request.get('rangoSuperficie') == '200-9999' %}selected{% endif %}>200 m² o más</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-paint-roller me-2 text-primary"></i>Estado</label>
+                    <select name="etatDuBien" class="form-select custom-input shadow-sm">
+                        <option value="">Cualquier estado</option>
+                        {% for etat in estadosDeBien %}
+                            <option value="{{ etat }}" {% if app.request.get('etatDuBien') == etat %}selected{% endif %}>
+                                {% if etat == 'Neuf' %}Nuevo
+                                {% elseif etat == 'Ancien' %}Usado / Antiguo
+                                {% else %}{{ etat }}
+                                {% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-grow-1 shadow-sm fw-bold py-2 btn-lg" style="border-radius: 10px;"><i class="fas fa-search me-2"></i>Buscar</button>
+                    <a href="{{ path('home') }}" class="btn btn-outline-secondary shadow-sm py-2 px-3 d-flex align-items-center justify-content-center" style="border-radius: 10px;" title="Limpiar filtros"><i class="fas fa-eraser"></i></a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-<main>
-    <div class="grille-biens">
-        {# Mostramos las propiedades paginadas #}
+{# ========================================================================= #}
+{# === REJILLA DE INMUEBLES (BOOTSTRAP CARDS) === #}
+{# ========================================================================= #}
+<main class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 fw-bold border-start border-4 border-primary ps-3">Propiedades Destacadas</h2>
+        <span class="badge bg-primary fs-6 rounded-pill px-3 py-2 shadow-sm">{{ bienes.getTotalItemCount }} resultados</span>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for bien in bienes %}
-            <div class="carte-bien">
-                <div class="carte-bien-image">
-                    <img src="{{ asset(bien.foto) }}" alt="{{ bien.typeDeBien }} en venta o arriendo en {{ bien.ville }}, {{ bien.adresse }}" class="carte-bien-img" loading="lazy">
-                </div>
-                <div class="carte-bien-info">
-                    <h3>
-                        {% if bien.typeDeBien == 'Appartement' %}Apartamento
-                        {% elseif bien.typeDeBien == 'Maison' %}Casa
-                        {% else %}{{ bien.typeDeBien }}
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 property-card overflow-hidden" style="border-radius: 15px;">
+                    
+                    {# IMAGEN CON BADGE Y CORAZÓN #}
+                    <div class="position-relative">
+                        {% set fotoPrincipal = 'https://placehold.co/600x400/e9ecef/6c757d?text=Sin+Imagen' %}
+                        {% if bien.foto %}
+                            {% set fotosArray = bien.foto|split(',') %}
+                            {% if fotosArray[0] != '' %}
+                                {% set fotoPrincipal = asset('uploads/bienes/' ~ fotosArray[0]) %}
+                            {% endif %}
                         {% endif %}
-                        {% if bien.tipoTransaccion %} en {{ bien.tipoTransaccion }}{% endif %}
-                    </h3>
-                    <div class="prix-bien">{{ bien.prix|number_format(0, ',', ' ') }} COP</div>
-                    <p>Ciudad: {{ bien.ville }}</p>
-                    <p>Dirección: {{ bien.adresse }}</p>
-                    <p>Superficie: {{ bien.surfaceM2 }} m²</p>
-                    <a href="{{ path('bien_show', {'id': bien.id}) }}" class="btn-primary">Ver más</a>
+                        <img src="{{ fotoPrincipal }}" alt="Inmueble en {{ bien.ville }}" class="card-img-top" loading="lazy" style="object-fit: cover; height: 250px;">
+                        
+                        {# =============================================================== #}
+                        {# === BOTÓN DE FAVORITOS (CORAZÓN FLOTANTE - SIEMPRE VISIBLE) === #}
+                        {# =============================================================== #}
+                        <div class="position-absolute top-0 start-0 m-3" style="z-index: 10;">
+                            {% if app.user %}
+                                <form method="post" action="{{ path('agregar_favorito', {'id': bien.id}) }}">
+                                    <button type="submit" class="btn btn-light rounded-circle shadow-lg p-0 d-flex justify-content-center align-items-center border-0" style="width: 42px; height: 42px; background-color: white;" title="Guardar en mis Favoritos">
+                                        <i class="fas fa-heart text-danger fs-5"></i>
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a href="{{ path('app_login') }}" class="btn btn-light rounded-circle shadow-lg p-0 d-flex justify-content-center align-items-center border-0 text-decoration-none" style="width: 42px; height: 42px; background-color: white;" title="Inicia sesión para guardar">
+                                    <i class="far fa-heart text-secondary fs-5"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        {# Badge de Venta/Arriendo #}
+                        {% if bien.tipoTransaccion %}
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge {% if bien.tipoTransaccion == 'venta' %}bg-primary{% elseif bien.tipoTransaccion == 'arriendo' %}bg-success{% else %}bg-info{% endif %} fs-6 shadow px-3 py-2 rounded-pill">
+                                    {{ bien.tipoTransaccion|capitalize }}
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    {# CUERPO DE LA TARJETA #}
+                    <div class="card-body d-flex flex-column p-4 bg-body-tertiary">
+                        <h5 class="card-title fw-bold mb-1 fs-4">
+                            {% if bien.typeDeBien == 'Appartement' %}Apartamento
+                            {% elseif bien.typeDeBien == 'Maison' %}Casa
+                            {% else %}{{ bien.typeDeBien }}
+                            {% endif %}
+                        </h5>
+                        <p class="text-muted small mb-3"><i class="fas fa-map-marker-alt text-danger me-1"></i>{{ bien.ville }}, {{ bien.adresse }}</p>
+                        
+                        <h4 class="text-primary fw-bold mb-4">$ {{ bien.prix|number_format(0, ',', '.') }} <span class="fs-6 text-muted fw-normal">COP</span></h4>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+                            <span class="opacity-75 small fw-bold"><i class="fas fa-ruler-combined me-1 text-primary"></i>{{ bien.surfaceM2 }} m²</span>
+                            <a href="{{ path('bien_show', {'id': bien.id}) }}" class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-4 py-2">Ver detalle</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% else %}
-            <p>No hay propiedades disponibles.</p>
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3 opacity-50"></i>
+                <h4 class="opacity-75">No se encontraron propiedades</h4>
+                <p class="text-muted">Intenta ajustar o limpiar los filtros de búsqueda.</p>
+                <a href="{{ path('home') }}" class="btn btn-primary mt-2 rounded-pill px-4">Ver todas las propiedades</a>
+            </div>
         {% endfor %}
     </div>
-   <div class="pagination-wrapper">
-    {{ knp_pagination_render(bienes) }}
-</div>
-
+    
+    <div class="d-flex justify-content-center mt-5">
+        {{ knp_pagination_render(bienes) }}
+    </div>
 </main>
+
+{# ========================================================================= #}
+{# === SECCIÓN UX: CONVENIOS === #}
+{# ========================================================================= #}
+<section class="container my-5 pt-5 border-top text-center section-convenios-consoria">
+    <div class="row mb-5">
+        <div class="col-12">
+            <span class="text-uppercase text-primary fw-bold small d-block mb-1" style="letter-spacing: 2px;">Seguridad y Respaldo</span>
+            <h2 class="h3 fw-bold">Nuestras Alianzas Estratégicas</h2>
+            <p class="opacity-75 mx-auto mt-3" style="max-width: 650px;">
+                Trabajamos de la mano con las principales entidades bancarias, fiduciarias y aseguradoras para garantizar procesos 100% seguros.
+            </p>
+        </div>
+    </div>
+    <div class="row align-items-center justify-content-center g-4 logo-convenios-grid">
+        {% for i in 1..13 %}
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <div class="p-3 bg-body rounded-4 shadow-sm border border-light-subtle d-flex align-items-center justify-content-center box-partner-logo" style="height: 90px;">
+                    <img src="{{ asset('assets/convenios/convenio' ~ i ~ '.webp.jpeg') }}" alt="Entidad Aliada {{ i }}" class="img-fluid logo-partner" loading="lazy" style="max-height: 50px; object-fit: contain;">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<style>
+    .premium-search-card {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+    :root.light-mode .premium-search-card { background: rgba(255, 255, 255, 0.9); }
+    html.dark-mode .premium-search-card, body.dark-mode .premium-search-card, :root.dark-mode .premium-search-card, [data-bs-theme="dark"] .premium-search-card {
+        background: rgba(30, 33, 37, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,0.5) !important;
+    }
+    .custom-input { background-color: var(--bs-body-bg); border: 1px solid var(--bs-border-color); color: var(--bs-body-color); border-radius: 8px; padding: 0.6rem 1rem; }
+    .custom-input:focus { border-color: var(--bs-primary); box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25); }
+    .property-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .property-card:hover { transform: translateY(-8px); box-shadow: 0 1rem 2rem rgba(0,0,0,.15)!important; }
+    .logo-partner { filter: grayscale(100%); opacity: 0.6; transition: all 0.4s ease-in-out; }
+    .box-partner-logo { transition: all 0.3s ease-in-out; }
+    .box-partner-logo:hover { border-color: #d4af37 !important; transform: translateY(-5px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important; }
+    .box-partner-logo:hover .logo-partner { filter: grayscale(0%); opacity: 1; }
+</style>
 {% if app.request.attributes.get('_route') == 'home' %}
   <script src="{{ asset('js/weather_widget.js') }}"></script>
 {% endif %}
-
-
 {% endblock %}

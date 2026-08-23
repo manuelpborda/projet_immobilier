@@ -18,36 +18,25 @@ class HomeController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(BienRepository $bienRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        // Capturo todos los posibles filtros enviados por GET desde la interfaz
-        $typeDeBien  = $request->query->get('typeDeBien');
-        $ville       = $request->query->get('ville');
+        // 1. Captura y normalización de parámetros GET
+        $typeDeBien      = $request->query->get('typeDeBien');
+        $ville           = $request->query->get('ville');
         $rangoPrecio     = $request->query->get('rangoPrecio');
         $rangoSuperficie = $request->query->get('rangoSuperficie');
-        $etatDuBien  = $request->query->get('etatDuBien');
+        $etatDuBien      = $request->query->get('etatDuBien');
         $tipoTransaccion = $request->query->get('tipoTransaccion');
 
-        // Compatibilidad con redirección desde otras páginas (ej: ?tipo=arriendo)
+        // Compatibilidad con redirección externa (?tipo=arriendo)
         if (!$tipoTransaccion && $request->query->get('tipo')) {
             $tipoTransaccion = $request->query->get('tipo');
         }
 
-        // Obtengo valores únicos para los selects de filtro (tipo, ciudad, estado)
-        $tiposDeBien = $bienRepository->createQueryBuilder('b')
-            ->select('DISTINCT b.typeDeBien')
-            ->getQuery()->getResult();
-        $tiposDeBien = array_map(fn($row) => $row['typeDeBien'], $tiposDeBien);
+        // 2. Extracción limpia de filtros únicos desde el repositorio (Evitamos lógica pesada aquí)
+        $tiposDeBien         = $bienRepository->findDistinctValues('typeDeBien');
+        $ciudadesDisponibles = $bienRepository->findDistinctValues('ville');
+        $estadosDeBien       = $bienRepository->findDistinctValues('etatDuBien');
 
-        $ciudadesDisponibles = $bienRepository->createQueryBuilder('b')
-            ->select('DISTINCT b.ville')
-            ->getQuery()->getResult();
-        $ciudadesDisponibles = array_map(fn($row) => $row['ville'], $ciudadesDisponibles);
-
-        $estadosDeBien = $bienRepository->createQueryBuilder('b')
-            ->select('DISTINCT b.etatDuBien')
-            ->getQuery()->getResult();
-        $estadosDeBien = array_map(fn($row) => $row['etatDuBien'], $estadosDeBien);
-
-        // Construyo el query aplicando los filtros seleccionados por el usuario
+        // 3. Centralización y construcción segura del QueryBuilder
         $qb = $bienRepository->createQueryBuilder('b');
 
         if ($typeDeBien) {
@@ -62,28 +51,39 @@ class HomeController extends AbstractController
             $qb->andWhere('b.etatDuBien = :etatDuBien')
                ->setParameter('etatDuBien', $etatDuBien);
         }
-        if ($rangoPrecio) {
-            [$min, $max] = explode('-', $rangoPrecio);
-            $qb->andWhere('b.prix BETWEEN :minPrix AND :maxPrix')
-               ->setParameter('minPrix', $min)
-               ->setParameter('maxPrix', $max);
-        }
-        if ($rangoSuperficie) {
-            [$min, $max] = explode('-', $rangoSuperficie);
-            $qb->andWhere('b.surfaceM2 BETWEEN :minSuperficie AND :maxSuperficie')
-               ->setParameter('minSuperficie', $min)
-               ->setParameter('maxSuperficie', $max);
-        }
         if ($tipoTransaccion) {
             $qb->andWhere('b.tipoTransaccion = :tipoTransaccion')
                ->setParameter('tipoTransaccion', $tipoTransaccion);
         }
 
-        // Pagino los resultados con KnpPaginator para optimizar la UX
-        $page = $request->query->getInt('page', 1);
-        $bienes = $paginator->paginate($qb, $page, 9); // 9 inmuebles por página
+        // BLINDAJE ANTI-CRASH: Validación segura del formato de rangos (Precio)
+        if ($rangoPrecio && str_contains($rangoPrecio, '-')) {
+            $partesPrecio = explode('-', $rangoPrecio);
+            if (count($partesPrecio) === 2 && is_numeric($partesPrecio[0]) && is_numeric($partesPrecio[1])) {
+                $qb->andWhere('b.prix BETWEEN :minPrix AND :maxPrix')
+                   ->setParameter('minPrix', $partesPrecio[0])
+                   ->setParameter('maxPrix', $partesPrecio[1]);
+            }
+        }
 
-        // Envío a la vista todas las variables que el frontend necesita
+        // BLINDAJE ANTI-CRASH: Validación segura del formato de rangos (Superficie)
+        if ($rangoSuperficie && str_contains($rangoSuperficie, '-')) {
+            $partesSuperficie = explode('-', $rangoSuperficie);
+            if (count($partesSuperficie) === 2 && is_numeric($partesSuperficie[0]) && is_numeric($partesSuperficie[1])) {
+                $qb->andWhere('b.surfaceM2 BETWEEN :minSuperficie AND :maxSuperficie')
+                   ->setParameter('minSuperficie', $partesSuperficie[0])
+                   ->setParameter('maxSuperficie', $partesSuperficie[1]);
+            }
+        }
+
+        // Ordenamos por defecto para que los últimos inmuebles publicados aparezcan primero
+        $qb->orderBy('b.id', 'DESC');
+
+        // 4. Paginación inteligente a nivel de base de datos
+        $page = $request->query->getInt('page', 1);
+        $bienes = $paginator->paginate($qb, $page, 9);
+
+        // 5. Envío de datos idéntico a tu Twig original para no romper el diseño gráfico
         return $this->render('home/index.html.twig', [
             'bienes' => $bienes,
             'tiposDeBien' => $tiposDeBien,

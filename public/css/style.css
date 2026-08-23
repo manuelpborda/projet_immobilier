@@ -1,153 +1,165 @@
-/* =========================
-   CONSORIA - ESTILO GLOBAL
-   ========================= */
+/* ========================================================
+   CONSORIA - ESTILO GLOBAL (PREMIUM DARK/LIGHT UX)
+   ======================================================== */
 
-/*
-   Uso variables CSS centralizadas para la paleta dorado-negro,
-*/
 :root {
-    --luxe-black: #1A181A;        
-    --luxe-gold: #C19D53;         
-    --luxe-gold-bright: #FFD700;  
-    --luxe-white: #FFFDF8;        
-    --luxe-grey: #E0E0E0;         
-    --luxe-yellow: #FFD600;      
-    --luxe-green: #223A2F;        
-    --shadow-gold: 0 6px 18px #c19d5333; 
+    /* --- PALETA NOCTURNA DE LUJO (MIDNIGHT SLATE Y ORO) --- */
+    --luxe-black: #1A1D24;         /* Fondo Principal: Azul Noche/Carbón (Transmite confianza y calidez) */
+    --luxe-card-bg: #232730;       /* Tarjetas: Más elevadas para una profundidad 3D real */
+    --luxe-gold: #D4AF37;          /* Oro Metálico Institucional */
+    --luxe-gold-bright: #F3E5AB;   /* Brillo de oro suave para hovers */
+    --luxe-white: #E4E7EC;         /* Blanco humo: Más suave para leer textos largos */
+    
+    /* Complementos */
+    --luxe-grey: #2C313C;          /* Gris azulado para bordes inactivos */
+    --luxe-yellow: #D4AF37;        
+    --luxe-green: #1E3A2F;         
+    
+    /* Sombras Premium */
+    --shadow-gold: 0 8px 25px rgba(212, 175, 55, 0.12);
+    --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.4); /* Sombra más suave para no ensuciar el fondo */
 }
 
 /* 
    FONDO GENERAL Y TIPOGRAFÍA
 */
-html, body { height: 100%; } /* base para sticky footer */
+html, body { height: 100%; } 
 body {
     background: var(--luxe-black);
     color: var(--luxe-white);
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     margin: 0;
     padding: 0;
-
-    /* STICKY FOOTER: cuerpo como contenedor flex vertical */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Si usas <main> en tus templates, se expandirá para empujar el footer al fondo */
 main { flex: 1 0 auto; }
 
 /* 
    NAVBAR PRINCIPAL
 */
 nav {
-    background: var(--luxe-black);
+    background: rgba(18, 19, 21, 0.95);
+    backdrop-filter: blur(10px);
     color: var(--luxe-gold);
     padding: 18px 36px;
-    border-bottom: 2px solid var(--luxe-gold);
-    box-shadow: 0 4px 18px #0002;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: var(--shadow-dark);
     display: flex;
     align-items: center;
     gap: 24px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 nav a {
-    color: var(--luxe-gold);
+    color: var(--luxe-white);
     text-decoration: none;
     font-weight: 500;
     margin-right: 14px;
-    transition: color 0.18s;
+    transition: all 0.2s ease;
 }
 nav a:hover {
-    color: var(--luxe-gold-bright);
-    text-shadow: 0 0 14px var(--luxe-gold-bright);
+    color: var(--luxe-gold);
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
 /* 
    SECCIÓN DE FILTROS/BÚSQUEDA
 */
 .search-section {
-    background: var(--luxe-black);
-    border-bottom: 2px solid var(--luxe-gold);
+    background: var(--luxe-card-bg);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
     padding: 28px 0 12px 0;
     margin-bottom: 24px;
     text-align: center;
+    box-shadow: var(--shadow-dark);
 }
 .search-section form select,
 .search-section form input[type="text"] {
-    background: var(--luxe-white);
-    border: 1.5px solid var(--luxe-gold);
-    color: var(--luxe-black);
+    background: var(--luxe-black);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--luxe-white);
     border-radius: 7px;
-    padding: 8px 13px;
+    padding: 10px 15px;
     margin: 0 8px 12px 0;
     font-size: 1em;
+    transition: all 0.3s ease;
+}
+.search-section form select:focus,
+.search-section form input[type="text"]:focus {
+    outline: none;
+    border-color: var(--luxe-gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
 }
 .search-section form button,
 .search-section form a {
-    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
-    color: var(--luxe-black);
+    background: linear-gradient(135deg, var(--luxe-gold), #AA8623);
+    color: #121315;
     border: none;
     border-radius: 7px;
-    padding: 8px 18px;
+    padding: 10px 24px;
     font-weight: bold;
     font-size: 1em;
     margin-right: 8px;
-    box-shadow: 0 2px 10px #c19d5360;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
     cursor: pointer;
-    transition: box-shadow 0.16s, background 0.16s, color 0.16s;
+    transition: all 0.3s ease;
     text-decoration: none;
     letter-spacing: 0.04em;
 }
 .search-section form button:hover,
 .search-section form a:hover {
-    background: linear-gradient(90deg, var(--luxe-gold-bright), var(--luxe-gold));
-    color: var(--luxe-black);
-    filter: brightness(1.10);
+    background: linear-gradient(135deg, var(--luxe-gold-bright), var(--luxe-gold));
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
 }
 
-/* === SEARCH SECTION: corregir viñetas cuando el contenedor está centrado === */
 .search-section ul,
 .search-section ol {
-    display: inline-block;   /* el bloque de la lista queda centrado */
-    text-align: left;        /* el texto se lee alineado a la izquierda */
+    display: inline-block;
+    text-align: left;
     margin: 0 auto 1em;
-    list-style-position: inside; /* viñetas/números junto al texto */
+    list-style-position: inside;
     padding-left: 0;
 }
 .search-section ul { list-style-type: disc; }
 .search-section ol { list-style-type: decimal; }
 
 /* 
-   GRID DE PROPIEDADES:  3x3 DESKTOP
+   GRID DE PROPIEDADES: 3x3 DESKTOP
 */
 .grille-biens {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /*  3 columnas desktop */
+    grid-template-columns: repeat(3, 1fr);
     gap: 32px 24px;
     margin: 24px 0 40px 0;
     padding: 0 8vw;
     align-items: stretch;
 }
 
-/* Card individual: bordes oro, sombra dorada */
 .carte-bien {
     display: flex;
     flex-direction: column;
-    background: var(--luxe-white);
-    color: var(--luxe-black);
-    border: 2px solid var(--luxe-gold);
+    background: var(--luxe-card-bg);
+    color: var(--luxe-white);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 18px;
-    box-shadow: var(--shadow-gold);
-    transition: box-shadow 0.22s, border-color 0.18s;
+    box-shadow: var(--shadow-dark);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     overflow: hidden;
     height: 100%;
 }
 .carte-bien:hover {
-    box-shadow: 0 8px 32px var(--luxe-gold-bright);
-    border-color: var(--luxe-gold-bright);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-gold);
+    border-color: rgba(212, 175, 55, 0.4);
 }
 
-/* Imagen de la card  */
 .carte-bien-image {
     width: 100%;
     aspect-ratio: 3 / 2;
@@ -164,7 +176,6 @@ nav a:hover {
     object-fit: cover;
     display: block;
     border-radius: 18px 18px 0 0;
-    box-shadow: 0 2px 12px #0001;
 }
 
 .favorito-img-wrapper {
@@ -173,13 +184,9 @@ nav a:hover {
     padding: 0;
     max-width: 100%;
 }
-
-/* Estilo de la tarjeta del bien en favoritos */
 .favorito-card {
     background: transparent !important;
 }
-
-/* Estilo de la imagen */
 .favorito-img {
     max-width: 380px;
     width: 100%;
@@ -190,44 +197,39 @@ nav a:hover {
     margin: 0 auto;
 }
 
-/* Info de la card */
 .carte-bien-info {
-    padding: 18px 18px 24px 18px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
 }
 .carte-bien-info h3 {
-    font-size: 1.22rem;
-    color: var(--luxe-black);
+    font-size: 1.25rem;
+    color: var(--luxe-gold);
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     line-height: 1.24;
 }
 
-/* 
-   Uso un dorado oscuro sobre fondo blanco para máximo contraste .
-*/
 .prix-bien {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    color: var(--luxe-gold);
-    background: #f6efe2;
-    padding: 7px 15px;
+    color: #121315;
+    background: linear-gradient(135deg, var(--luxe-gold), #AA8623);
+    padding: 8px 16px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px #c19d5333;
-    margin-bottom: 8px;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+    margin-bottom: 12px;
     display: inline-block;
-    border: 1.5px solid var(--luxe-gold-bright);
-    letter-spacing: 0.08em;
+    border: none;
+    letter-spacing: 0.05em;
 }
 
 .carte-bien-info p {
-    color: #222;
-    margin: 4px 0 6px 0;
-    font-size: 0.97em;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 4px 0 8px 0;
+    font-size: 0.95em;
 }
-
 .carte-bien-info a.btn-primary {
     align-self: flex-end;
     margin-top: 8px;
@@ -237,72 +239,72 @@ nav a:hover {
    BOTONES LUXE DORADO
    ============================= */
 .btn-primary {
-    background: linear-gradient(90deg, var(--luxe-gold) 20%, var(--luxe-gold-bright) 80%);
-    color: var(--luxe-black);
+    background: linear-gradient(135deg, var(--luxe-gold), #AA8623);
+    color: #121315 !important;
     border: none;
     border-radius: 8px;
     padding: 10px 28px;
     font-weight: bold;
     font-size: 1.07em;
     letter-spacing: 0.6px;
-    box-shadow: 0 4px 16px var(--luxe-gold-bright);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
     cursor: pointer;
-    transition: box-shadow 0.16s, background 0.16s, color 0.16s;
+    transition: all 0.3s ease;
 }
 .btn-primary:hover {
-    background: linear-gradient(90deg, var(--luxe-gold-bright) 10%, var(--luxe-gold) 90%);
-    color: var(--luxe-black);
-    box-shadow: 0 8px 28px var(--luxe-gold-bright);
-    filter: brightness(1.08);
+    background: linear-gradient(135deg, var(--luxe-gold-bright), var(--luxe-gold));
+    color: #121315 !important;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
 }
 
-/* Botón de alerta/acción importante (amarillo suave) */
 .btn-warning {
-    background: var(--luxe-yellow);
-    color: var(--luxe-black);
-    border: none;
+    background: transparent;
+    color: var(--luxe-gold);
+    border: 1px solid var(--luxe-gold);
     border-radius: 8px;
     padding: 8px 20px;
     font-weight: bold;
     font-size: 1em;
+    transition: all 0.3s ease;
 }
 .btn-warning:hover {
-    background: var(--luxe-gold-bright);
-    color: var(--luxe-black);
-    filter: brightness(1.11);
+    background: var(--luxe-gold);
+    color: #121315;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
 }
 
-/* Boton EXCLUSIVO para propietario mas visible */
 .btn-proprietaire {
-    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
-    color: var(--luxe-black);
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--luxe-gold);
+    border: 1px solid var(--luxe-gold);
     border-radius: 8px;
     padding: 6px 18px;
     font-weight: bold;
     margin-left: 12px;
+    transition: all 0.3s ease;
 }
 .btn-proprietaire:hover {
-    background: linear-gradient(90deg, var(--luxe-gold-bright), var(--luxe-gold));
+    background: var(--luxe-gold);
     color: var(--luxe-black);
-    box-shadow: 0 6px 24px var(--luxe-gold);
+    box-shadow: var(--shadow-gold);
 }
 
-/* === SEARCH SECTION: margen extra para "Limpiar filtros" === */
 .search-section .btn-warning,
 .search-section .btn-limpiar,
 .search-section .btn-clear {
-    display: inline-block;   /* asegura que margin-top/bottom surta efecto también en <a> */
-    margin-top: 16px;        /* más aire arriba */
-    margin-bottom: 12px;     /* un poco abajo también */
+    display: inline-block; 
+    margin-top: 16px; 
+    margin-bottom: 12px; 
 }
 
 /* =============================
    AVISOS Y ALERTAS
    ============================= */
 .alert {
-    background: var(--luxe-yellow);
-    color: var(--luxe-black);
-    border: 1.5px solid var(--luxe-gold);
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--luxe-gold);
+    border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 10px;
     padding: 12px 18px;
     margin: 16px 0;
@@ -311,7 +313,7 @@ nav a:hover {
 .alert-success {
     background: var(--luxe-green);
     color: var(--luxe-gold-bright);
-    border: 1.5px solid var(--luxe-gold);
+    border: 1px solid var(--luxe-gold);
 }
 
 /* =============================
@@ -319,13 +321,11 @@ nav a:hover {
    ============================= */
 footer {
     background: var(--luxe-black);
-    color: var(--luxe-gold-bright);
+    color: var(--luxe-white);
     padding: 40px 0 18px 0;
     text-align: center;
     font-size: 1rem;
-    border-top: 2px solid var(--luxe-gold);
-
-    /* STICKY FOOTER: se pega al fondo del viewport cuando hay poco contenido */
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
     margin-top: auto;
 }
 .footer-section {
@@ -339,7 +339,7 @@ footer {
 }
 
 /* =============================
-   PAGINACIÓN DORADA (centrada,)
+   PAGINACIÓN DORADA
    ============================= */
 .pagination-wrapper {
     display: flex;
@@ -354,52 +354,46 @@ footer {
     padding: 0;
     list-style: none;
 }
-.pagination li {
-    margin: 0 2px;
-}
+.pagination li { margin: 0 2px; }
 .pagination li > a,
 .pagination li > span {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-width: 48px;
     height: 48px;
-    line-height: 48px;
-    background: var(--luxe-white);
+    background: var(--luxe-card-bg);
     color: var(--luxe-gold);
-    border: 2px solid var(--luxe-gold);
+    border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 12px;
-    text-align: center;
-    font-size: 1.35rem;
+    font-size: 1.2rem;
     font-weight: 700;
     text-decoration: none;
-    transition:
-        background 0.18s,
-        color 0.18s,
-        border-color 0.18s,
-        box-shadow 0.18s;
-    box-shadow: 0 2px 8px #c19d5333;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     cursor: pointer;
 }
 .pagination li > a:hover {
-    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
-    color: var(--luxe-black);
-    border-color: var(--luxe-gold-bright);
-    box-shadow: 0 4px 14px var(--luxe-gold-bright);
+    background: linear-gradient(135deg, var(--luxe-gold), #AA8623);
+    color: #121315;
+    border-color: var(--luxe-gold);
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
 }
 .pagination li.active > span,
 .pagination li.current > span {
-    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
-    color: #fff; /* blanco puro, página activa resalta */
-    border-color: var(--luxe-gold-bright);
-    box-shadow: 0 4px 18px var(--luxe-gold-bright);
-    font-size: 1.5rem;
+    background: linear-gradient(135deg, var(--luxe-gold), #AA8623);
+    color: #121315;
+    border-color: var(--luxe-gold);
+    box-shadow: 0 4px 18px rgba(212, 175, 55, 0.4);
+    font-size: 1.3rem;
     font-weight: 900;
 }
 .pagination li.disabled > span,
 .pagination li.disabled > a {
-    background: var(--luxe-grey);
-    color: #aaa;
+    background: var(--luxe-black);
+    color: rgba(255,255,255,0.2);
     cursor: not-allowed;
-    border-color: var(--luxe-grey);
+    border-color: rgba(255,255,255,0.1);
     box-shadow: none;
     pointer-events: none;
 }
@@ -414,39 +408,33 @@ footer {
     padding: 0 1em;
     justify-content: center;
 }
-
 .detalle-bien-imagen {
     flex: 1 1 450px;
     text-align: center;
 }
-
 .detalle-img {
     max-width: 100%;
     border-radius: 16px;
-    box-shadow: var(--shadow-gold);
-    height: auto; /* Permite altura proporcional */
+    box-shadow: var(--shadow-dark);
+    height: auto; 
 }
-
 .detalle-bien-info {
     flex: 1 1 450px;
     color: var(--luxe-white);
     font-size: 1.05em;
     line-height: 1.7em;
 }
-
 .detalle-bien-info h1 {
     color: var(--luxe-gold);
     margin-bottom: 0.5em;
 }
-
 .detalle-bien-info ul {
     list-style: none;
     padding: 0;
 }
-
 .detalle-bien-info li {
     margin-bottom: 0.8em;
-    border-bottom: 1px solid var(--luxe-gold);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
     padding-bottom: 0.4em;
 }
 
@@ -455,12 +443,10 @@ footer {
    ============================= */
 @media (max-width: 1100px) {
     .grille-biens {
-        grid-template-columns: repeat(2, 1fr); /* 2 cards en tablet */
+        grid-template-columns: repeat(2, 1fr); 
         padding: 0 4vw;
     }
-    .footer-section {
-        gap: 20px;
-    }
+    .footer-section { gap: 20px; }
 }
 @media (max-width: 700px) {
     nav {
@@ -469,7 +455,7 @@ footer {
         padding: 16px 4vw;
     }
     .grille-biens {
-        grid-template-columns: 1fr; /* 1 card en móvil */
+        grid-template-columns: 1fr; 
         gap: 20px;
         padding: 0 1vw;
     }
@@ -487,339 +473,223 @@ footer {
     gap: 16px;
     margin-top: 1.5em;
 }
-
-.admin-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 2em;
-    background: var(--luxe-white);
-    color: var(--luxe-black);
-    border: 2px solid var(--luxe-gold);
-    box-shadow: var(--shadow-gold);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.admin-table th, .admin-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--luxe-gold);
-    text-align: left;
-}
-
-.admin-table th {
-    background: var(--luxe-gold);
-    color: var(--luxe-black);
-    font-weight: bold;
-}
-
-.admin-table tr:hover {
-    background: var(--luxe-gold-bright);
-    color: var(--luxe-black);
-}
-
-/* para el graico estdisticas en perfil admin */
 .admin-table, .tabla-estadisticas {
     width: 100%;
     border-collapse: collapse;
     margin: 2em auto;
-    background: var(--luxe-white);
-    color: var(--luxe-black);
-    box-shadow: var(--shadow-gold);
+    background: var(--luxe-card-bg);
+    color: var(--luxe-white);
+    box-shadow: var(--shadow-dark);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
 }
-
-.admin-table th, .tabla-estadisticas th,
-.admin-table td, .tabla-estadisticas td {
-    border: 1px solid var(--luxe-gold);
-    padding: 10px;
-}
-
 .admin-table th, .tabla-estadisticas th {
-    background: var(--luxe-gold);
-    color: var(--luxe-black);
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--luxe-gold);
+    padding: 16px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
 }
-
-.admin-table tr:nth-child(even), .tabla-estadisticas tr:nth-child(even) {
-    background: #fdfaf0;
+.admin-table td, .tabla-estadisticas td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
-
 .admin-table tr:hover, .tabla-estadisticas tr:hover {
-    background: var(--luxe-grey);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 /* =========================================================
-   SECCIÓN CONTACTO (Opción 2: fondo blanco solo hasta email)
+   SECCIÓN CONTACTO / REGISTRO
    ========================================================= */
-
-/* Contenedor general de la página de contacto */
-.contact-section {
-    max-width: 900px;
+.contact-section { max-width: 900px; margin: 2em auto; }
+.contact-info-block, .register-container {
+    background: var(--luxe-card-bg);
+    color: var(--luxe-white);
+    border-radius: 16px;
+    padding: 2.5em;
+    box-shadow: var(--shadow-dark);
     margin: 2em auto;
+    max-width: 600px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
-
-/* Bloque interno que sí lleva fondo blanco */
-.contact-info-block {
-    background: var(--luxe-white);
-    color: var(--luxe-black);
-    border-radius: 12px;
-    padding: 1.5em;
-    box-shadow: var(--shadow-gold);
-    margin-bottom: 2em;
-}
-
-.contact-info-block h1 {
+.contact-info-block h1, .register-container h1 {
     color: var(--luxe-gold);
     text-align: center;
     margin-bottom: 0.8em;
 }
+.contact-info-block p { text-align: center; margin-bottom: 2em; font-size: 1.05em; }
 
-.contact-info-block p {
-    text-align: center;
-    margin-bottom: 2em;
-    font-size: 1.05em;
+.contact-form, .register-container .form-group {
+    display: flex; flex-direction: column; gap: 1em; margin-bottom: 2em;
 }
-
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    margin-bottom: 2em;
+.contact-form label, .register-container label {
+    font-weight: bold; color: var(--luxe-white); margin-bottom: 8px;
 }
-
-.contact-form label {
-    font-weight: bold;
-    color: var(--luxe-black);
-}
-
-.contact-form input,
-.contact-form textarea {
-    padding: 10px;
-    border: 1.5px solid var(--luxe-gold);
+.contact-form input, .contact-form textarea,
+.register-container input, .register-container select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    font-size: 1em;
-    background: var(--luxe-white);
-    color: var(--luxe-black);
-    box-shadow: 0 2px 6px #c19d5320;
+    background: var(--luxe-black);
+    color: var(--luxe-white);
+    box-sizing: border-box;
+    transition: all 0.3s ease;
 }
-
-.contact-form textarea {
-    resize: vertical;
+.contact-form input:focus, .contact-form textarea:focus,
+.register-container input:focus, .register-container select:focus {
+    outline: none;
+    border-color: var(--luxe-gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
 }
+.contact-form textarea { resize: vertical; }
 
-.contact-info {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 0; /* Ajuste para que no se coma margen extra antes de imagen */
-}
-
-.contact-info li {
-    margin-bottom: 0.6em;
-}
-
-.contact-info a {
-    color: var(--luxe-gold);
-    text-decoration: none;
-}
-
-.contact-info a:hover {
-    text-decoration: underline;
-}
-
-/* Imagen y mapa se mantienen fuera del bloque blanco */
-.contact-image {
-    text-align: center;
-    margin-bottom: 2em;
-}
-
-.contact-image img {
-    max-width: 100%;
-    border-radius: 10px;
-    box-shadow: var(--shadow-gold);
-}
-
-.contact-map {
-    text-align: center;
-}
-
-.contact-map iframe {
+.register-container .btn-register {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--luxe-gold), #AA8623);
+    color: #121315;
     border: none;
-    max-width: 100%;
-    border-radius: 10px;
-    box-shadow: var(--shadow-gold);
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+.register-container .btn-register:hover {
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
+}
+
+.contact-info { list-style: none; padding: 0; margin-bottom: 0; }
+.contact-info li { margin-bottom: 0.6em; }
+.contact-info a { color: var(--luxe-gold); text-decoration: none; }
+.contact-info a:hover { text-decoration: underline; }
+
+.contact-image, .contact-map { text-align: center; margin-bottom: 2em; }
+.contact-image img, .contact-map iframe {
+    max-width: 100%; border-radius: 10px; box-shadow: var(--shadow-dark); border: none;
 }
 
 /* =============================
    BOTÓN DARK MODE PERSONALIZADO
    ============================= */
-/* Explico: coloco el botón fijo en la parte superior derecha, separado del nav, estilo dorado coherente */
 #darkModeToggle {
-    position: fixed;
-    top: 15px; /* un poco más cerca del borde superior */
-    right: 15px; /* un poco más cerca del borde derecho */
-    z-index: 999;
-    padding: 4px 10px; 
-    background: linear-gradient(90deg, var(--luxe-gold), var(--luxe-gold-bright));
-    color: var(--luxe-black);
-    border: 1px solid var(--luxe-gold-bright); 
-    border-radius: 6px; 
+    position: fixed; top: 15px; right: 15px; z-index: 1050;
+    padding: 8px 12px; 
+    background: var(--luxe-card-bg);
+    color: var(--luxe-gold);
+    border: 1px solid rgba(212, 175, 55, 0.3); 
+    border-radius: 8px; 
     font-weight: bold;
-    font-size: 0.8rem; 
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 1px 4px #c19d5366; 
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-dark); 
 }
-
 #darkModeToggle:hover {
-    background: linear-gradient(90deg, var(--luxe-gold-bright), var(--luxe-gold));
-    box-shadow: 0 4px 14px var(--luxe-gold-bright);
+    background: var(--luxe-gold);
     color: var(--luxe-black);
     transform: scale(1.05);
 }
 
-/* MODO CLARO (cuando NO hay dark-mode) ------------ */
-/* Explico al jurado: uso body:not(.dark-mode) para mantener sitio oscuro por defecto y aplicar claro solo cuando cambia */
-
-/* === CLARO cuando hay .light-mode === */
+/* =========================================================
+   MODO CLARO (LIGHT MODE OVERRIDES)
+   ========================================================= */
 html.light-mode body {
-    background-color: #f5f5f5;
-    color: #1A181A;
+    background-color: #F8F9FA;
+    color: #212529;
+}
+html.light-mode nav, html.light-mode footer, html.light-mode .search-section,
+html.light-mode .footer-gallery-container, html.light-mode .footer-info-columns {
+    background: #FFFFFF;
+    color: #212529;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+html.light-mode a, html.light-mode .footer-contact a { color: #495057; }
+html.light-mode nav a:hover { color: var(--luxe-gold); text-shadow: none; }
+
+html.light-mode .carte-bien, html.light-mode .admin-table, 
+html.light-mode .register-container, html.light-mode .contact-info-block,
+html.light-mode .admin-table th, html.light-mode .tabla-estadisticas th {
+    background: #FFFFFF;
+    color: #212529;
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+html.light-mode .admin-table th { background: #F8F9FA; border-bottom: 2px solid #DEE2E6; }
+
+html.light-mode .search-section form select, html.light-mode .search-section form input[type="text"],
+html.light-mode .register-container input, html.light-mode .contact-form input, html.light-mode .contact-form textarea,
+html.light-mode .register-container select {
+    background: #FFFFFF;
+    color: #212529;
+    border: 1px solid #CED4DA;
 }
 
-html.light-mode nav,
-html.light-mode footer {
-    background-color: #fffdf8;
-    color: #1A181A;
-    border-color: #C19D53;
-}
+.footer-gallery-container { overflow: hidden; width: 100%; border-top: 1px solid rgba(212, 175, 55, 0.2); }
+.footer-gallery { display: flex; width: fit-content; animation: scrollGallery 25s linear infinite; }
+.footer-gallery img { height: 100px; margin: 10px 24px; object-fit: contain; flex-shrink: 0; border-radius: 10px; transition: transform 0.3s ease; }
+.footer-gallery img:hover { transform: scale(1.05); }
+@keyframes scrollGallery { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-html.light-mode a {
-    color: #1A181A;
-}
-
-html.light-mode .btn-primary {
-    background: linear-gradient(90deg, #FFD700, #C19D53);
-    color: #1A181A;
-}
-
-html.light-mode .carte-bien {
-    background: #ffffff;
-    color: #1A181A;
-    border-color: #C19D53;
-}
-
-/* === Light Mode: Search Section === */
-html.light-mode .search-section {
-    background-color: #fffdf8;
-    border-bottom-color: var(--luxe-gold);
-}
-
-/* ===== Light Mode: arreglos específicos para el footer de HOME ===== */
-html.light-mode .footer-gallery-container {
-    background: #fffdf8;                /* mismo tono claro que nav/footer */
-    border-top-color: var(--luxe-gold);
-}
-html.light-mode .footer-info-columns {
-    background-color: #fffdf8;          /* fondo claro */
-    color: #1A181A;                     /* texto oscuro para contraste */
-    border-top-color: var(--luxe-gold);
-}
-
-/* === Galería horizontal tipo banda === */
-.footer-gallery-container {
-    overflow: hidden;
-    width: 100%;
-    background: #000;
-    border-top: 2px solid var(--luxe-gold);
-}
-
-.footer-gallery {
-    display: flex;
-    width: fit-content;
-    animation: scrollGallery 25s linear infinite;
-}
-
-.footer-gallery img {
-    height: 100px;
-    margin: 10px 24px;
-    object-fit: contain;
-    flex-shrink: 0;
-    border-radius: 10px;
-    transition: transform 0.3s ease;
-}
-
-.footer-gallery img:hover {
-    transform: scale(1.05);
-}
-
-@keyframes scrollGallery {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-
-/* Información del footer en columnas  y contacto con agente whatsaap lo dejo al a derecha */
-/* === Estructura del footer === */
 .footer-info-columns {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    padding: 24px 16px;
-    background-color: var(--luxe-black);
-    border-top: 2px solid var(--luxe-gold);
-    color: var(--luxe-white);
+    display: flex; justify-content: space-around; align-items: flex-start; flex-wrap: wrap;
+    padding: 24px 16px; border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+.footer-office, .footer-contact { flex: 1; min-width: 220px; margin: 12px; }
+.footer-bottom { text-align: center; margin-top: 16px; padding-bottom: 16px; }
+
+.section-texto { text-align: center; }
+.img-info { display: block; margin: 0 auto; }
+.section-texto ul, .section-texto ol { display: inline-block; text-align: left; margin: 0 auto 1em; list-style-position: inside; padding-left: 0; }
+
+/* ========================================================
+   BOOTSTRAP 5 Y GLASSMORPHISM FIXES (DARK MODE OVERRIDES)
+   ======================================================== */
+[data-bs-theme="dark"] {
+    --bs-body-bg: var(--luxe-black);
+    --bs-body-color: var(--luxe-white);
+    --bs-secondary-bg: var(--luxe-card-bg);
+    --bs-tertiary-bg: var(--luxe-card-bg);
+    --bs-primary: var(--luxe-gold);
+    --bs-border-color: rgba(255, 255, 255, 0.05);
 }
 
-.footer-office,
-.footer-contact {
-    flex: 1;
-    min-width: 220px;
-    margin: 12px;
+/* 1. Forzar el Buscador a Modo Obsidiana */
+[data-bs-theme="dark"] .premium-search-card {
+    background: rgba(28, 30, 34, 0.85) !important; 
+    border: 1px solid rgba(212, 175, 55, 0.2) !important; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
 }
 
-.footer-contact a {
-    color: var(--luxe-gold);
-    text-decoration: none;
+/* 2. Forzar las casillas del buscador */
+[data-bs-theme="dark"] .custom-input {
+    background-color: var(--luxe-black) !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    color: var(--luxe-white) !important;
+}
+[data-bs-theme="dark"] .custom-input:focus {
+    border-color: var(--luxe-gold) !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15) !important;
 }
 
-.footer-contact a:hover {
-    text-decoration: underline;
+/* 3. Adaptar las etiquetas de colores (Badges) */
+[data-bs-theme="dark"] .bg-primary {
+    background-color: var(--luxe-gold) !important;
+    color: #121315 !important;
 }
-
-.footer-bottom {
-    text-align: center;
-    margin-top: 16px;
-    padding-bottom: 16px;
+[data-bs-theme="dark"] .bg-success {
+    background-color: var(--luxe-green) !important;
+    color: var(--luxe-gold-bright) !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
 }
-
-.footer-bottom a {
-    color: var(--luxe-gold);
-    text-decoration: none;
+[data-bs-theme="dark"] .bg-info {
+    background-color: #1A2634 !important; 
+    color: var(--luxe-white) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
-
-/* === ABOUT: centrar texto e imagen  === */
-.section-texto {
-    text-align: center;           /* centro títulos y párrafos del bloque */
-}
-.img-info {
-    display: block;               /* hace que el margin auto funcione */
-    margin: 0 auto;               /* centra la imagen horizontalmente */
-}
-/* === ABOUT: arreglar viñetas dentro de .section-texto === */
-.section-texto ul,
-.section-texto ol {
-    /* Centro la lista como bloque, pero dejo el texto alineado a la izquierda */
-    display: inline-block;
-    text-align: left;
-    margin: 0 auto 1em;
-
-    /* Hago que el punto/número forme parte del bloque (así no se va a la izquierda) */
-    list-style-position: inside;
-
-    /* Evito sangrías raras al usar 'inside' */
-    padding-left: 0;
-}
-
-/* Mantengo el tipo de marcador adecuado por lista */
-.section-texto ul { list-style-type: disc; }
-.section-texto ol { list-style-type: decimal; }
-
-/*comentario test git actions*/

@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Estudio de Viabilidad Financiera - CONSORIA Inmobiliaria{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10"> {# Ampliamos el contenedor a col-10 para que los 33 campos se acomoden mejor #}
+            
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold text-success mb-3">
+                    <i class="fas fa-file-invoice-dollar me-3"></i>Estudio de Viabilidad
+                </h1>
+                <p class="lead opacity-75 mb-4">
+                    Completa este formulario seguro. Tu información es confidencial y está protegida por la ley colombiana.
+                </p>
+
+                {# BANNERS DE CONFIANZA: LOGOTIPOS DE BANCOS ALIADOS #}
+                <div class="bg-body-tertiary rounded shadow-sm p-4 mb-4 border text-center">
+                    <span class="d-block small text-uppercase text-body-secondary fw-bold mb-3 tracking-wider" style="letter-spacing: 1.5px;">
+                        Respaldado por las mejores entidades financieras
+                    </span>
+                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-4">
+                        {# Cambiamos el bucle a 13 y la extensión exacta a .webp.jpeg #}
+                        {% for i in 1..13 %}
+                            <img src="{{ asset('assets/convenios/convenio' ~ i ~ '.webp.jpeg') }}" alt="Banco Aliado" height="40" style="object-fit: contain; filter: grayscale(100%); opacity: 0.6; transition: 0.3s;" onmouseover="this.style.filter='none'; this.style.opacity='1';" onmouseout="this.style.filter='grayscale(100%)'; this.style.opacity='0.6';">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow border-0 mb-5 bg-body-tertiary">
+                <div class="card-body p-4 p-md-5">
+                    {{ form_start(form) }}
+                    
+                    {# --- SECCIÓN 1: DATOS PERSONALES --- #}
+                    <h4 class="text-primary border-bottom pb-2 mb-4"><i class="fas fa-user me-2"></i>1. Datos Personales y de Contacto</h4>
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-6">{{ form_row(form.cedula) }}</div>
+                        <div class="col-md-6">{{ form_row(form.nombresApellidos) }}</div>
+                        <div class="col-md-4">{{ form_row(form.estadoCivil) }}</div>
+                        <div class="col-md-4">{{ form_row(form.genero) }}</div>
+                        <div class="col-md-4">{{ form_row(form.celular) }}</div>
+                        <div class="col-md-6">{{ form_row(form.fechaCiudadNacimiento) }}</div>
+                        <div class="col-md-6">{{ form_row(form.fechaCiudadExpedicion) }}</div>
+                        <div class="col-md-12">{{ form_row(form.correo) }}</div>
+                        <div class="col-md-4">{{ form_row(form.direccionDomicilio) }}</div>
+                        <div class="col-md-4">{{ form_row(form.direccionLaboral) }}</div>
+                        <div class="col-md-4">{{ form_row(form.ciudadTrabajoDomicilio) }}</div>
+                    </div>
+
+                    {# --- SECCIÓN 2: PERFIL LABORAL --- #}
+                    <h4 class="text-primary border-bottom pb-2 mb-4"><i class="fas fa-briefcase me-2"></i>2. Perfil Laboral</h4>
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-4">{{ form_row(form.nivelEstudios) }}</div>
+                        <div class="col-md-4">{{ form_row(form.profesion) }}</div>
+                        <div class="col-md-4">{{ form_row(form.empresaDondeLabora) }}</div>
+                        <div class="col-md-4">{{ form_row(form.cargo) }}</div>
+                        <div class="col-md-4">{{ form_row(form.tipoContrato) }}</div>
+                        <div class="col-md-4">{{ form_row(form.fechaIngreso) }}</div>
+                        <div class="col-md-4">{{ form_row(form.personasCargo) }}</div>
+                    </div>
+
+                    {# --- SECCIÓN 3: PERFIL FINANCIERO --- #}
+                    <h4 class="text-primary border-bottom pb-2 mb-4"><i class="fas fa-chart-line me-2"></i>3. Perfil Financiero</h4>
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-4">{{ form_row(form.ingresosFijos) }}</div>
+                        <div class="col-md-4">{{ form_row(form.ingresosVariables) }}</div>
+                        <div class="col-md-4">{{ form_row(form.gastosFinancieros) }}</div>
+                        <div class="col-md-4">{{ form_row(form.patrimonioInmuebles) }}</div>
+                        <div class="col-md-4">{{ form_row(form.valorVehiculos) }}</div>
+                        <div class="col-md-4">{{ form_row(form.deudasFinancieras) }}</div>
+                        <div class="col-12">{{ form_row(form.descripcionPerfil) }}</div>
+                    </div>
+
+                    {# --- SECCIÓN 4: DETALLES DEL CRÉDITO --- #}
+                    <h4 class="text-primary border-bottom pb-2 mb-4"><i class="fas fa-home me-2"></i>4. Detalles del Negocio y Crédito</h4>
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-4">{{ form_row(form.valorInmueble) }}</div>
+                        <div class="col-md-4">{{ form_row(form.valorSolicitado) }}</div>
+                        <div class="col-md-4">{{ form_row(form.plazoAnos) }}</div>
+                        <div class="col-md-3">{{ form_row(form.sistemaAmortizacion) }}</div>
+                        <div class="col-md-3">{{ form_row(form.lineaCredito) }}</div>
+                        <div class="col-md-3">{{ form_row(form.tipoVivienda) }}</div>
+                        <div class="col-md-3">{{ form_row(form.ciudadInmueble) }}</div>
+                    </div>
+
+                    {# --- SECCIÓN 5: REFERENCIAS --- #}
+                    <h4 class="text-primary border-bottom pb-2 mb-4"><i class="fas fa-users me-2"></i>5. Referencias</h4>
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-6">{{ form_row(form.referenciaFamiliar) }}</div>
+                        <div class="col-md-6">{{ form_row(form.referenciaPersonal) }}</div>
+                    </div>
+
+                    {# --- SECCIÓN LEGAL Y PROTECCIÓN DE DATOS (HABEAS DATA) --- #}
+                    <div class="alert bg-body border border-success border-start-0 border-end-0 border-bottom-0 border-top-4 mt-5 shadow-sm p-4">
+                        <h5 class="fw-bold text-success mb-3"><i class="fas fa-shield-alt me-2"></i>Política de Tratamiento de Datos Personales</h5>
+                        <p class="small opacity-75 mb-4 text-justify">
+                            En cumplimiento de la <strong>Ley Estatutaria 1581 de 2012 de Colombia (Habeas Data)</strong> y sus decretos reglamentarios, CONSORIA Inmobiliaria le informa que los datos personales, financieros, laborales y de contacto suministrados en este formulario serán tratados de manera estrictamente confidencial y segura. Su finalidad exclusiva será la gestión, perfilamiento, evaluación y trámite de su solicitud de viabilidad de crédito hipotecario o leasing ante las entidades financieras e inmobiliarias aliadas.
+                        </p>
+                        <div class="form-check">
+                            {{ form_widget(form.aceptaTratamientoDatos, {'attr': {'class': 'form-check-input fs-5'}}) }}
+                            {{ form_label(form.aceptaTratamientoDatos, null, {'label_attr': {'class': 'form-check-label fw-bold mt-1 ms-2'}}) }}
+                            {{ form_errors(form.aceptaTratamientoDatos) }}
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-5">
+                        <button type="submit" class="btn btn-success btn-lg fw-bold shadow-sm py-3">
+                            <i class="fas fa-lock me-2"></i>Enviar Solicitud Segura
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

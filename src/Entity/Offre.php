@@ -16,14 +16,15 @@ class Offre
     #[ORM\Column(name: "id_offre", type: "integer")]
     private ?int $idOffre = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
+    // CORRECCIÓN DE PRECISIÓN: Cambiado de 10 a 15 para soportar los montos del peso colombiano (COP)
+    #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 2, nullable: true)]
     private ?string $prix = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOffre = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $etatNegociation = null;
+    private ?string $etatNegociation = null; // Ej: 'Presentada', 'Aceptada', 'Rechazada', 'Contraoferta'
 
     // Ahora el cliente es una instancia de User con typeUser = 'client'
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -33,6 +34,15 @@ class Offre
     #[ORM\ManyToOne(targetEntity: Bien::class, inversedBy: 'offres')]
     #[ORM\JoinColumn(name: "id_bien", referencedColumnName: "id_bien", nullable: true)]
     private ?Bien $bien = null;
+
+    // =========================================================================
+    // EXTENSIONES DE NEGOCIACIÓN (Opcionales, invisibles en el diseño actual)
+    // =========================================================================
+    
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $conditionsAchat = null; // Para especificar métodos de pago o permutas
+
+    // --- Getters y setters originales (Mantenidos intactos) ---
 
     public function getIdOffre(): ?int { return $this->idOffre; }
     public function setIdOffre(int $idOffre): static { $this->idOffre = $idOffre; return $this; }
@@ -51,4 +61,14 @@ class Offre
 
     public function getBien(): ?Bien { return $this->bien; }
     public function setBien(?Bien $bien): static { $this->bien = $bien; return $this; }
+
+    // =========================================================================
+    // GETTERS Y SETTERS NUEVOS
+    // =========================================================================
+
+    public function getConditionsAchat(): ?string { return $this->conditionsAchat; }
+    public function setConditionsAchat(?string $conditionsAchat): static {
+        $this->conditionsAchat = $conditionsAchat;
+        return $this;
+    }
 }

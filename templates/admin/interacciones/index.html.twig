@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestión de Solicitudes - CONSORIA{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="h2 fw-bold mb-4 text-primary"><i class="fas fa-inbox me-2"></i>Bandeja de Solicitudes</h1>
+
+    <div class="row">
+        <div class="col-12 mb-5">
+            <h3 class="h4 mb-3"><i class="far fa-calendar-check me-2 text-info"></i>Visitas Programadas</h3>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Inmueble</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for visita in visitas %}
+                            <tr>
+                                <td>{{ visita.dateVisite ? visita.dateVisite|date('d/m/Y') : 'N/A' }}</td>
+                                <td>{{ visita.client ? visita.client.email : 'Usuario Eliminado' }}</td>
+                                <td>{{ visita.bien ? visita.bien.titulo : 'N/A' }}</td>
+                                <td>
+                                    <span class="badge {{ visita.statut == 'Programada' ? 'bg-warning' : (visita.statut == 'Realizada' ? 'bg-success' : 'bg-danger') }}">
+                                        {{ visita.statut }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ path('admin_visita_estado', {'id': visita.idVisites, 'estado': 'Realizada'}) }}" class="btn btn-sm btn-success" title="Marcar Realizada"><i class="fas fa-check"></i></a>
+                                    <a href="{{ path('admin_visita_estado', {'id': visita.idVisites, 'estado': 'Cancelada'}) }}" class="btn btn-sm btn-danger" title="Cancelar"><i class="fas fa-times"></i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5" class="text-center opacity-75">No hay visitas registradas.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <h3 class="h4 mb-3"><i class="fas fa-hand-holding-usd me-2 text-warning"></i>Ofertas Recibidas</h3>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Inmueble</th>
+                            <th>Monto Oferta</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for oferta in ofertas %}
+                            <tr>
+                                <td>{{ oferta.dateOffre ? oferta.dateOffre|date('d/m/Y') : 'N/A' }}</td>
+                                <td>{{ oferta.client ? oferta.client.email : 'Usuario Eliminado' }}</td>
+                                <td>{{ oferta.bien ? oferta.bien.titulo : 'N/A' }}</td>
+                                <td class="fw-bold text-success">$ {{ oferta.prix|number_format(0, ',', '.') }}</td>
+                                <td>
+                                    <span class="badge {{ oferta.etatNegociation == 'Presentada' ? 'bg-info' : (oferta.etatNegociation == 'Aceptada' ? 'bg-success' : 'bg-danger') }}">
+                                        {{ oferta.etatNegociation }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ path('admin_oferta_estado', {'id': oferta.idOffre, 'estado': 'Aceptada'}) }}" class="btn btn-sm btn-success" title="Aceptar Oferta"><i class="fas fa-check"></i></a>
+                                    <a href="{{ path('admin_oferta_estado', {'id': oferta.idOffre, 'estado': 'Rechazada'}) }}" class="btn btn-sm btn-danger" title="Rechazar"><i class="fas fa-times"></i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="6" class="text-center opacity-75">No hay ofertas registradas.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

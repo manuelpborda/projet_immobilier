@@ -1,0 +1,319 @@
+{# templates/proprietaire/editar.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Inmueble - Propietario{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            
+            {# Mensajes Flash del Sistema #}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show shadow-sm" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i> {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            
+            {# Detector de Errores de Validación del Servidor #}
+            {% if not form.vars.valid %}
+                <div class="alert alert-danger shadow-sm p-4">
+                    <h5 class="alert-heading fw-bold text-danger mb-2">
+                        <i class="fas fa-exclamation-triangle me-2"></i> Error al actualizar el inmueble
+                    </h5>
+                    <p class="small mb-3">Se han detectado inconvenientes. Por favor verifique la siguiente lista:</p>
+                    <ul class="mb-0 ps-3 small">
+                        {% for error in form.vars.errors %}
+                            <li>{{ error.message|replace({'El archivo subido es demasiado grande. Por favor, suba un archivo más pequeño.': 'Uno de los archivos excede el límite de 200 MB.'}) }}</li>
+                        {% endfor %}
+                        {% for child in form.children %}
+                            {% for error in child.vars.errors %}
+                                <li><span class="fw-bold">{{ child.vars.label }}:</span> {{ error.message }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="card shadow-lg border-0 rounded-3 mt-3">
+                <div class="card-header bg-dark text-white text-center py-4 rounded-top">
+                    <h2 class="mb-0"><i class="fas fa-edit me-2"></i> Editar Inmueble</h2>
+                    <p class="mb-0 text-white-50 mt-1">Modifica los datos necesarios de tu propiedad de forma segura.</p>
+                </div>
+                
+                <div class="card-body p-4 p-md-5 bg-light">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'enctype': 'multipart/form-data'}}) }}
+
+                    {# --- SECCIÓN 1: DATOS GENERALES --- #}
+                    <div class="bg-white p-4 rounded shadow-sm mb-4">
+                        <h4 class="text-primary mb-3 border-bottom pb-2">1. Información Básica</h4>
+                        <div class="row g-3">
+                            <div class="col-md-8">{{ form_row(form.titulo) }}</div>
+                            <div class="col-md-4">{{ form_row(form.matricula) }}</div>
+                            <div class="col-md-6">{{ form_row(form.tipoTransaccion) }}</div>
+                            <div class="col-md-6">{{ form_row(form.typeDeBien) }}</div>
+                            <div class="col-md-6">{{ form_row(form.prix) }}</div>
+                            <div class="col-md-6">{{ form_row(form.prixAdministration) }}</div>
+                            <div class="col-md-4">{{ form_row(form.etatDuBien) }}</div>
+                            <div class="col-md-4">{{ form_row(form.anoConstruccion) }}</div>
+                            <div class="col-md-4">{{ form_row(form.estrato) }}</div>
+                        </div>
+                    </div>
+
+                    {# --- SECCIÓN 2: CARACTERÍSTICAS --- #}
+                    <div class="bg-white p-4 rounded shadow-sm mb-4">
+                        <h4 class="text-primary mb-3 border-bottom pb-2">2. Características del Inmueble</h4>
+                        <div class="row g-3">
+                            <div class="col-md-3">{{ form_row(form.habitaciones) }}</div>
+                            <div class="col-md-3">{{ form_row(form.banos) }}</div>
+                            <div class="col-md-3">{{ form_row(form.garajes) }}</div>
+                            <div class="col-md-3">{{ form_row(form.numeroPiso) }}</div>
+                            <div class="col-md-6">{{ form_row(form.surfaceM2) }}</div>
+                            <div class="col-md-6">{{ form_row(form.areaConstruida) }}</div>
+                            <div class="col-12">{{ form_row(form.description) }}</div>
+                        </div>
+                    </div>
+
+                    {# --- SECCIÓN 3: UBICACIÓN --- #}
+                    <div class="bg-white p-4 rounded shadow-sm mb-4">
+                        <h4 class="text-primary mb-3 border-bottom pb-2">3. Ubicación</h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">{{ form_row(form.departamento) }}</div>
+                            <div class="col-md-6">
+                                <label class="form-label required fw-bold">Ciudad</label>
+                                <select id="select-visual-ciudad" class="form-select" disabled>
+                                    <option value="">Primero seleccione un departamento</option>
+                                </select>
+                                {{ form_widget(form.ville) }}
+                                {{ form_errors(form.ville) }}
+                            </div>
+                            <div class="col-md-6">{{ form_row(form.barrio) }}</div>
+                            <div class="col-md-6">{{ form_row(form.adresse) }}</div>
+                        </div>
+                    </div>
+
+                    {# --- SECCIÓN 4: MULTIMEDIA CON PREVIEW Y ELIMINACIÓN --- #}
+                    <div class="bg-white p-4 rounded shadow-sm mb-4">
+                        <h4 class="text-primary mb-3 border-bottom pb-2">4. Galería de Fotos e Imágenes Actuales</h4>
+                        
+                        <div class="alert alert-warning d-flex align-items-center small py-2 mb-4" role="alert">
+                            <i class="fas fa-info-circle me-2 fs-5"></i>
+                            <div>
+                                Subir un archivo en un casillero <strong>reemplazará</strong> la foto anterior. Límite: 200 MB por archivo.
+                            </div>
+                        </div>
+
+                        {# Parseamos las fotos actuales guardadas en el string por comas #}
+                        {% set fotosActuales = bien.foto ? bien.foto|split(',') : [] %}
+
+                        <div class="row g-4 mt-2">
+                            {% for i in 1..6 %}
+                                <div class="col-md-4 col-sm-6 text-file-box">
+                                    <div class="border p-3 rounded position-relative {{ i == 1 ? 'border-primary bg-primary bg-opacity-10 shadow' : 'bg-light' }}">
+                                        
+                                        {% if i == 1 %}
+                                            <span class="badge bg-primary position-absolute top-0 start-50 translate-middle px-3 py-2 shadow-sm" style="font-size: 0.85rem; z-index: 2;">
+                                                <i class="fas fa-star text-warning me-1"></i> FOTO DE PORTADA
+                                            </span>
+                                        {% endif %}
+
+                                        {# Lógica para mostrar la foto actual si existe #}
+                                        {% set fotoExistente = (fotosActuales[i-1] is defined and fotosActuales[i-1] != '') ? fotosActuales[i-1] : null %}
+                                        {% if fotoExistente %}
+                                            <div class="mb-3 d-flex align-items-center gap-2 bg-white p-2 rounded border shadow-sm">
+                                                {% if fotoExistente|split('.')|last|lower == 'mp4' %}
+                                                    <div class="bg-dark text-white rounded d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                                                        <i class="fas fa-video fs-5"></i>
+                                                    </div>
+                                                {% else %}
+                                                    <img src="{{ asset('uploads/bienes/' ~ fotoExistente) }}" alt="Miniatura" class="rounded border" style="width: 55px; height: 55px; object-fit: cover;">
+                                                {% endif %}
+                                                <div class="flex-grow-1 min-w-0">
+                                                    <p class="text-muted text-truncate mb-0" style="font-size: 0.7rem;">{{ fotoExistente }}</p>
+                                                    
+                                                    <div class="form-check form-switch m-0 mt-1">
+                                                        <input class="form-check-input" type="checkbox" name="eliminar_fotos[]" value="{{ i - 1 }}" id="eliminar_foto_{{ i }}">
+                                                        <label class="form-check-label text-danger small fw-bold" for="eliminar_foto_{{ i }}" style="font-size: 0.75rem; cursor: pointer;">
+                                                            🗑️ Eliminar foto
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        {{ form_row(attribute(form, 'foto' ~ i)) }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div id="extra-photos" style="display: none;">
+                            <div class="row g-4 mt-1">
+                                {% for i in 7..20 %}
+                                    <div class="col-md-4 col-sm-6 text-file-box">
+                                        <div class="border p-3 rounded bg-light">
+                                            
+                                            {% set fotoExistente = (fotosActuales[i-1] is defined and fotosActuales[i-1] != '') ? fotosActuales[i-1] : null %}
+                                            {% if fotoExistente %}
+                                                <div class="mb-3 d-flex align-items-center gap-2 bg-white p-2 rounded border shadow-sm">
+                                                    {% if fotoExistente|split('.')|last|lower == 'mp4' %}
+                                                        <div class="bg-dark text-white rounded d-flex align-items-center justify-content-center" style="width: 55px; height: 55px;">
+                                                            <i class="fas fa-video fs-5"></i>
+                                                        </div>
+                                                    {% else %}
+                                                        <img src="{{ asset('uploads/bienes/' ~ fotoExistente) }}" alt="Miniatura" class="rounded border" style="width: 55px; height: 55px; object-fit: cover;">
+                                                    {% endif %}
+                                                    <div class="flex-grow-1 min-w-0">
+                                                        <p class="text-muted text-truncate mb-0" style="font-size: 0.7rem;">{{ fotoExistente }}</p>
+                                                        <div class="form-check form-switch m-0 mt-1">
+                                                            <input class="form-check-input" type="checkbox" name="eliminar_fotos[]" value="{{ i - 1 }}" id="eliminar_foto_{{ i }}">
+                                                            <label class="form-check-label text-danger small fw-bold" for="eliminar_foto_{{ i }}" style="font-size: 0.75rem; cursor: pointer;">
+                                                                🗑️ Eliminar
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                            {{ form_row(attribute(form, 'foto' ~ i)) }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="button" id="btn-toggle-photos" class="btn btn-outline-primary rounded-pill px-4 fw-bold">
+                                <i class="fas fa-plus-circle me-2"></i> Ver fotos adicionales (hasta 20)
+                            </button>
+                        </div>
+                    </div>
+
+                    {# --- BOTONES EN EL LUGAR CORRECTO: AL FINAL DEL FORMULARIO --- #}
+                    <div class="d-flex justify-content-end gap-3 mt-4 border-top pt-3">
+                        <a href="{{ path('proprietaire_dashboard') }}" class="btn btn-secondary btn-lg px-4">Cancelar</a>
+                        <button type="submit" class="btn btn-primary btn-lg px-5 fw-bold">
+                            <i class="fas fa-save me-2"></i> Guardar Cambios
+                        </button>
+                    </div>
+
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnToggle = document.getElementById('btn-toggle-photos');
+        const extraPhotos = document.getElementById('extra-photos');
+
+        if(btnToggle && extraPhotos) {
+            btnToggle.addEventListener('click', function() {
+                if (extraPhotos.style.display === 'none') {
+                    extraPhotos.style.display = 'block';
+                    btnToggle.innerHTML = '<i class="fas fa-minus-circle me-2"></i> Ocultar slots adicionales';
+                    btnToggle.classList.replace('btn-outline-primary', 'btn-outline-secondary');
+                } else {
+                    extraPhotos.style.display = 'none';
+                    btnToggle.innerHTML = '<i class="fas fa-plus-circle me-2"></i> Ver fotos adicionales (hasta 20)';
+                    btnToggle.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                }
+            });
+        }
+
+        // Validación de peso (200 MB)
+        const inputsArchivo = document.querySelectorAll('input[type="file"]');
+        const MAX_BYTES = 200 * 1024 * 1024;
+
+        inputsArchivo.forEach(function(input) {
+            input.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const archivo = this.files[0];
+                    const pesoEnMB = (archivo.size / (1024 * 1024)).toFixed(2);
+                    const errorPrevio = this.parentNode.querySelector('.js-error-peso');
+                    if (errorPrevio) errorPrevio.remove();
+
+                    if (archivo.size > MAX_BYTES) {
+                        const avisoError = document.createElement('div');
+                        avisoError.className = 'text-danger small fw-bold mt-1 js-error-peso';
+                        avisoError.innerHTML = `<i class="fas fa-times-circle me-1"></i> Demasiado pesado (${pesoEnMB} MB). Máximo 200 MB.`;
+                        this.parentNode.appendChild(avisoError);
+                        this.value = ''; 
+                    }
+                }
+            });
+        });
+
+        // Diccionario Geográfico de Ubicación
+        const diccionarioUbicacion = {
+            'Antioquia': ['Medellín', 'Bello', 'Itagüí', 'Envigado', 'Rionegro', 'Apartadó', 'Sabaneta', 'Caldas'],
+            'Atlántico': ['Barranquilla', 'Soledad', 'Malambo', 'Sabanalarga', 'Puerto Colombia'],
+            'Bogotá D.C.': ['Bogotá D.C.'],
+            'Bolívar': ['Cartagena', 'Magangué', 'Turbaco', 'Arjona'],
+            'Boyacá': ['Tunja', 'Duitama', 'Sogamoso', 'Chiquinquirá'],
+            'Caldas': ['Manizales', 'La Dorada', 'Villamaría', 'Chinchiná'],
+            'Cauca': ['Popayán', 'Quilichao', 'El Tambo'],
+            'Cesar': ['Valledupar', 'Aguachica', 'Agustín Codazzi'],
+            'Córdoba': ['Montería', 'Lorica', 'Sahagún', 'Cereté'],
+            'Cundinamarca': ['Soacha', 'Chía', 'Zipaquirá', 'Facatativá', 'Fusagasugá', 'Girardot', 'Cajicá', 'Funza'],
+            'Huila': ['Neiva', 'Pitalito', 'Garzón'],
+            'La Guajira': ['Riohacha', 'Maicao', 'Uribia'],
+            'Magdalena': ['Santa Marta', 'Ciénaga', 'Fundación'],
+            'Meta': ['Villavicencio', 'Acacías', 'Granada'],
+            'Nariño': ['Pasto', 'Tumaco', 'Ipiales'],
+            'Norte de Santander': ['Cúcuta', 'Ocaña', 'Villa del Rosario', 'Pamplona'],
+            'Quindío': ['Armenia', 'Calarcá', 'Montenegro'],
+            'Risaralda': ['Pereira', 'Dosquebradas', 'Santa Rosa de Cabal'],
+            'Santander': ['Bucaramanga', 'Floridablanca', 'Barrancabermeja', 'Piedecuesta', 'Girón'],
+            'Sucre': ['Sincelejo', 'Corozal'],
+            'Tolima': ['Ibagué', 'Espinal', 'Melgar'],
+            'Valle del Cauca': ['Cali', 'Buenaventura', 'Palmira', 'Tuluá', 'Yumbo', 'Cartago', 'Jamundí', 'Buga']
+        };
+
+        const deptoSelect = document.getElementById('bien_departamento');
+        const ciudadVisual = document.getElementById('select-visual-ciudad');
+        const hiddenVilleInput = document.getElementById('bien_ville');
+
+        function cargarCiudades(deptoEscogido, ciudadSeleccionada = '') {
+            ciudadVisual.innerHTML = '<option value="">Seleccione una ciudad...</option>';
+            if (deptoEscogido && diccionarioUbicacion[deptoEscogido]) {
+                ciudadVisual.disabled = false;
+                diccionarioUbicacion[deptoEscogido].forEach(function(ciudad) {
+                    const option = document.createElement('option');
+                    option.value = ciudad;
+                    option.textContent = ciudad;
+                    if (ciudad === ciudadSeleccionada) {
+                        option.selected = true;
+                    }
+                    ciudadVisual.appendChild(option);
+                });
+            } else {
+                ciudadVisual.disabled = true;
+                ciudadVisual.innerHTML = '<option value="">Primero seleccione un departamento</option>';
+            }
+        }
+
+        // LÓGICA DE PRE-CARGA DE EDICIÓN: Lee lo que ya está guardado en la Base de Datos
+        if (deptoSelect && deptoSelect.value) {
+            const deptoGuardado = deptoSelect.value;
+            const ciudadGuardada = "{{ bien.ville|e('js') }}";
+            cargarCiudades(deptoGuardado, ciudadGuardada);
+        }
+
+        deptoSelect.addEventListener('change', function() {
+            cargarCiudades(this.value);
+            hiddenVilleInput.value = ''; 
+        });
+
+        ciudadVisual.addEventListener('change', function() {
+            hiddenVilleInput.value = this.value;
+        });
+    });
+</script>
+{% endblock %}

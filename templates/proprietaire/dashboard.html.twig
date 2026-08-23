@@ -1,14 +1,72 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panel Propietario{% endblock %}
+{% block title %}Mi Panel de Propietario | Consoria{% endblock %}
 
 {% block body %}
-    <h1>Bienvenido Propietario {{ user.firstName }}</h1>
-    <p>Desde este panel podrás administrar los inmuebles que ofreces.</p>
+<main class="admin-panel" style="max-width: 1200px; margin: 40px auto; padding: 20px;">
+    
+    {# Contenedor principal en dos columnas #}
+    <div class="dashboard-layout" style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
+        
+        {# COLUMNA IZQUIERDA: Bienvenida y Botón de Acción #}
+        <div class="dashboard-welcome-zone" style="flex: 1; min-width: 280px; max-width: 360px; margin-bottom: 20px;">
+            <h1 style="color: var(--luxe-gold); margin-top: 0; margin-bottom: 10px; font-size: 2rem;">
+                Bienvenido, {{ user.firstName }} {{ user.lastName }}
+            </h1>
+            <p style="color: #a0a0a0; line-height: 1.5; margin-bottom: 25px;">
+                Gestiona tus inmuebles y observa el rendimiento de tus publicaciones.
+            </p>
+            
+            {# El botón ahora vive aquí, visible y protegido de amontonamientos #}
+            <a href="{{ path('proprietaire_bien_nuevo') }}" class="btn-primary" style="display: inline-block; background-color: var(--luxe-gold, #d4af37); color: #111111; padding: 12px 24px; font-weight: bold; text-decoration: none; border-radius: 4px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);">
+                + Publicar nuevo inmueble
+            </a>
+        </div>
 
-    <ul>
-        <li>Correo: <strong>{{ user.email }}</strong></li>
-        <li>Tipo: <strong>{{ user.typeUser }}</strong></li>
-        <li>Roles: {{ user.roles|join(', ') }}</li>
-    </ul>
+        {# COLUMNA DERECHA: Tabla con máxima representación y espacio libre #}
+        <div class="dashboard-table-zone" style="flex: 2; min-width: 320px; width: 100%;">
+            {# La tabla usa la clase 'admin-table' que ya tienes definida en style.css #}
+            <div style="overflow-x: auto; background-color: #1e1e1e; border-radius: 8px; padding: 5px;">
+                <table class="admin-table" style="width: 100%; margin: 0;">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Título</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bien in bienes %}
+                        <tr>
+                            <td>
+                                {% if bien.foto %}
+                                    <img src="{{ asset('uploads/bienes/' ~ bien.foto) }}" alt="Foto" style="width: 80px; border-radius: 4px;">
+                                {% else %}
+                                    <span>Sin foto</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ bien.typeDeBien }} en {{ bien.ville }}</td>
+                            <td class="prix-bien">{{ bien.prix|number_format(0, ',', '.') }} €</td>
+                            <td>
+                                <a href="{{ path('proprietaire_bien_editar', {id: bien.id}) }}" style="color: var(--luxe-gold);">Editar</a>
+                                |
+                                <form action="{{ path('proprietaire_bien_eliminar', {id: bien.id}) }}" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bien.id) }}">
+                                    <button type="submit" style="background:none; border:none; color:red; cursor:pointer;" onclick="return confirm('¿Seguro?')">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 20px; color: #a0a0a0;">Aún no tienes inmuebles publicados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
 {% endblock %}

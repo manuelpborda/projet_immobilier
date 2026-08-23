@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastName = null;
 
     #[ORM\Column(length: 20, nullable: true)]
-    private ?string $phone = null;
+    private ?string $phone = null; // Perfecto para los prefijos y números de Colombia (+57)
 
     public function getUserIdentifier(): string
     {
@@ -61,16 +61,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
 
-       if ($this->typeUser === 'admin') {
-        $roles[] = 'ROLE_ADMIN';
-    } elseif ($this->typeUser === 'client') {
-        $roles[] = 'ROLE_CLIENT';
-    } elseif ($this->typeUser === 'proprietaire') {
-        $roles[] = 'ROLE_PROPRIETAIRE';
-    }
+        if ($this->typeUser === 'admin') {
+            $roles[] = 'ROLE_ADMIN';
+        } elseif ($this->typeUser === 'client') {
+            $roles[] = 'ROLE_CLIENT';
+        } elseif ($this->typeUser === 'proprietaire') {
+            $roles[] = 'ROLE_PROPRIETAIRE';
+        }
 
-    return array_unique($roles);
-}
+        return array_unique($roles);
+    }
 
     public function setRoles(array $roles): static
     {

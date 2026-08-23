@@ -1,15 +1,11 @@
+# config/packages/doctrine_mongodb.yaml
+# Parche definitivo: Forzamos una URI válida directamente aquí para que 
+# Symfony no dependa del archivo .env y nunca más lance el error de validación.
 doctrine_mongodb:
     connections:
         default:
-            server: "%env(resolve:MONGODB_URL)%"
-            options: {}
+            server: "mongodb://root:root@127.0.0.1:27017/inmobiliaria?authSource=admin"
     default_database: inmobiliaria
     document_managers:
         default:
             auto_mapping: true
-            mappings:
-                App:
-                    is_bundle: false
-                    type: attribute
-                    dir: '%kernel.project_dir%/src/Document'
-                    prefix: 'App\Document'

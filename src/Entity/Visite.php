@@ -33,6 +33,18 @@ class Visite
     #[ORM\JoinColumn(name: "id_bien", referencedColumnName: "id_bien", nullable: true)]
     private ?Bien $bien = null;
 
+    // =========================================================================
+    // EXTENSIONES LOGÍSTICAS DE BACKEND (Opcionales, no afectan lo visual)
+    // =========================================================================
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $statut = 'Programada'; // Valores sugeridos: 'Programada', 'Realizada', 'Cancelada'
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $commentaires = null; // Notas del agente sobre el feedback del cliente
+
+    // --- Getters y setters originales (Mantenidos intactos) ---
+
     public function getIdVisites(): ?int { return $this->idVisites; }
     public function setIdVisites(int $idVisites): static { $this->idVisites = $idVisites; return $this; }
 
@@ -47,4 +59,20 @@ class Visite
 
     public function getBien(): ?Bien { return $this->bien; }
     public function setBien(?Bien $bien): static { $this->bien = $bien; return $this; }
+
+    // =========================================================================
+    // GETTERS Y SETTERS NUEVOS (Para control interno e informes futuros)
+    // =========================================================================
+
+    public function getStatut(): ?string { return $this->statut; }
+    public function setStatut(?string $statut): static {
+        $this->statut = $statut;
+        return $this;
+    }
+
+    public function getCommentaires(): ?string { return $this->commentaires; }
+    public function setCommentaires(?string $commentaires): static {
+        $this->commentaires = $commentaires;
+        return $this;
+    }
 }

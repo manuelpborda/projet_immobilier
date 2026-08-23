@@ -1,20 +1,28 @@
-
+# config/services.yaml
 # Este archivo configura los servicios de Symfony y nuestros propios servicios personalizados.
-# ==========================================
-
+# =========================================================================================
 
 parameters:
-    mongo_db_name: '%env(string:MONGO_DB)%' # Nombre de la BD MongoDB tomado de variables de entorno (.env)
+    # Nombre de la BD MongoDB tomado de variables de entorno (.env)
+    mongo_db_name: '%env(string:MONGO_DB)%' 
+    
+    # Carpeta pública donde se guardarán las fotos de los inmuebles (Estructura original)
+    bienes_images_directory: '%kernel.project_dir%/public/uploads/bienes'
+
+    
+    # Carpeta PRIVADA y PROTEGIDA para documentos legales (Fuera de /public)
+    propietarios_documentos_directory: '%kernel.project_dir%/var/documents'
+
+    # CORRECCIÓN DE PARÁMETRO: Ruta requerida por ProprietaireController para la subida de fotos
+    fotos_directory: '%kernel.project_dir%/public/uploads/fotos'
 
 services:
     # === Configuración por defecto para todos los servicios de este archivo ===
-    # Justificación: Symfony inyectará automáticamente las dependencias y configurará los servicios.
     _defaults:
         autowire: true      # Inyección automática de dependencias en constructores
         autoconfigure: true # Symfony registra automáticamente tags según el tipo de clase
 
     # === Registro automático de todas las clases de /src como servicios ===
-    # Justificación: así no tengo que registrar cada clase manualmente.
     App\:
         resource: '../src/'
         exclude:
@@ -22,16 +30,23 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    # === Servicio especializado para la carga de imágenes (Inmuebles/Bienes) ===
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%bienes_images_directory%'
+            # Nota: SluggerInterface se inyecta automáticamente gracias a autowire: true
+
     # === Servicio MongoDB\Client ===
-    # Justificación: Este cliente es el que nos permite conectar con MongoDB usando la librería oficial.
+    # Permite conectar con MongoDB usando la librería oficial.
     MongoDB\Client:
         class: MongoDB\Client
         arguments:
             - '%env(string:MONGO_URI)%' # URI de conexión a MongoDB definida en .env
 
     # === Servicio personalizado para registrar contactos en MongoDB ===
-    # Justificación: encapsulo la lógica de guardado NoSQL para cumplir con requisitos UC.
+    # SOLUCIÓN CRÍTICA: Quitamos el nombre de variable estricto y le pasamos los 
+    # argumentos en orden posicional exacto para evitar conflictos con el constructor.
     App\Service\MongoContactLogger:
         arguments:
-            - '@MongoDB\Client' # Inyección del cliente MongoDB
-            - '%mongo_db_name%' # Nombre de la base de datos
+            - '@MongoDB\Client'
+            - '%mongo_db_name%'
