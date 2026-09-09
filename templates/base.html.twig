@@ -35,32 +35,35 @@
             flex-wrap: wrap;
             gap: 1.5rem;
             padding: 0.5rem 1rem;
+            background: var(--luxe-card-bg, #1C1E22); /* Fondo premium para la navbar */
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
         .nav-enlaces a {
-            font-size: 1.1rem; 
+            font-size: 1.05rem; 
             text-decoration: none;
             transition: all 0.3s ease;
+            color: #fff; /* Texto blanco por defecto */
         }
         .nav-enlaces a:hover {
-            opacity: 0.8;
+            color: var(--luxe-gold, #D4AF37) !important;
         }
         .user-zone {
             margin-left: auto; 
             display: flex;
             align-items: center;
             gap: 1rem;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(212, 175, 55, 0.3);
             padding-left: 1rem;
         }
         .text-gold {
-            color: #d4af37 !important; /* Dorado Premium Inmobiliario */
+            color: var(--luxe-gold, #D4AF37) !important; 
         }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100" style="background-color: var(--luxe-black, #111); color: #fff;">
 
     <nav class="nav-wrapper">
-        {# LOGO DE LA EMPRESA con eco-concepción #}
+        {# LOGO DE LA EMPRESA #}
         <a href="{{ path('home') }}" class="me-3">
             <img src="{{ asset('assets/img/logo.webp') }}" alt="Logo CONSORIA Inmobiliaria" width="150" height="100" style="vertical-align:middle; object-fit: contain;">
         </a>
@@ -70,15 +73,21 @@
                 {% if 'ROLE_ADMIN' in app.user.roles %}
                     <a href="{{ path('admin_dashboard') }}">Panel Admin</a>
                     <a href="{{ path('admin_usuarios') }}">Usuarios</a>
-                    <a href="{{ path('admin_estadisticas') }}">Estadísticas</a>
-                    <a href="{{ path('admin_documentos_index') }}" class="fw-bold">
-    <i class="fas fa-folder-open me-1 text-warning"></i> Documentos
-</a>
-                    <a href="{{ path('admin_interacciones_index') }}" class="fw-bold">
-    <i class="fas fa-envelope-open-text me-1 text-warning"></i> Solicitudes
-</a>
-                    {# === NOMBRE CORREGIDO: MÁS CLARO PARA TU HERMANO === #}
-                    <a href="{{ path('admin_estudios_index') }}" class="text-success fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Estudios de Crédito</a>
+                    <a href="{{ path('admin_documentos_index') }}" class="fw-bold text-warning">
+                        <i class="fas fa-folder-open me-1"></i> Documentos
+                    </a>
+                    <a href="{{ path('admin_interacciones_index') }}" class="fw-bold text-warning">
+                        <i class="fas fa-envelope-open-text me-1"></i> Solicitudes
+                    </a>
+                    <a href="{{ path('admin_estudios_index') }}" class="text-success fw-bold">
+                        <i class="fas fa-file-invoice-dollar me-1"></i> Estudios
+                    </a>
+                    
+                    {# === BOTÓN PARA QUE TU HERMANO CREE INMUEBLES === #}
+                    {# === BOTÓN PARA QUE TU HERMANO CREE INMUEBLES === #}
+                    <a href="{{ path('proprietaire_bien_nuevo') }}" class="btn btn-sm ms-2 fw-bold shadow-sm" style="background-color: var(--luxe-gold, #D4AF37); color: #111; border-radius: 20px; padding: 6px 15px;">
+                        <i class="fas fa-plus-circle me-1"></i> Nuevo Inmueble
+                    </a>
                     
                     {# ZONA DE PERFIL RESALTADA #}
                     <div class="user-zone">
@@ -129,22 +138,23 @@
                 <a href="{{ path('contact') }}">Contacto</a>
                 
                 <div class="user-zone border-0">
-                    <a href="{{ path('app_login') }}" class="btn btn-outline-primary rounded-pill px-4">Iniciar sesión</a>
-                    <a href="{{ path('app_register') }}" class="btn btn-primary rounded-pill px-4">Registrarse</a>
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-light rounded-pill px-4" style="border-color: var(--luxe-gold, #D4AF37); color: var(--luxe-gold, #D4AF37);">Iniciar sesión</a>
+                    <a href="{{ path('app_register') }}" class="btn rounded-pill px-4 fw-bold" style="background-color: var(--luxe-gold, #D4AF37); color: #111;">Registrarse</a>
                 </div>
             {% endif %}
             
-            <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary ms-2 rounded-circle" title="Modo Oscuro / Claro" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
+            <button id="darkModeToggle" class="btn btn-sm ms-2 rounded-circle" title="Modo Oscuro / Claro" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--luxe-gold, #D4AF37); color: var(--luxe-gold, #D4AF37);">
                 <i class="fas fa-moon"></i>
             </button>
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container mt-4 min-vh-100"><div class="container mt-4 mb-5 flex-grow-1">
+    
         {# === GESTIÓN DE MENSAJES FLASH === #}
         {% for label, messages in app.flashes %}
             {% for msg in messages %}
-                <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show shadow-sm" role="alert">
+                <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show shadow-sm" role="alert" style="border-left: 4px solid var(--luxe-gold, #D4AF37);">
                     {{ msg }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -154,8 +164,8 @@
         {% block body %}{% endblock %}
     </div>
 
-<footer>
-    <div class="footer-gallery-container">
+<footer class="mt-auto" style="background: linear-gradient(180deg, #1C1E22 0%, #111 100%); border-top: 2px solid var(--luxe-gold, #D4AF37); padding-top: 2rem;">
+    <div class="footer-gallery-container mb-4" style="position: relative; overflow: hidden; min-height: 100px;">
         <div class="footer-gallery">
             <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 1" loading="lazy">
             <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 2" loading="lazy">
@@ -175,29 +185,46 @@
         </div>
     </div>
 
-    <div class="footer-info-columns">
-        <div class="footer-office">
-            <p><strong>Oficina en Bogotá - Colombia</strong><br>
-            Carrera 7 #85-24, Chapinero</p>
-            {% if app.request.attributes.get('_route') == 'home' %}
-                <p id="clima-bogota">Clima Bogotá: cargando...</p>
-            {% endif %}
-        </div>
-        <div class="footer-office">
-            <p><strong>Oficina en París - Francia</strong><br>
-            12 Rue de Paris, 75000 Paris</p>
-            {% if app.request.attributes.get('_route') == 'home' %}
-                <p id="clima-paris">Clima París: cargando...</p>
-            {% endif %}
-        </div>
-        <div class="footer-contact">
-            <p><strong>Habla con un agente</strong><br>
-            <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
+    <div class="container pb-4">
+        <div class="row text-center text-md-start g-4">
+            {# OFICINA BOGOTÁ (CORREGIDA) #}
+            <div class="col-md-4">
+                <h6 class="text-gold fw-bold mb-3"><i class="fas fa-map-marker-alt me-2"></i>Oficina en Colombia</h6>
+                <p class="text-white opacity-75 mb-1">Cra 7D # 151-42, Oficina 201</p>
+                <p class="text-white opacity-75 mb-1">Bogotá, D.C.</p>
+                {% if app.request.attributes.get('_route') == 'home' %}
+                    <p id="clima-bogota" class="small text-muted mt-2"><i class="fas fa-cloud-sun me-1"></i> Clima: cargando...</p>
+                {% endif %}
+            </div>
+            
+            {# OFICINA PARÍS (PROYECTO DE EXPANSIÓN) #}
+            <div class="col-md-4">
+                <h6 class="text-gold fw-bold mb-3 d-flex align-items-center justify-content-center justify-content-md-start">
+                    <i class="fas fa-globe-europe me-2"></i>Oficina en Francia 
+                    <span class="badge bg-secondary ms-2" style="font-size: 0.65em; letter-spacing: 1px;">PROXIMAMENTE</span>
+                </h6>
+                <p class="text-white opacity-50 mb-1" style="font-style: italic;">Expansión internacional en desarrollo.</p>
+                <p class="text-white opacity-50 mb-1" style="font-style: italic;">Próximamente en París, Europa.</p>
+                {% if app.request.attributes.get('_route') == 'home' %}
+                    <p id="clima-paris" class="small text-muted mt-2 opacity-50"><i class="fas fa-cloud-sun me-1"></i> Clima: cargando...</p>
+                {% endif %}
+            </div>
+            
+            {# CONTACTO #}
+            <div class="col-md-4 text-md-end">
+                <h6 class="text-gold fw-bold mb-3"><i class="fas fa-headset me-2"></i>Habla con un agente</h6>
+                <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success rounded-pill px-4 py-2">
+                    <i class="fab fa-whatsapp me-2 fa-lg"></i> Contactar por WhatsApp
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="footer-bottom">
-        <p><a href="{{ path('mentions_legales') }}">Aviso Legal y Términos de Uso</a></p>
+    <div class="footer-bottom text-center py-3" style="background: #000; border-top: 1px solid rgba(212, 175, 55, 0.1);">
+        <p class="mb-0 small text-white opacity-50">
+            &copy; {{ 'now'|date('Y') }} Consoria Inmobiliaria. Todos los derechos reservados. | 
+            <a href="{{ path('mentions_legales') }}" class="text-white text-decoration-none hover-gold">Aviso Legal y Términos de Uso</a>
+        </p>
     </div>
 </footer>
 

@@ -1,188 +1,183 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ bien.typeDeBien }} en {{ bien.tipoTransaccion }} en {{ bien.ville }}{% endblock %}
+{% block title %}{{ bien.typeDeBien }} en {{ bien.tipoTransaccion }} en {{ bien.ville }} - CONSORIA{% endblock %}
 
 {% block body %}
 <div class="container my-5">
-    {# Botón para regresar al listado público #}
+    {# Botón para regresar al portafolio #}
     <div class="mb-4">
-        <a href="{{ path('home') }}" class="btn btn-link opacity-75 p-0 text-decoration-none text-body">
-            <i class="fas fa-arrow-left me-2"></i>Volver al listado de inmuebles
+        <a href="{{ path('home') }}" class="text-decoration-none fw-bold" style="color: var(--luxe-gold); transition: all 0.3s ease;">
+            <i class="fas fa-arrow-left me-2"></i>Volver al portafolio de inmuebles
         </a>
     </div>
 
-    <div class="row">
-        {# COLUMNA IZQUIERDA: Galería Multimedia #}
+    <div class="row gx-lg-5">
+        {# COLUMNA IZQUIERDA: Galería Multimedia Luxe #}
         <div class="col-lg-7 mb-4">
-            <h2 class="h4 fw-bold mb-3"><i class="fas fa-images me-2 text-primary"></i>Galería Multimedia</h2>
             
             {% if bien.foto %}
                 {% set archivosMedia = bien.foto|split(',') %}
                 
-                <div id="bienCarousel" class="carousel slide shadow rounded overflow-hidden bg-dark" data-bs-ride="false">
-                    <div class="carousel-inner" style="min-height: 350px; max-height: 500px;">
+                <div id="bienCarousel" class="carousel slide shadow-lg rounded-4 overflow-hidden mb-3" style="border: 1px solid rgba(212, 175, 55, 0.2);" data-bs-ride="false">
+                    <div class="carousel-inner" style="min-height: 400px; max-height: 550px; background: var(--luxe-black);">
                         {% for archivo in archivosMedia %}
                             {% set extension = archivo|split('.')|last|lower %}
                             <div class="carousel-item {{ loop.first ? 'active' : '' }}">
                                 {% if extension in ['mp4', 'webm', 'mov', 'avi'] %}
-                                    <div class="ratio ratio-16x9 bg-dark d-flex align-items-center justify-content-center" style="max-height: 500px;">
-                                        <video controls preload="metadata" class="w-100 h-100" style="object-fit: contain;">
+                                    <div class="ratio ratio-16x9 d-flex align-items-center justify-content-center" style="max-height: 550px; background: #000;">
+                                        {# OPTIMIZACIÓN VIDEO: playsinline y controls aseguran que el botón fullscreen nativo funcione perfecto #}
+                                        <video controls playsinline preload="metadata" class="w-100 h-100" style="object-fit: contain;">
                                             <source src="{{ asset('uploads/bienes/' ~ archivo) }}" type="video/{{ extension == 'mov' ? 'quicktime' : extension }}">
-                                            Tu navegador no soporta la reproducción de este video.
+                                            Tu navegador no soporta video.
                                         </video>
                                     </div>
                                 {% else %}
-                                    <img src="{{ asset('uploads/bienes/' ~ archivo) }}" alt="Fotografía del inmueble" class="d-block w-100" style="height: 500px; object-fit: cover;">
+                                    {# OPTIMIZACIÓN FOTO: cursor zoom-in y llamado a la función JS del Lightbox #}
+                                    <img src="{{ asset('uploads/bienes/' ~ archivo) }}" alt="Fotografía del inmueble" class="d-block w-100" style="height: 550px; object-fit: cover; cursor: zoom-in;" onclick="abrirVisorLuxe(this.src)" title="Clic para ampliar">
                                 {% endif %}
                             </div>
                         {% endfor %}
                     </div>
                     
                     <button class="carousel-control-prev" type="button" data-bs-target="#bienCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                        <span class="carousel-control-prev-icon p-3 rounded-circle" style="background-color: rgba(28, 30, 34, 0.8); border: 1px solid var(--luxe-gold);" aria-hidden="true"></span>
                         <span class="visually-hidden">Anterior</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#bienCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                        <span class="carousel-control-next-icon p-3 rounded-circle" style="background-color: rgba(28, 30, 34, 0.8); border: 1px solid var(--luxe-gold);" aria-hidden="true"></span>
                         <span class="visually-hidden">Siguiente</span>
                     </button>
                 </div>
 
-                <div class="d-flex gap-2 overflow-x-auto mt-2 pb-2 custom-scrollbar" style="white-space: nowrap; scrollbar-width: thin;">
+                {# Miniaturas estilo Premium #}
+                <div class="d-flex gap-2 overflow-x-auto pb-2 custom-scrollbar" style="white-space: nowrap; scrollbar-width: thin; scrollbar-color: var(--luxe-gold) var(--luxe-card-bg);">
                     {% for archivo in archivosMedia %}
                         {% set extension = archivo|split('.')|last|lower %}
-                        <button type="button" data-bs-target="#bienCarousel" data-bs-slide-to="{{ loop.index0 }}" class="btn p-0 border rounded overflow-hidden flex-shrink-0" style="width: 85px; height: 60px; transition: transform 0.2s;">
+                        <button type="button" data-bs-target="#bienCarousel" data-bs-slide-to="{{ loop.index0 }}" class="btn p-0 rounded-3 overflow-hidden flex-shrink-0 thumbnail-btn" style="width: 90px; height: 65px; border: 2px solid transparent; transition: all 0.3s ease;">
                             {% if extension in ['mp4', 'webm', 'mov', 'avi'] %}
-                                <div class="bg-secondary d-flex align-items-center justify-content-center w-100 h-100 text-white position-relative">
+                                <div class="d-flex align-items-center justify-content-center w-100 h-100 text-white position-relative" style="background: var(--luxe-card-bg);">
                                     <i class="fas fa-play fs-5 text-warning"></i>
                                 </div>
                             {% else %}
-                                <img src="{{ asset('uploads/bienes/' ~ archivo) }}" class="w-100 h-100" style="object-fit: cover;" alt="Miniatura {{ loop.index }}">
+                                <img src="{{ asset('uploads/bienes/' ~ archivo) }}" class="w-100 h-100" style="object-fit: cover;" alt="Miniatura">
                             {% endif %}
                         </button>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="card bg-body-tertiary border-0 text-center py-5 shadow-sm rounded">
-                    <div class="card-body">
-                        <i class="far fa-images fa-4x opacity-25 mb-3"></i>
-                        <p class="opacity-75 m-0">Este inmueble no registra fotos ni videos de momento.</p>
-                    </div>
+                <div class="carte-bien text-center py-5 d-flex flex-column align-items-center justify-content-center" style="min-height: 400px;">
+                    <i class="far fa-images fa-4x mb-3" style="color: var(--luxe-gold); opacity: 0.5;"></i>
+                    <p class="opacity-75 m-0">Inmueble en proceso de sesión fotográfica.</p>
                 </div>
             {% endif %}
         </div>
 
-        {# COLUMNA DERECHA: Ficha Técnica y Acciones #}
+        {# COLUMNA DERECHA: Ficha Técnica Luxe #}
         <div class="col-lg-5">
-            <div class="card shadow-sm border-0 position-sticky bg-body-tertiary" style="top: 20px;">
-                <div class="card-body p-4">
-                    <span class="badge bg-primary px-3 py-2 mb-2 fw-bold text-uppercase">{{ bien.tipoTransaccion }}</span>
-                    <h1 class="h3 fw-bold mb-1">{{ bien.titulo }}</h1>
-                    
-                    <p class="opacity-75 small">
-                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
-                        {{ bien.barrio ? bien.barrio ~ ' - ' : '' }}{{ bien.adresse }}, {{ bien.ville }}
+            <div class="carte-bien position-sticky" style="top: 100px; padding: 30px;">
+                <span class="badge bg-primary px-3 py-2 mb-3 fw-bold text-uppercase rounded-pill shadow-sm">{{ bien.tipoTransaccion }}</span>
+                <h1 class="h3 fw-bold mb-2 text-white">{{ bien.titulo }}</h1>
+                
+                <p class="small" style="color: var(--luxe-white); opacity: 0.8;">
+                    <i class="fas fa-map-marker-alt me-2" style="color: var(--luxe-gold);"></i>
+                    {{ bien.barrio ? bien.barrio ~ ' - ' : '' }}{{ bien.adresse }}, {{ bien.ville }}
+                </p>
+                
+                <h2 class="display-6 fw-bold my-4" style="color: var(--luxe-gold); letter-spacing: -1px;">
+                    $ {{ bien.prix|number_format(0, ',', '.') }} <span class="fs-5 opacity-75">COP</span>
+                </h2>
+
+                <hr style="border-color: rgba(212, 175, 55, 0.2); margin: 25px 0;">
+
+                <h4 class="h6 fw-bold mb-3 text-uppercase" style="color: var(--luxe-gold); letter-spacing: 1px;">Especificaciones</h4>
+                
+                <div class="row text-center mb-4 g-2">
+                    <div class="col-4">
+                        <div class="p-3 rounded-3" style="background: var(--luxe-black); border: 1px solid rgba(255,255,255,0.05);">
+                            <i class="fas fa-bed mb-2 d-block fs-5" style="color: var(--luxe-gold);"></i>
+                            <span class="d-block small opacity-75">Habitaciones</span>
+                            <strong class="text-white fs-5">{{ bien.habitaciones }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-3 rounded-3" style="background: var(--luxe-black); border: 1px solid rgba(255,255,255,0.05);">
+                            <i class="fas fa-bath mb-2 d-block fs-5" style="color: var(--luxe-gold);"></i>
+                            <span class="d-block small opacity-75">Baños</span>
+                            <strong class="text-white fs-5">{{ bien.banos }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-3 rounded-3" style="background: var(--luxe-black); border: 1px solid rgba(255,255,255,0.05);">
+                            <i class="fas fa-car mb-2 d-block fs-5" style="color: var(--luxe-gold);"></i>
+                            <span class="d-block small opacity-75">Parqueaderos</span>
+                            <strong class="text-white fs-5">{{ bien.garajes }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-3 rounded-3" style="background: var(--luxe-black); border: 1px solid rgba(255,255,255,0.05);">
+                            <i class="fas fa-vector-square mb-2 d-block fs-5" style="color: var(--luxe-gold);"></i>
+                            <span class="d-block small opacity-75">Área (m²)</span>
+                            <strong class="text-white fs-5">{{ bien.surfaceM2 }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-3 rounded-3" style="background: var(--luxe-black); border: 1px solid rgba(255,255,255,0.05);">
+                            <i class="fas fa-layer-group mb-2 d-block fs-5" style="color: var(--luxe-gold);"></i>
+                            <span class="d-block small opacity-75">Estrato</span>
+                            <strong class="text-white fs-5">{{ bien.estrato ?: '-' }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-3 rounded-3" style="background: var(--luxe-black); border: 1px solid rgba(255,255,255,0.05);">
+                            <i class="fas fa-key mb-2 d-block fs-5" style="color: var(--luxe-gold);"></i>
+                            <span class="d-block small opacity-75">Estado</span>
+                            <strong class="text-white" style="font-size: 0.9rem;">{{ bien.etatDuBien }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between p-3 rounded-3 mb-4" style="background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <div>
+                        <span class="d-block opacity-75 small">Administración</span>
+                        <strong class="text-white">{{ bien.prixAdministration ? '$' ~ bien.prixAdministration|number_format(0, ',', '.') : 'Incluida' }}</strong>
+                    </div>
+                    <div class="text-end">
+                        <span class="d-block opacity-75 small">Año Construcción</span>
+                        <strong class="text-white">{{ bien.anoConstruccion ?: 'N/A' }}</strong>
+                    </div>
+                </div>
+
+                {% if bien.description %}
+                    <h4 class="h6 fw-bold mb-2 text-uppercase" style="color: var(--luxe-gold); letter-spacing: 1px;">Descripción</h4>
+                    <p class="small opacity-75 mb-4" style="white-space: pre-line; line-height: 1.7;">
+                        {{ bien.description }}
                     </p>
-                    
-                    <h2 class="h3 text-success fw-bold my-3">
-                        $ {{ bien.prix|number_format(0, ',', '.') }} COP
-                    </h2>
+                {% endif %}
 
-                    <hr class="my-4 border-secondary-subtle">
-
-                    <h4 class="h6 opacity-75 fw-bold mb-3">Características Principales</h4>
-                    
-                    <div class="row text-center mb-4">
-                        <div class="col-4 mb-3">
-                            <div class="p-2 bg-body rounded border border-secondary-subtle">
-                                <i class="fas fa-bed text-primary mb-1 d-block"></i>
-                                <span class="d-block small opacity-75" style="font-size: 0.8rem;">Hab.</span>
-                                <strong class="text-body">{{ bien.habitaciones }}</strong>
-                            </div>
+                <div class="mt-4 d-grid gap-3">
+                    {% if app.user %}
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-primary flex-grow-1 py-3" data-bs-toggle="modal" data-bs-target="#modalVisita">
+                                <i class="far fa-calendar-check me-2"></i>Agendar Visita
+                            </button>
+                            <button type="button" class="btn btn-warning flex-grow-1 py-3" data-bs-toggle="modal" data-bs-target="#modalOferta">
+                                <i class="fas fa-hand-holding-usd me-2"></i>Enviar Oferta
+                            </button>
                         </div>
-                        <div class="col-4 mb-3">
-                            <div class="p-2 bg-body rounded border border-secondary-subtle">
-                                <i class="fas fa-bath text-primary mb-1 d-block"></i>
-                                <span class="d-block small opacity-75" style="font-size: 0.8rem;">Baños</span>
-                                <strong class="text-body">{{ bien.banos }}</strong>
-                            </div>
+                    {% else %}
+                        <div class="d-flex gap-2">
+                            <a href="{{ path('app_login') }}" class="btn btn-primary flex-grow-1 py-3" title="Inicia sesión para agendar">
+                                <i class="far fa-calendar-check me-2"></i>Agendar Visita
+                            </a>
+                            <a href="{{ path('app_login') }}" class="btn btn-warning flex-grow-1 py-3" title="Inicia sesión para ofertar">
+                                <i class="fas fa-hand-holding-usd me-2"></i>Enviar Oferta
+                            </a>
                         </div>
-                        <div class="col-4 mb-3">
-                            <div class="p-2 bg-body rounded border border-secondary-subtle">
-                                <i class="fas fa-car text-primary mb-1 d-block"></i>
-                                <span class="d-block small opacity-75" style="font-size: 0.8rem;">Garajes</span>
-                                <strong class="text-body">{{ bien.garajes }}</strong>
-                            </div>
-                        </div>
-                        <div class="col-4 mb-3">
-                            <div class="p-2 bg-body rounded border border-secondary-subtle">
-                                <i class="fas fa-ruler-combined text-primary mb-1 d-block"></i>
-                                <span class="d-block small opacity-75" style="font-size: 0.8rem;">Área</span>
-                                <strong class="text-body">{{ bien.surfaceM2 }} m²</strong>
-                            </div>
-                        </div>
-                        <div class="col-4 mb-3">
-                            <div class="p-2 bg-body rounded border border-secondary-subtle">
-                                <i class="fas fa-layer-group text-primary mb-1 d-block"></i>
-                                <span class="d-block small opacity-75" style="font-size: 0.8rem;">Estrato</span>
-                                <strong class="text-body">{{ bien.estrato ?: '-' }}</strong>
-                            </div>
-                        </div>
-                        <div class="col-4 mb-3">
-                            <div class="p-2 bg-body rounded border border-secondary-subtle">
-                                <i class="fas fa-check-circle text-primary mb-1 d-block"></i>
-                                <span class="d-block small opacity-75" style="font-size: 0.8rem;">Estado</span>
-                                <strong class="text-body" style="font-size: 0.85rem;">{{ bien.etatDuBien }}</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-body p-3 rounded mb-4 small border border-secondary-subtle">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="opacity-75">Administración:</span>
-                            <strong>{{ bien.prixAdministration ? '$' ~ bien.prixAdministration|number_format(0, ',', '.') : 'Incluida' }}</strong>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <span class="opacity-75">Año Construcción:</span>
-                            <strong>{{ bien.anoConstruccion ?: 'N/A' }}</strong>
-                        </div>
-                    </div>
-
-                    {% if bien.description %}
-                        <h4 class="h6 opacity-75 fw-bold mb-2">Descripción</h4>
-                        <p class="p-3 bg-body rounded small border border-secondary-subtle" style="white-space: pre-line; line-height: 1.6;">
-                            {{ bien.description }}
-                        </p>
                     {% endif %}
-
-                    {# ========================================== #}
-                    {# === BOTONES DE ACCIÓN (NUEVA LÓGICA) === #}
-                    {# ========================================== #}
-                    <div class="mt-4 d-grid gap-2">
-                        {% if app.user %}
-                            <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-primary flex-grow-1 shadow-sm fw-bold py-2" data-bs-toggle="modal" data-bs-target="#modalVisita">
-                                    <i class="far fa-calendar-check me-2"></i>Visitar
-                                </button>
-                                <button type="button" class="btn btn-warning flex-grow-1 shadow-sm fw-bold text-dark py-2" data-bs-toggle="modal" data-bs-target="#modalOferta">
-                                    <i class="fas fa-hand-holding-usd me-2"></i>Ofertar
-                                </button>
-                            </div>
-                        {% else %}
-                            <div class="d-flex gap-2">
-                                <a href="{{ path('app_login') }}" class="btn btn-primary flex-grow-1 shadow-sm fw-bold py-2" title="Inicia sesión para agendar">
-                                    <i class="far fa-calendar-check me-2"></i>Visitar
-                                </a>
-                                <a href="{{ path('app_login') }}" class="btn btn-warning flex-grow-1 shadow-sm fw-bold text-dark py-2" title="Inicia sesión para ofertar">
-                                    <i class="fas fa-hand-holding-usd me-2"></i>Ofertar
-                                </a>
-                            </div>
-                        {% endif %}
-                        
-                        <a href="https://wa.me/573124504982?text=Hola,%20estoy%20interesado%20en%20el%20inmueble%20{{ bien.titulo|url_encode }}" target="_blank" class="btn btn-success shadow-sm fw-bold py-2 mt-2">
-                            <i class="fab fa-whatsapp me-2 fa-lg"></i>Contactar Asesor
-                        </a>
-                    </div>
+                    
+                    <a href="{{ whatsappUrl }}" target="_blank" class="btn text-white fw-bold py-3" style="background: linear-gradient(135deg, #1E3A2F, #128C7E); border: none; box-shadow: 0 4px 15px rgba(18, 140, 126, 0.3);">
+                        <i class="fab fa-whatsapp me-2 fa-lg"></i>Contactar Asesor por WhatsApp
+                    </a>
                 </div>
             </div>
         </div>
@@ -190,33 +185,66 @@
 </div>
 
 {# ========================================================= #}
-{# === MODALES DE INTERACCIÓN (SOLO VISIBLES SI LOGUEADO) === #}
+{# === VISOR LUXE (LIGHTBOX PARA FOTOS EN PANTALLA COMPLETA) #}
+{# ========================================================= #}
+<div class="modal fade" id="lightboxModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen modal-dialog-centered">
+        <div class="modal-content" style="background: rgba(10, 10, 12, 0.95); border: none;">
+            <div class="modal-header border-0 position-absolute w-100 p-4" style="z-index: 1055;">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1) grayscale(100%) brightness(200%); width: 1.5rem; height: 1.5rem;"></button>
+            </div>
+            {# Al hacer clic fuera de la foto (o en la foto), se cierra el modal #}
+            <div class="modal-body d-flex align-items-center justify-content-center p-0" onclick="document.querySelector('#lightboxModal .btn-close').click()" style="cursor: zoom-out;">
+                <img id="lightboxImage" src="" class="img-fluid shadow-lg" style="max-height: 90vh; max-width: 90vw; object-fit: contain; border: 1px solid rgba(212, 175, 55, 0.2);">
+            </div>
+        </div>
+    </div>
+</div>
+
+{# SCRIPT PARA EL LIGHTBOX #}
+<script>
+    function abrirVisorLuxe(imagenSrc) {
+        document.getElementById('lightboxImage').src = imagenSrc;
+        var myModal = new bootstrap.Modal(document.getElementById('lightboxModal'));
+        myModal.show();
+    }
+</script>
+
+{# ========================================================= #}
+{# === MODALES DE CONTACTO (SOLO VISIBLES SI LOGUEADO) === #}
 {# ========================================================= #}
 {% if app.user %}
+    <style>
+        .luxe-modal .modal-content { background: var(--luxe-card-bg); border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: var(--shadow-dark); color: var(--luxe-white); }
+        .luxe-modal .modal-header { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .luxe-modal .modal-footer { border-top: 1px solid rgba(255,255,255,0.05); }
+        .luxe-modal .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+        .thumbnail-btn:focus, .thumbnail-btn:hover { border-color: var(--luxe-gold) !important; transform: scale(1.05); }
+    </style>
+
     {# MODAL: SOLICITAR VISITA #}
-    <div class="modal fade" id="modalVisita" tabindex="-1" aria-labelledby="modalVisitaLabel" aria-hidden="true">
+    <div class="modal fade luxe-modal" id="modalVisita" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-body-tertiary border-0 shadow">
-                <div class="modal-header border-bottom border-secondary-subtle">
-                    <h5 class="modal-title fw-bold" id="modalVisitaLabel"><i class="far fa-calendar-check text-primary me-2"></i>Agendar Visita</h5>
+            <div class="modal-content rounded-4">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" style="color: var(--luxe-gold);"><i class="far fa-calendar-check me-2"></i>Agendar Visita</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="post" action="{{ path('solicitar_visita', {'id': bien.id}) }}">
-                    <div class="modal-body">
-                        <p class="small opacity-75 mb-4">Selecciona la fecha en la que te gustaría visitar el inmueble. Nos contactaremos contigo para confirmar la hora exacta.</p>
-                        
+                    <div class="modal-body p-4">
+                        <p class="small opacity-75 mb-4">Selecciona la fecha en la que te gustaría visitar el inmueble. Un asesor te contactará para confirmar la hora.</p>
                         <div class="mb-3">
                             <label for="fecha_visita" class="form-label fw-bold small">Fecha deseada <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control bg-body border-secondary-subtle" id="fecha_visita" name="fecha_visita" required min="{{ 'now'|date('Y-m-d') }}">
+                            <input type="date" class="form-control custom-input" id="fecha_visita" name="fecha_visita" required min="{{ 'now'|date('Y-m-d') }}">
                         </div>
                         <div class="mb-3">
-                            <label for="comentarios" class="form-label fw-bold small">Disponibilidad de horario o comentarios</label>
-                            <textarea class="form-control bg-body border-secondary-subtle" id="comentarios" name="comentarios" rows="3" placeholder="Ej: Prefiero en las mañanas antes de las 10 AM..."></textarea>
+                            <label for="comentarios" class="form-label fw-bold small">Disponibilidad de horario</label>
+                            <textarea class="form-control custom-input" id="comentarios" name="comentarios" rows="3" placeholder="Ej: Prefiero en las mañanas antes de las 10 AM..."></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer border-top border-secondary-subtle">
-                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Enviar Solicitud</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary px-4">Enviar Solicitud</button>
                     </div>
                 </form>
             </div>
@@ -224,33 +252,32 @@
     </div>
 
     {# MODAL: ENVIAR OFERTA #}
-    <div class="modal fade" id="modalOferta" tabindex="-1" aria-labelledby="modalOfertaLabel" aria-hidden="true">
+    <div class="modal fade luxe-modal" id="modalOferta" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-body-tertiary border-0 shadow">
-                <div class="modal-header border-bottom border-secondary-subtle">
-                    <h5 class="modal-title fw-bold" id="modalOfertaLabel"><i class="fas fa-hand-holding-usd text-warning me-2"></i>Enviar Oferta Formal</h5>
+            <div class="modal-content rounded-4">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" style="color: var(--luxe-gold);"><i class="fas fa-hand-holding-usd me-2"></i>Enviar Oferta Formal</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="post" action="{{ path('enviar_oferta', {'id': bien.id}) }}">
-                    <div class="modal-body">
-                        <p class="small opacity-75 mb-4">Envía tu propuesta económica. Esta será evaluada directamente por el propietario o administrador.</p>
-                        
+                    <div class="modal-body p-4">
+                        <p class="small opacity-75 mb-4">Tu propuesta económica será evaluada de forma confidencial por nuestro equipo de gerencia.</p>
                         <div class="mb-3">
                             <label for="precio_oferta" class="form-label fw-bold small">Valor de tu oferta (COP) <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text bg-body border-secondary-subtle">$</span>
-                                <input type="number" class="form-control bg-body border-secondary-subtle" id="precio_oferta" name="precio_oferta" required placeholder="Ej: 250000000" min="100000">
+                                <span class="input-group-text" style="background: var(--luxe-black); border: 1px solid rgba(212,175,55,0.3); color: var(--luxe-gold);">$</span>
+                                <input type="number" class="form-control custom-input" id="precio_oferta" name="precio_oferta" required placeholder="Ej: 250000000" min="100000">
                             </div>
-                            <div class="form-text opacity-75">El precio actual es de $ {{ bien.prix|number_format(0, ',', '.') }} COP</div>
+                            <div class="form-text mt-2" style="color: var(--luxe-gold);">Precio lista: $ {{ bien.prix|number_format(0, ',', '.') }} COP</div>
                         </div>
                         <div class="mb-3">
-                            <label for="condiciones" class="form-label fw-bold small">Condiciones de compra o arriendo</label>
-                            <textarea class="form-control bg-body border-secondary-subtle" id="condiciones" name="condiciones" rows="3" placeholder="Ej: Pago de contado, crédito preaprobado, etc."></textarea>
+                            <label for="condiciones" class="form-label fw-bold small">Condiciones de compra</label>
+                            <textarea class="form-control custom-input" id="condiciones" name="condiciones" rows="3" placeholder="Ej: Pago de contado, crédito preaprobado, permuta..."></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer border-top border-secondary-subtle">
-                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-warning text-dark rounded-pill px-4 fw-bold">Enviar Oferta</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning px-4">Radicar Oferta</button>
                     </div>
                 </form>
             </div>

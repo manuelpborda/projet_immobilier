@@ -1,64 +1,121 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Arriendo de Inmuebles - CONSORIA Inmobiliaria{% endblock %}
+{% block title %}Arrienda tu inmueble - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
-
-<div class="section-texto">
-
-    {# Título principal con dorado y bloque informativo de inicio #}
-    <h1>Arrienda tu inmueble fácil y seguro</h1>
-    <p>
-        Con <strong>CONSORIA Inmobiliaria</strong> puedes arrendar tu apartamento, casa, oficina o local comercial en las principales ciudades de Colombia con total respaldo.<br>
-        Encontramos el arrendatario ideal y te acompañamos en cada paso.
-    </p>
-
-    {# Beneficios explicados con lista semántica #}
-    <h2>¿Por qué arrendar con nosotros?</h2>
-    <ul>
-        <li>Promoción en los principales portales inmobiliarios</li>
-        <li>Selección y validación de inquilinos</li>
-        <li>Gestión completa de contratos de arriendo</li>
-        <li>Asesoría legal durante todo el proceso</li>
-        <li>Gestión de cobro y seguimiento mensual</li>
-    </ul>
-
-    {# Condiciones de comisión claramente explicadas #}
-    <h3>Condiciones de corretaje para arriendo</h3>
-    <ul>
-        <li>Comisión: <strong>50% del primer canon + IVA</strong> (solo si se concreta el arriendo)</li>
-        <li>No cobramos anticipos. Solo si el arriendo es exitoso</li>
-    </ul> <br>
-
-    {# Botón destacado para volver a buscar propiedades en este caso solo en arriendo  usando Get #}
-    <a href="{{ path('home') ~ '?tipo=arriendo' }}" class="btn-warning" style="margin-top: 1em;">Ver inmuebles en arriendo</a>
-
-
-    <hr style="margin: 3em 0; border-top: 1px solid var(--luxe-gold);">
-
-    {# Sección alquiler vacacional, visualmente diferenciada #}
-    <h2>¿Buscas alquilar tu propiedad por temporadas (vacacional)?</h2>
-    <p>
-        También te ayudamos a promocionar y gestionar tu inmueble en alquiler vacacional, para estadías cortas en plataformas como Airbnb o Booking.
-    </p>
-    <ul>
-        <li>Gestión completa de reservas, check-in y check-out</li>
-        <li>Promoción en plataformas internacionales</li>
-        <li>Asesoría para optimizar ocupación y precio</li>
-        <li>Comisión: <strong>10% del valor del alquiler</strong></li>
-    </ul>
-
-    {# Datos de contacto secundarios #}
-    <h3>¿Quieres que te asesoremos? Contáctanos:</h3>
-    <ul>
-        <li><strong>Teléfono/WhatsApp:</strong> <a href="https://wa.me/573124504982" target="_blank">+57 312 4504982</a></li>
-        <li><strong>Oficina:</strong> Cra 7D # 151-42, oficina 201 Bogotá</li>
-        <li><strong>Email:</strong> <a href="mailto:gabrielpulido1984@gmail.com">gabrielpulido1984@gmail.com</a></li>
-    </ul>
-
-    {# Imagen destacada al final para cierre visual elegante #}
-    <img src="assets/img/static_pages/location_vacances.png" alt="Arriendo de Inmuebles" class="img-info">
-
+{# ========================================== #}
+{# HERO SECTION (Encabezado oscuro e imponente) #}
+{# ========================================== #}
+<div class="py-5 mb-5 shadow-sm" style="background: linear-gradient(180deg, var(--luxe-black, #111) 0%, rgba(28, 30, 34, 0.95) 100%); border-bottom: 2px solid var(--luxe-gold, #D4AF37);">
+    <div class="container text-center py-4">
+        <h1 class="display-5 fw-bold mb-3" style="color: var(--luxe-gold, #D4AF37); letter-spacing: -1px;">
+            Arrienda tu inmueble fácil y seguro
+        </h1>
+        <p class="lead opacity-75 mx-auto text-white" style="max-width: 800px; font-weight: 300;">
+            Con <strong style="color: var(--luxe-gold, #D4AF37);">CONSORIA Inmobiliaria</strong> puedes arrendar tu apartamento, casa, oficina o local comercial en las principales ciudades de Colombia con total respaldo. Encontramos el arrendatario ideal y te acompañamos en cada paso.
+        </p>
+    </div>
 </div>
 
+<div class="container mb-5">
+    <div class="row g-4 align-items-stretch">
+        {# ========================================== #}
+        {# TARJETA 1: ARRIENDO TRADICIONAL            #}
+        {# ========================================== #}
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-lg rounded-4 p-4" style="background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.1) !important;">
+                <div class="card-body d-flex flex-column">
+                    <div class="text-center mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 80px; height: 80px; background: rgba(212, 175, 55, 0.1);">
+                            <i class="fas fa-key fa-2x" style="color: var(--luxe-gold, #D4AF37);"></i>
+                        </div>
+                        <h2 class="h4 fw-bold text-white text-uppercase" style="letter-spacing: 1px;">Arriendo Tradicional</h2>
+                    </div>
+                    
+                    <h5 class="fw-bold mb-3 small text-uppercase" style="color: var(--luxe-gold, #D4AF37);">¿Por qué arrendar con nosotros?</h5>
+                    <ul class="list-unstyled text-white opacity-75 mb-4 mb-4">
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Promoción en los principales portales inmobiliarios</li>
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Selección y validación estricta de inquilinos</li>
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Gestión completa de contratos de arriendo</li>
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Asesoría legal durante todo el proceso</li>
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Gestión de cobro y seguimiento mensual</li>
+                    </ul>
+
+                    <div class="p-3 rounded-3 mb-4 mt-auto" style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--luxe-gold, #D4AF37);">
+                        <h6 class="fw-bold text-white mb-2">Condiciones de corretaje</h6>
+                        <p class="mb-1 text-white opacity-75 small"><i class="fas fa-file-contract me-2" style="color: var(--luxe-gold, #D4AF37);"></i><strong>Comisión: 50% del primer canon + IVA</strong> (solo si se concreta el arriendo).</p>
+                        <p class="mb-0 text-white opacity-75 small"><i class="fas fa-shield-alt me-2" style="color: var(--luxe-gold, #D4AF37);"></i>No cobramos anticipos. Solo si el arriendo es exitoso.</p>
+                    </div>
+
+                    {# NOTA: Reemplaza '#' por tu ruta real de listado de arriendos, ej: path('inmuebles_lista', {'tipo': 'arriendo'}) #}
+                    <a href="#" class="btn w-100 fw-bold py-3" style="background: transparent; border: 1px solid var(--luxe-gold, #D4AF37); color: var(--luxe-gold, #D4AF37); transition: all 0.3s ease;">
+                        Ver inmuebles en arriendo
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {# ========================================== #}
+        {# TARJETA 2: ARRIENDO VACACIONAL             #}
+        {# ========================================== #}
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-lg rounded-4 p-4" style="background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.1) !important;">
+                <div class="card-body d-flex flex-column">
+                    <div class="text-center mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 80px; height: 80px; background: rgba(212, 175, 55, 0.1);">
+                            <i class="fas fa-suitcase-rolling fa-2x" style="color: var(--luxe-gold, #D4AF37);"></i>
+                        </div>
+                        <h2 class="h4 fw-bold text-white text-uppercase" style="letter-spacing: 1px;">Arriendo Vacacional</h2>
+                    </div>
+                    
+                    <p class="text-white opacity-75 mb-4" style="line-height: 1.7;">
+                        ¿Buscas alquilar tu propiedad por temporadas? También te ayudamos a promocionar y gestionar tu inmueble en alquiler vacacional, para estadías cortas en plataformas de alcance global como <strong>Airbnb o Booking</strong>.
+                    </p>
+
+                    <h5 class="fw-bold mb-3 small text-uppercase" style="color: var(--luxe-gold, #D4AF37);">Nuestra Gestión Incluye</h5>
+                    <ul class="list-unstyled text-white opacity-75 mb-4">
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Gestión completa de reservas, check-in y check-out</li>
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Promoción destacada en plataformas internacionales</li>
+                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Asesoría profesional para optimizar ocupación y precio</li>
+                    </ul>
+
+                    <div class="p-3 rounded-3 mt-auto" style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--luxe-gold, #D4AF37);">
+                        <h6 class="fw-bold text-white mb-2">Condiciones de corretaje</h6>
+                        <p class="mb-0 text-white opacity-75 small"><i class="fas fa-percentage me-2" style="color: var(--luxe-gold, #D4AF37);"></i><strong>Comisión: 10% del valor total</strong> de cada alquiler.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ========================================== #}
+    {# SECCIÓN DE CONTACTO FINAL                  #}
+    {# ========================================== #}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="p-5 shadow-lg rounded-4 text-center" style="background: linear-gradient(135deg, #1C1E22 0%, #111 100%); border: 1px solid rgba(212, 175, 55, 0.3);">
+                <h3 class="fw-bold mb-4" style="color: var(--luxe-gold, #D4AF37);">¿Quieres que te asesoremos personalmente?</h3>
+                
+                <div class="d-flex flex-wrap justify-content-center gap-4 gap-md-5 mb-5">
+                    <div class="text-white text-center">
+                        <i class="fas fa-map-marker-alt fa-2x mb-2 d-block" style="color: var(--luxe-gold, #D4AF37);"></i>
+                        <span class="opacity-75 small">Cra 7D # 151-42, Of. 201<br>Bogotá, Colombia</span>
+                    </div>
+                    <div class="text-white text-center">
+                        <i class="fas fa-envelope fa-2x mb-2 d-block" style="color: var(--luxe-gold, #D4AF37);"></i>
+                        <span class="opacity-75 small">gabrielpulido1984<br>@gmail.com</span>
+                    </div>
+                    <div class="text-white text-center">
+                        <i class="fas fa-phone-alt fa-2x mb-2 d-block" style="color: var(--luxe-gold, #D4AF37);"></i>
+                        <span class="opacity-75 small">+57 312 4504982<br>Atención Telefónica</span>
+                    </div>
+                </div>
+
+                <a href="https://wa.me/573124504982?text=Hola,%20estoy%20interesado%20en%20recibir%20asesor%C3%ADa%20para%20arrendar%20mi%20inmueble." target="_blank" class="btn text-white fw-bold py-3 px-5 rounded-pill shadow-sm" style="background: linear-gradient(135deg, #1E3A2F, #128C7E);">
+                    <i class="fab fa-whatsapp me-2 fa-lg"></i>Contactar Asesor por WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

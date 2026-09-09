@@ -34,22 +34,11 @@ class BienController extends AbstractController
         }
 
         // =========================================================================
-        // OPTIMIZACIÓN COMERCIAL: Generación de enlace dinámico de WhatsApp
+        // OPTIMIZACIÓN COMERCIAL: Enlace de WhatsApp directo al Asesor (Tu hermano)
         // =========================================================================
-        $propietario = $bien->getProprietaire();
         
-        // CORRECCIÓN DE PROPIEDAD: Cambiado getTelephone() por getPhone() según mapeo de RegistrationFormType
-        $telefono = ($propietario && method_exists($propietario, 'getPhone') && $propietario->getPhone())
-            ? $propietario->getPhone()
-            : '573000000000'; // Teléfono corporativo de respaldo (Código de país 57 para Colombia)
-
-        // Limpiamos el teléfono de espacios, guiones o caracteres extraños
-        $telefonoLimpio = preg_replace('/[^0-9]/', '', $telefono);
-
-        // Si el teléfono guardado en Colombia no incluye el código de país (57), se lo anteponemos automáticamente
-        if (strlen($telefonoLimpio) === 10 && strpos($telefonoLimpio, '3') === 0) {
-            $telefonoLimpio = '57' . $telefonoLimpio;
-        }
+        // Número oficial de la agencia/asesor (Código Colombia 57 + Celular)
+        $telefonoAsesor = '573124504982';
 
         // Creamos un texto predefinido atractivo para el mercado local
         $mensajeBase = sprintf(
@@ -59,7 +48,7 @@ class BienController extends AbstractController
             number_format((float)($bien->getPrix() ?? 0), 0, ',', '.')
         );
 
-        $whatsappUrl = "https://wa.me/" . $telefonoLimpio . "?text=" . urlencode($mensajeBase);
+        $whatsappUrl = "https://wa.me/" . $telefonoAsesor . "?text=" . urlencode($mensajeBase);
         // =========================================================================
 
         // Renderizo la vista de detalle conservando tus variables originales intactas

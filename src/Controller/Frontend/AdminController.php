@@ -12,36 +12,38 @@ class AdminController extends AbstractController
 {
     /**
      * Ruta: /admin/dashboard
-     * Panel de resumen para administradores: muestra conteo de usuarios por rol e inmuebles.
+     * Panel de resumen global: fusionamos estadísticas de usuarios e inmuebles en una sola vista.
      */
     #[Route('/admin/dashboard', name: 'admin_dashboard')]
     public function dashboard(UserRepository $userRepo, BienRepository $bienRepo): Response
     {
-        // --- Total de usuarios registrados en el sistema ---
-        $totalUsuarios = $userRepo->count([]); // Conteo total sin filtros
-
         // --- Conteo de usuarios por tipo de rol ---
-        // IMPORTANTE: ahora usamos el método countByRole() que funciona sin JSON_CONTAINS.
-        $clientes = $userRepo->countByRole('ROLE_CLIENT');           // Clientes
-        $propietarios = $userRepo->countByRole('ROLE_PROPRIETAIRE'); // Propietarios
-        $administradores = $userRepo->countByRole('ROLE_ADMIN');     // Administradores
+        $clientes = $userRepo->countByRole('ROLE_CLIENT');
+        $propietarios = $userRepo->countByRole('ROLE_PROPRIETAIRE');
+        $administradores = $userRepo->countByRole('ROLE_ADMIN');
 
         // --- Total de inmuebles publicados ---
-        $totalBienes = $bienRepo->count([]); // Conteo global de propiedades
+        $totalInmuebles = $bienRepo->count([]);
 
-        // Paso los datos a la vista del panel
+        // --- Estadísticas para las tablas del Dashboard ---
+        // Utilizamos los métodos que ya tenías creados en tu repositorio
+        $estadisticasTipo = $bienRepo->countByType();
+        $estadisticasCiudad = $bienRepo->countByCity();
+
+        // Pasamos todos los datos centralizados a la nueva vista del dashboard
         return $this->render('admin/dashboard.html.twig', [
-            'totalUsuarios'    => $totalUsuarios,
-            'clientes'         => $clientes,
-            'propietarios'     => $propietarios,
-            'administradores'  => $administradores,
-            'totalBienes'      => $totalBienes,
+            'totalInmuebles'     => $totalInmuebles,
+            'clientes'           => $clientes,
+            'propietarios'       => $propietarios,
+            'administradores'    => $administradores,
+            'estadisticasTipo'   => $estadisticasTipo,
+            'estadisticasCiudad' => $estadisticasCiudad,
         ]);
     }
 
     /**
      * Ruta: /admin/usuarios
-     * Página para visualizar todos los usuarios registrados (sin edición por ahora).
+     * Página para visualizar todos los usuarios registrados (accesible desde el menú superior).
      */
     #[Route('/admin/usuarios', name: 'admin_usuarios')]
     public function usuarios(UserRepository $userRepo): Response
@@ -50,22 +52,6 @@ class AdminController extends AbstractController
 
         return $this->render('admin/usuarios.html.twig', [
             'usuarios' => $usuarios,
-        ]);
-    }
-
-    /**
-     * Ruta: /admin/estadisticas
-     * Página para mostrar estadísticas simples sobre inmuebles por tipo y ciudad.
-     */
-    #[Route('/admin/estadisticas', name: 'admin_estadisticas')]
-    public function estadisticas(BienRepository $bienRepo): Response
-    {
-        $porTipo = $bienRepo->countByType();   // Agrupación por tipo de inmueble
-        $porCiudad = $bienRepo->countByCity(); // Agrupación por ciudad
-
-        return $this->render('admin/estadisticas.html.twig', [
-            'porTipo' => $porTipo,
-            'porCiudad' => $porCiudad,
         ]);
     }
 }

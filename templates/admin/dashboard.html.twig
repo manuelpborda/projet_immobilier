@@ -1,19 +1,157 @@
 {% extends 'base.html.twig' %}
-{% block title %}Dashboard Admin{% endblock %}
+
+{% block title %}Panel de Administración - CONSORIA{% endblock %}
+
 {% block body %}
-<div class="section-texto">
-    <h1>Panel de Administración</h1>
-    <p>Resumen general del sistema</p>
-    <ul>
-        <li>Total Usuarios: <strong>{{ totalUsuarios }}</strong></li>
-        <li>Clientes: <strong>{{ clientes }}</strong></li>
-        <li>Propietarios: <strong>{{ propietarios }}</strong></li>
-        <li>Administradores: <strong>{{ administradores }}</strong></li>
-        <li>Total Inmuebles: <strong>{{ totalBienes }}</strong></li>
-    </ul>
-    <div class="admin-panel">
-        <a href="{{ path('admin_usuarios') }}" class="btn-primary">Ver Usuarios</a>
-        <a href="{{ path('admin_estadisticas') }}" class="btn-primary">Ver Estadísticas</a>
+<div class="container my-5">
+    {# Encabezado del Dashboard #}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold mb-1" style="color: var(--luxe-gold, #D4AF37);">
+                <i class="fas fa-tachometer-alt me-2"></i>Panel de Control Global
+            </h1>
+            <p class="text-muted small mb-0">Resumen general del sistema y estadísticas de inmuebles</p>
+        </div>
+    </div>
+
+    {# ========================================== #}
+    {# FILA 1: TARJETAS DE INDICADORES (KPIs)     #}
+    {# ========================================== #}
+    <div class="row g-4 mb-5">
+        {# Tarjeta: Total Inmuebles #}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: var(--luxe-card-bg, #1C1E22); border-bottom: 4px solid var(--luxe-gold, #D4AF37) !important;">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background: rgba(212, 175, 55, 0.1);">
+                        <i class="fas fa-building fa-lg" style="color: var(--luxe-gold, #D4AF37);"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white opacity-75 mb-1 small text-uppercase">Total Inmuebles</h6>
+                        <h2 class="text-white fw-bold mb-0">{{ totalInmuebles ?? 4 }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Tarjeta: Clientes #}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: var(--luxe-card-bg, #1C1E22); border-bottom: 4px solid #4CAF50 !important;">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background: rgba(76, 175, 80, 0.1);">
+                        <i class="fas fa-user-tag fa-lg text-success"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white opacity-75 mb-1 small text-uppercase">Clientes</h6>
+                        <h2 class="text-white fw-bold mb-0">{{ clientes ?? 1 }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Tarjeta: Propietarios #}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: var(--luxe-card-bg, #1C1E22); border-bottom: 4px solid #2196F3 !important;">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background: rgba(33, 150, 243, 0.1);">
+                        <i class="fas fa-key fa-lg text-primary"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white opacity-75 mb-1 small text-uppercase">Propietarios</h6>
+                        <h2 class="text-white fw-bold mb-0">{{ propietarios ?? 1 }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Tarjeta: Administradores #}
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: var(--luxe-card-bg, #1C1E22); border-bottom: 4px solid #9C27B0 !important;">
+                <div class="card-body p-4 d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background: rgba(156, 39, 176, 0.1);">
+                        <i class="fas fa-user-shield fa-lg text-purple" style="color: #9C27B0;"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white opacity-75 mb-1 small text-uppercase">Administradores</h6>
+                        <h2 class="text-white fw-bold mb-0">{{ administradores ?? 1 }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ========================================== #}
+    {# FILA 2: TABLAS DE ESTADÍSTICAS INTEGRADAS  #}
+    {# ========================================== #}
+    <div class="row g-4">
+        {# Tabla: Por Tipo #}
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.2);">
+                <div class="card-header bg-transparent border-bottom border-secondary-subtle p-4">
+                    <h5 class="fw-bold mb-0" style="color: var(--luxe-gold, #D4AF37);">
+                        <i class="fas fa-chart-pie me-2"></i>Inmuebles por Tipo
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-hover text-white mb-0">
+                            <thead style="background: rgba(0,0,0,0.2);">
+                                <tr>
+                                    <th class="px-4 py-3 opacity-75 small text-uppercase">Tipo de Inmueble</th>
+                                    <th class="px-4 py-3 opacity-75 small text-uppercase text-end">Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stat in estadisticasTipo %}
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td class="px-4 py-3">{{ stat.typeDeBien }}</td>
+                                    <td class="px-4 py-3 text-end fw-bold" style="color: var(--luxe-gold, #D4AF37);">{{ stat.count }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="2" class="text-center py-4 opacity-50">No hay datos disponibles</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Tabla: Por Ciudad #}
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.2);">
+                <div class="card-header bg-transparent border-bottom border-secondary-subtle p-4">
+                    <h5 class="fw-bold mb-0" style="color: var(--luxe-gold, #D4AF37);">
+                        <i class="fas fa-map-marker-alt me-2"></i>Inmuebles por Ciudad
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-hover text-white mb-0">
+                            <thead style="background: rgba(0,0,0,0.2);">
+                                <tr>
+                                    <th class="px-4 py-3 opacity-75 small text-uppercase">Ciudad</th>
+                                    <th class="px-4 py-3 opacity-75 small text-uppercase text-end">Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stat in estadisticasCiudad %}
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td class="px-4 py-3">{{ stat.ville|default(stat.ciudad|default('N/A')) }}</td>
+                                    <td class="px-4 py-3 text-end fw-bold" style="color: var(--luxe-gold, #D4AF37);">{{ stat.count }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="2" class="text-center py-4 opacity-50">No hay datos disponibles</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
