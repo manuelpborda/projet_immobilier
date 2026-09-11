@@ -7,11 +7,14 @@
     <h1 class="h2 fw-bold mb-4 text-primary"><i class="fas fa-inbox me-2"></i>Bandeja de Solicitudes</h1>
 
     <div class="row">
+        {# ========================================== #}
+        {# TABLA DE VISITAS PROGRAMADAS               #}
+        {# ========================================== #}
         <div class="col-12 mb-5">
             <h3 class="h4 mb-3"><i class="far fa-calendar-check me-2 text-info"></i>Visitas Programadas</h3>
-            <div class="table-responsive">
-                <table class="admin-table">
-                    <thead>
+            <div class="table-responsive shadow-sm rounded">
+                <table class="admin-table w-100 table table-hover align-middle mb-0">
+                    <thead class="table-dark">
                         <tr>
                             <th>Fecha</th>
                             <th>Cliente</th>
@@ -25,30 +28,52 @@
                             <tr>
                                 <td>{{ visita.dateVisite ? visita.dateVisite|date('d/m/Y') : 'N/A' }}</td>
                                 <td>{{ visita.client ? visita.client.email : 'Usuario Eliminado' }}</td>
-                                <td>{{ visita.bien ? visita.bien.titulo : 'N/A' }}</td>
                                 <td>
-                                    <span class="badge {{ visita.statut == 'Programada' ? 'bg-warning' : (visita.statut == 'Realizada' ? 'bg-success' : 'bg-danger') }}">
+                                    {{ visita.bien ? visita.bien.titulo : 'N/A' }}
+                                    {% if visita.bien and visita.bien.vendido %}
+                                        <br><span class="badge bg-danger" style="font-size: 0.7em;">CERRADO</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge {{ visita.statut == 'Programada' ? 'bg-warning text-dark' : (visita.statut == 'Realizada' ? 'bg-success' : 'bg-danger') }}">
                                         {{ visita.statut }}
                                     </span>
                                 </td>
                                 <td>
+                                    {# Acciones originales de la visita #}
                                     <a href="{{ path('admin_visita_estado', {'id': visita.idVisites, 'estado': 'Realizada'}) }}" class="btn btn-sm btn-success" title="Marcar Realizada"><i class="fas fa-check"></i></a>
                                     <a href="{{ path('admin_visita_estado', {'id': visita.idVisites, 'estado': 'Cancelada'}) }}" class="btn btn-sm btn-danger" title="Cancelar"><i class="fas fa-times"></i></a>
+                                    
+                                    {# NUEVO BOTÓN: Cerrar Trato desde Visitas #}
+                                    {% if visita.bien %}
+                                        <form method="post" action="{{ path('admin_toggle_vendido', {'id': visita.bien.id}) }}" style="display: inline-block;" class="ms-2">
+                                            <button type="submit" class="btn btn-sm {% if visita.bien.vendido %}btn-warning{% else %}btn-primary{% endif %} shadow-sm" title="Cambiar disponibilidad del inmueble">
+                                                {% if visita.bien.vendido %}
+                                                    <i class="fas fa-box-open"></i> Reabrir
+                                                {% else %}
+                                                    <i class="fas fa-handshake"></i> Cerrar Trato
+                                                {% endif %}
+                                            </button>
+                                        </form>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% else %}
-                            <tr><td colspan="5" class="text-center opacity-75">No hay visitas registradas.</td></tr>
+                            <tr><td colspan="5" class="text-center py-4 opacity-75">No hay visitas registradas.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
 
+        {# ========================================== #}
+        {# TABLA DE OFERTAS RECIBIDAS                 #}
+        {# ========================================== #}
         <div class="col-12">
             <h3 class="h4 mb-3"><i class="fas fa-hand-holding-usd me-2 text-warning"></i>Ofertas Recibidas</h3>
-            <div class="table-responsive">
-                <table class="admin-table">
-                    <thead>
+            <div class="table-responsive shadow-sm rounded">
+                <table class="admin-table w-100 table table-hover align-middle mb-0">
+                    <thead class="table-dark">
                         <tr>
                             <th>Fecha</th>
                             <th>Cliente</th>
@@ -63,20 +88,39 @@
                             <tr>
                                 <td>{{ oferta.dateOffre ? oferta.dateOffre|date('d/m/Y') : 'N/A' }}</td>
                                 <td>{{ oferta.client ? oferta.client.email : 'Usuario Eliminado' }}</td>
-                                <td>{{ oferta.bien ? oferta.bien.titulo : 'N/A' }}</td>
+                                <td>
+                                    {{ oferta.bien ? oferta.bien.titulo : 'N/A' }}
+                                    {% if oferta.bien and oferta.bien.vendido %}
+                                        <br><span class="badge bg-danger" style="font-size: 0.7em;">CERRADO</span>
+                                    {% endif %}
+                                </td>
                                 <td class="fw-bold text-success">$ {{ oferta.prix|number_format(0, ',', '.') }}</td>
                                 <td>
-                                    <span class="badge {{ oferta.etatNegociation == 'Presentada' ? 'bg-info' : (oferta.etatNegociation == 'Aceptada' ? 'bg-success' : 'bg-danger') }}">
+                                    <span class="badge {{ oferta.etatNegociation == 'Presentada' ? 'bg-info text-dark' : (oferta.etatNegociation == 'Aceptada' ? 'bg-success' : 'bg-danger') }}">
                                         {{ oferta.etatNegociation }}
                                     </span>
                                 </td>
                                 <td>
+                                    {# Acciones originales de la oferta #}
                                     <a href="{{ path('admin_oferta_estado', {'id': oferta.idOffre, 'estado': 'Aceptada'}) }}" class="btn btn-sm btn-success" title="Aceptar Oferta"><i class="fas fa-check"></i></a>
                                     <a href="{{ path('admin_oferta_estado', {'id': oferta.idOffre, 'estado': 'Rechazada'}) }}" class="btn btn-sm btn-danger" title="Rechazar"><i class="fas fa-times"></i></a>
+                                    
+                                    {# NUEVO BOTÓN: Cerrar Trato desde Ofertas #}
+                                    {% if oferta.bien %}
+                                        <form method="post" action="{{ path('admin_toggle_vendido', {'id': oferta.bien.id}) }}" style="display: inline-block;" class="ms-2">
+                                            <button type="submit" class="btn btn-sm {% if oferta.bien.vendido %}btn-warning{% else %}btn-primary{% endif %} shadow-sm" title="Cambiar disponibilidad del inmueble">
+                                                {% if oferta.bien.vendido %}
+                                                    <i class="fas fa-box-open"></i> Reabrir
+                                                {% else %}
+                                                    <i class="fas fa-handshake"></i> Cerrar Trato
+                                                {% endif %}
+                                            </button>
+                                        </form>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% else %}
-                            <tr><td colspan="6" class="text-center opacity-75">No hay ofertas registradas.</td></tr>
+                            <tr><td colspan="6" class="text-center py-4 opacity-75">No hay ofertas registradas.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>

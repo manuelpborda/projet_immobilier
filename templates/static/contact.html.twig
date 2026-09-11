@@ -2,68 +2,196 @@
 {% block title %}Contacto - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
+{# === ESTILOS ESPECÍFICOS Y ADAPTABLES PARA CONTACTO === #}
+<style>
+    .hero-contact {
+        background: linear-gradient(180deg, var(--luxe-black, #111) 0%, rgba(28, 30, 34, 0.95) 100%);
+        border-bottom: 2px solid var(--luxe-gold, #D4AF37);
+        color: #E4E7EC;
+    }
+    .card-contact {
+        background: var(--luxe-card-bg, #1C1E22);
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        color: #E4E7EC;
+    }
+    /* Clases para arreglar el contraste del formulario */
+    .form-label-adaptable {
+        color: #E4E7EC;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    .form-control-luxe {
+        background-color: var(--luxe-black, #111);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        color: #E4E7EC;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+    }
+    .form-control-luxe:focus {
+        background-color: var(--luxe-black, #111);
+        border-color: var(--luxe-gold, #D4AF37);
+        color: #E4E7EC;
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+        outline: none;
+    }
+    .texto-muteado { opacity: 0.85; }
+    
+    /* MODO CLARO */
+    html.light-mode .hero-contact {
+        background: linear-gradient(180deg, #F5F7FA 0%, #FFFFFF 100%) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .card-contact {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .form-label-adaptable {
+        color: #2C313C !important;
+    }
+    html.light-mode .form-control-luxe {
+        background-color: #F8F9FA !important;
+        border: 1px solid #CED4DA !important;
+        color: #212529 !important;
+    }
+    html.light-mode .form-control-luxe:focus {
+        background-color: #FFFFFF !important;
+        border-color: var(--luxe-gold, #D4AF37) !important;
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+    }
+    html.light-mode .texto-muteado {
+        color: #495057 !important;
+        opacity: 1;
+    }
+    .icon-gold { color: var(--luxe-gold, #D4AF37); font-size: 1.25rem; }
+</style>
 
-  {# Flashes discretos #}
-  {% for message in app.flashes('success') %}
-    <div class="alert alert-success">{{ message }}</div>
-  {% endfor %}
-  {% for message in app.flashes('info') %}
-    <div class="alert alert-info">{{ message }}</div>
-  {% endfor %}
-  {% for message in app.flashes('error') %}
-    <div class="alert alert-danger">{{ message }}</div>
-  {% endfor %}
-
-  <section class="contact-section">
-    <div class="contact-info-block">
-      <h1>Contacto directo con CONSORIA Inmobiliaria</h1>
-      <p>Completa el formulario y te responderé.</p>
-
-      {# Botón MUY pequeño para alternar entre Mongo y MySQL + badge discreto #}
-      {% set current  = storageMode is defined ? storageMode : 'mongo' %}
-      {% set toggleTo = current == 'mongo' ? 'mysql' : 'mongo' %}
-      <div class="mode-toggle">
-        <a href="{{ path('contact_mode', {'mode': toggleTo}) }}"
-           class="btn btn-sm btn-outline-secondary"
-           title="Cambiar modo de almacenamiento">
-           {% if current == 'mongo' %}Usar MySQL{% else %}Usar Mongo{% endif %}
-        </a>
-        <span class="mode-badge">Modo: {{ current|upper }}</span>
-      </div>
-
-      {# Form: posteo a la misma ruta 'contact' (GET/POST) #}
-      <form method="post" action="{{ path('contact') }}" class="contact-form">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('contact_form') }}">
-
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required maxlength="100">
-
-        <label for="telefono">Teléfono:</label>
-        <input type="tel" id="telefono" name="telefono" maxlength="20">
-
-        <label for="correo">Correo electrónico:</label>
-        <input type="email" id="correo" name="correo" required maxlength="120">
-
-        <label for="mensaje">Mensaje:</label>
-        <textarea id="mensaje" name="mensaje" rows="4" required maxlength="1000"></textarea>
-
-        <button type="submit" class="btn-primary">Enviar mensaje</button>
-      </form>
+{# ========================================== #}
+{# HERO SECTION (Encabezado Premium)          #}
+{# ========================================== #}
+<div class="py-5 mb-5 shadow-sm hero-contact">
+    <div class="container text-center py-5">
+        <span class="text-uppercase fw-bold small d-block mb-3" style="letter-spacing: 2px; color: var(--luxe-gold, #D4AF37);">Atención VIP</span>
+        <h1 class="display-4 fw-bold mb-4" style="color: var(--luxe-gold, #D4AF37); letter-spacing: -1px;">
+            Hablemos de tu próximo inmueble
+        </h1>
+        <p class="lead mx-auto texto-muteado" style="max-width: 700px; font-weight: 400; line-height: 1.8;">
+            Estamos aquí para brindarte asesoría inmobiliaria personalizada. Completa el formulario o utiliza nuestros canales directos y un asesor de <strong style="color: var(--luxe-gold);">CONSORIA</strong> se comunicará contigo.
+        </p>
     </div>
-  </section>
+</div>
 
-  <style>
-    /* Posiciono el toggle en la esquina del bloque, discreto */
-    .contact-info-block { position: relative; }
-    .mode-toggle{
-      display:flex; gap:.5rem; align-items:center;
-      position:absolute; right:12px; top:12px;
-    }
-    .mode-toggle .btn{ padding:.15rem .4rem; font-size:.75rem; line-height:1; }
-    .mode-badge{
-      font-size:.7rem; color:#6c757d; background:#f8f9fa; border:1px solid #e5e7eb;
-      padding:.1rem .35rem; border-radius:999px;
-    }
-  </style>
+<div class="container mb-5 pb-5">
+    
+    {# Mensajes de sistema (Flashes) #}
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success shadow-sm rounded-3"><i class="fas fa-check-circle me-2"></i>{{ message }}</div>
+            {% endfor %}
+            {% for message in app.flashes('info') %}
+                <div class="alert alert-info shadow-sm rounded-3"><i class="fas fa-info-circle me-2"></i>{{ message }}</div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger shadow-sm rounded-3"><i class="fas fa-exclamation-triangle me-2"></i>{{ message }}</div>
+            {% endfor %}
+        </div>
+    </div>
 
+    <div class="row g-5 justify-content-center">
+        
+        {# ========================================== #}
+        {# COLUMNA IZQUIERDA: Info Corporativa        #}
+        {# ========================================== #}
+        <div class="col-lg-4">
+            <div class="card-contact p-4 p-md-5 rounded-4 h-100">
+                <h3 class="fw-bold mb-4" style="color: var(--luxe-gold, #D4AF37);">Información Directa</h3>
+                
+                <div class="mb-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-map-marker-alt mt-1 me-3 icon-gold"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Oficina Principal</h6>
+                            <p class="texto-muteado small mb-0">Sede Norte, Barrio Cedritos<br>Bogotá D.C., Colombia<br><span class="fst-italic opacity-75">* Atención exclusiva con cita previa</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-phone-alt mt-1 me-3 icon-gold"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Teléfono / WhatsApp</h6>
+                            <a href="https://wa.me/573124504982" target="_blank" class="text-decoration-none texto-muteado small">+57 312 4504982</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-envelope mt-1 me-3 icon-gold"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Correo Electrónico</h6>
+                            <a href="mailto:consoriainmobiliaria@gmail.com" class="text-decoration-none texto-muteado small">consoriainmobiliaria@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 mt-4" style="border-top: 1px solid rgba(212, 175, 55, 0.2);">
+                    <h6 class="fw-bold mb-2">Horario de Atención:</h6>
+                    <p class="texto-muteado small mb-1">Lunes a Viernes: 8:00 am - 6:00 pm</p>
+                    <p class="texto-muteado small mb-0">Sábados: 9:00 am - 1:00 pm</p>
+                </div>
+            </div>
+        </div>
+
+        {# ========================================== #}
+        {# COLUMNA DERECHA: Formulario Adaptable      #}
+        {# ========================================== #}
+        <div class="col-lg-6">
+            <div class="card-contact p-4 p-md-5 rounded-4 shadow-lg h-100">
+                <h3 class="fw-bold mb-4">Envíanos un mensaje</h3>
+                
+                <form method="post" action="{{ path('contact') }}" class="needs-validation">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('contact_form') }}">
+
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label form-label-adaptable">Nombre completo:</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control form-control-luxe w-100" required maxlength="100" placeholder="Ej. Juan Pérez">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telefono" class="form-label form-label-adaptable">Teléfono celular:</label>
+                            <input type="tel" id="telefono" name="telefono" class="form-control form-control-luxe w-100" maxlength="20" placeholder="+57 300 000 0000">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="correo" class="form-label form-label-adaptable">Correo electrónico:</label>
+                            <input type="email" id="correo" name="correo" class="form-control form-control-luxe w-100" required maxlength="120" placeholder="correo@ejemplo.com">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="mensaje" class="form-label form-label-adaptable">¿En qué podemos ayudarte?</label>
+                        <textarea id="mensaje" name="mensaje" class="form-control form-control-luxe w-100" rows="5" required maxlength="1000" placeholder="Detalla el tipo de inmueble que buscas, tu presupuesto o el servicio que necesitas..."></textarea>
+                    </div>
+
+                    {# Casilla de Protección de Datos #}
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" value="" id="privacidad" required style="cursor: pointer; border-color: var(--luxe-gold);">
+                        <label class="form-check-label small texto-muteado" for="privacidad" style="cursor: pointer;">
+                            Al enviar este formulario, acepto la política de privacidad y el tratamiento de mis datos personales según la normativa vigente.
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn w-100 fw-bold py-3 rounded-3" style="background: linear-gradient(135deg, var(--luxe-gold), #AA8623); color: #111; font-size: 1.1rem; transition: transform 0.3s ease;">
+                        <i class="fas fa-paper-plane me-2"></i> Enviar Mensaje
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</div>
 {% endblock %}

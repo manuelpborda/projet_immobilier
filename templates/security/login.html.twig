@@ -1,38 +1,182 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Iniciar Sesión - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+{# === ESTILOS ESPECÍFICOS Y ADAPTABLES PARA LOGIN === #}
+<style>
+    .login-wrapper {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        padding: 3rem 0;
+    }
+    .card-login {
+        background: var(--luxe-card-bg, #1C1E22);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        color: #E4E7EC;
+    }
+    .login-info-side {
+        background: linear-gradient(135deg, rgba(17,17,17,0.9) 0%, rgba(28,30,34,0.9) 100%), url('{{ asset('assets/img/fondo2.jpg') }}') center/cover no-repeat;
+        border-right: 1px solid rgba(212, 175, 55, 0.2);
+    }
+    .form-label-adaptable {
+        color: #E4E7EC;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    .form-control-luxe {
+        background-color: var(--luxe-black, #111);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        color: #E4E7EC;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+    }
+    .form-control-luxe:focus {
+        background-color: var(--luxe-black, #111);
+        border-color: var(--luxe-gold, #D4AF37);
+        color: #E4E7EC;
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+        outline: none;
+    }
+    .texto-muteado { opacity: 0.85; }
+    
+    /* MODO CLARO */
+    html.light-mode .card-login {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .login-info-side {
+        background: linear-gradient(135deg, rgba(245,247,250,0.9) 0%, rgba(255,255,255,0.95) 100%), url('{{ asset('assets/img/fondo2.jpg') }}') center/cover no-repeat;
+        border-right: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    html.light-mode .form-label-adaptable { color: #2C313C !important; }
+    html.light-mode .form-control-luxe {
+        background-color: #F8F9FA !important;
+        border: 1px solid #CED4DA !important;
+        color: #212529 !important;
+    }
+    html.light-mode .form-control-luxe:focus {
+        background-color: #FFFFFF !important;
+        border-color: var(--luxe-gold, #D4AF37) !important;
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+    }
+    html.light-mode .texto-muteado { color: #495057 !important; opacity: 1; }
+    .icon-gold { color: var(--luxe-gold, #D4AF37); }
+</style>
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+<div class="login-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                
+                <div class="card-login rounded-4 overflow-hidden shadow-lg d-flex flex-column flex-lg-row">
+                    
+                    {# ========================================== #}
+                    {# COLUMNA IZQUIERDA: Contexto / Beneficios   #}
+                    {# ========================================== #}
+                    <div class="col-lg-5 login-info-side p-5 d-flex flex-column justify-content-center text-center text-lg-start">
+                        <div class="mb-4">
+                            <i class="fas fa-home fa-3x icon-gold mb-3"></i>
+                            <h2 class="fw-bold" style="color: var(--luxe-gold);">Bienvenido a CONSORIA</h2>
+                            <p class="texto-muteado mt-3">Tu plataforma exclusiva para la gestión inmobiliaria.</p>
+                        </div>
+                        
+                        <div class="mt-4 d-none d-lg-block">
+                            <ul class="list-unstyled">
+                                <li class="mb-3 d-flex align-items-center">
+                                    <i class="fas fa-heart icon-gold me-3"></i>
+                                    <span class="texto-muteado small">Guarda tus inmuebles favoritos</span>
+                                </li>
+                                <li class="mb-3 d-flex align-items-center">
+                                    <i class="fas fa-calendar-check icon-gold me-3"></i>
+                                    <span class="texto-muteado small">Gestiona tus citas y visitas</span>
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <i class="fas fa-file-contract icon-gold me-3"></i>
+                                    <span class="texto-muteado small">Revisa el estado de tus trámites</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {# ========================================== #}
+                    {# COLUMNA DERECHA: Formulario de Login       #}
+                    {# ========================================== #}
+                    <div class="col-lg-7 p-5">
+                        <div class="px-md-4">
+                            <div class="text-center mb-4">
+                                <h3 class="fw-bold">Iniciar Sesión</h3>
+                                <p class="texto-muteado small">Ingresa tus credenciales para acceder a tu cuenta.</p>
+                            </div>
+
+                            <form method="post">
+                                {# Mensaje de error si las credenciales son incorrectas #}
+                                {% if error %}
+                                    <div class="alert alert-danger rounded-3 small p-3 mb-4">
+                                        <i class="fas fa-exclamation-circle me-2"></i> {{ error.messageKey|trans(error.messageData, 'security') }}
+                                    </div>
+                                {% endif %}
+
+                                {# Mensaje si el usuario ya está logueado #}
+                                {% if app.user %}
+                                    <div class="alert alert-info rounded-3 small p-3 mb-4">
+                                        Has iniciado sesión como {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" style="color: var(--luxe-gold);">Cerrar sesión</a>
+                                    </div>
+                                {% endif %}
+
+                                <div class="mb-4">
+                                    <label for="inputEmail" class="form-label form-label-adaptable">Correo Electrónico</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0" style="background-color: rgba(212, 175, 55, 0.1); color: var(--luxe-gold);">
+                                            <i class="fas fa-envelope"></i>
+                                        </span>
+                                        <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control form-control-luxe border-start-0" autocomplete="email" required autofocus placeholder="tu@correo.com">
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label for="inputPassword" class="form-label form-label-adaptable mb-0">Contraseña</label>
+                                        {# Enlace opcional de recuperar contraseña #}
+                                        <a href="#" class="small text-decoration-none" style="color: var(--luxe-gold);">¿Olvidaste tu contraseña?</a>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0" style="background-color: rgba(212, 175, 55, 0.1); color: var(--luxe-gold);">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                        <input type="password" name="_password" id="inputPassword" class="form-control form-control-luxe border-start-0" autocomplete="current-password" required placeholder="••••••••">
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                                {# Recordarme (Opcional en Symfony) #}
+                                <div class="form-check mb-4">
+                                    <input type="checkbox" name="_remember_me" id="_remember_me" class="form-check-input" style="cursor: pointer; border-color: var(--luxe-gold);">
+                                    <label class="form-check-label texto-muteado small" for="_remember_me" style="cursor: pointer;">
+                                        Recordar mis datos en este equipo
+                                    </label>
+                                </div>
+
+                                <button class="btn w-100 fw-bold py-3 rounded-3 mb-4" type="submit" style="background: linear-gradient(135deg, var(--luxe-gold), #AA8623); color: #111; font-size: 1.1rem; transition: transform 0.3s ease;">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Ingresar
+                                </button>
+                                
+                                <div class="text-center mt-3">
+                                    <p class="texto-muteado small">
+                                        ¿No tienes una cuenta? <a href="{{ path('app_register') }}" class="text-decoration-none fw-bold" style="color: var(--luxe-gold);">Regístrate aquí</a>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        {% endif %}
-
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-        #}
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

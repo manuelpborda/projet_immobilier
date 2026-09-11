@@ -1,24 +1,73 @@
-{# === TEMPLATE MENTIONS LEGALES ===
-   Página legal obligatoria RGPD/CNIL
-   Justifico al jurado: cumplo exigencia de transparencia y protección de datos personales.
-#}
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Mentions Légales - CONSORIA Inmobilière{% endblock %}
+{% block title %}Aviso Legal y Términos de Uso - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
-<h1>Mentions Légales</h1>
-<p><strong>Responsable de publication :</strong> CONSORIA Inmobilière -</p>
-<p><strong>Hébergeur :</strong> Serveur personnel / MAMP local / GitHub Pages </p>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3" style="color: var(--luxe-gold, #D4AF37);">Aviso Legal y Términos de Uso</h1>
+                <p class="lead opacity-75 text-white">Políticas, regulaciones y marco legal para el territorio colombiano.</p>
+            </div>
 
-<h2>Protection des données personnelles (RGPD)</h2>
-<p>Les informations collectées via le formulaire de contact sont destinées exclusivement à un usage interne et ne sont jamais transmises à des tiers.</p>
-<p>Conformément au Règlement Général sur la Protection des Données (RGPD), vous pouvez exercer vos droits d'accès, de rectification ou de suppression en nous contactant à : [email@exemple.com]</p>
+            <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4" style="background: var(--luxe-card-bg, #1C1E22); color: var(--luxe-white, #fff); border: 1px solid rgba(212, 175, 55, 0.1) !important;">
+                
+                <h4 class="fw-bold mb-3" style="color: var(--luxe-gold, #D4AF37);">1. Información de la Empresa</h4>
+                <p class="opacity-75" style="line-height: 1.8;">
+                    En cumplimiento de lo establecido en la legislación comercial colombiana, se informa que el presente sitio web es titularidad de <strong>CONSORIA INMOBILIARIA</strong> (en adelante, "La Agencia"), con domicilio principal en la ciudad de Bogotá, D.C., Colombia, ubicada en la Cra 7D # 151-42, Oficina 201. Las notificaciones judiciales y administrativas serán recibidas en el correo electrónico: <strong>gabrielpulido1984@gmail.com</strong> o en el teléfono <strong>+57 312 4504982</strong>.
+                </p>
 
-<h2>Cookies</h2>
-<p>Ce site utilise uniquement des cookies techniques pour le bon fonctionnement de l'application. Aucun cookie publicitaire n'est utilisé.</p>
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 2rem 0;">
 
-<h2>Crédit</h2>
-<p>Site développé dans le cadre d'un projet éducatif - Tous droits réservés.</p>
+                <h4 class="fw-bold mb-3" style="color: var(--luxe-gold, #D4AF37);">2. Marco Legal Inmobiliario Colombiano</h4>
+                <p class="opacity-75" style="line-height: 1.8;">
+                    La Agencia rige todos sus procesos de intermediación, corretaje, administración, venta y arriendo de bienes inmuebles bajo la estricta normativa de la República de Colombia, destacando principalmente:
+                </p>
+                <ul class="opacity-75 mb-4" style="line-height: 1.8;">
+                    <li><strong>Ley 820 de 2003:</strong> Régimen de Arrendamiento de Vivienda Urbana, la cual regula los contratos de arriendo, fijación de cánones, y causales de terminación.</li>
+                    <li><strong>Ley 675 de 2001:</strong> Régimen de Propiedad Horizontal, aplicada a inmuebles sometidos a este régimen (apartamentos, conjuntos cerrados, centros comerciales).</li>
+                    <li><strong>Ley 1480 de 2011 (Estatuto del Consumidor):</strong> Garantizando la transparencia en la información, veracidad en la publicidad de los inmuebles y protección de los derechos de nuestros clientes.</li>
+                    <li><strong>Ley 300 de 1996 y Ley 2068 de 2020:</strong> Referente a la normativa de turismo para la operación y promoción de arriendos vacacionales o por pasadías (RNT).</li>
+                </ul>
+
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 2rem 0;">
+
+                <h4 class="fw-bold mb-3" style="color: var(--luxe-gold, #D4AF37);">3. Política de Tratamiento de Datos Personales (Habeas Data)</h4>
+                <p class="opacity-75" style="line-height: 1.8;">
+                    De conformidad con la <strong>Ley Estatutaria 1581 de 2012</strong> y su Decreto Reglamentario 1377 de 2013, CONSORIA Inmobiliaria informa a sus clientes, usuarios y prospectos que es responsable del tratamiento de los datos personales recolectados a través de este portal web, formularios físicos, correos electrónicos y WhatsApp.
+                </p>
+                <p class="opacity-75" style="line-height: 1.8;">
+                    Los datos recolectados (nombres, teléfonos, correos electrónicos, información financiera y/o crediticia) serán utilizados exclusivamente para fines de intermediación inmobiliaria, estudio de capacidad de pago (con aseguradoras y centrales de riesgo como Datacrédito/Cifin), elaboración de contratos, y envío de publicidad relacionada con nuestro portafolio de servicios. El titular tiene derecho a conocer, actualizar, rectificar y suprimir sus datos personales enviando una solicitud a nuestro correo oficial.
+                </p>
+
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 2rem 0;">
+
+                <h4 class="fw-bold mb-3" style="color: var(--luxe-gold, #D4AF37);">4. Prevención de Fraudes y SARLAFT</h4>
+                <p class="opacity-75" style="line-height: 1.8;">
+                    En cumplimiento de la normativa expedida por la Superintendencia de Sociedades y la UIAF, CONSORIA Inmobiliaria está comprometida con la prevención del Lavado de Activos y la Financiación del Terrorismo (SARLAFT/SIPLAFT). Por lo anterior, todo cliente potencial que desee adquirir o arrendar un inmueble será sujeto a un proceso de conocimiento del cliente (KYC), revisión en listas restrictivas (Clinton, OFAC, ONU) y deberá certificar la licitud del origen de sus fondos.
+                </p>
+
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 2rem 0;">
+
+                <h4 class="fw-bold mb-3" style="color: var(--luxe-gold, #D4AF37);">5. Propiedad Intelectual y Uso del Portal</h4>
+                <p class="opacity-75" style="line-height: 1.8;">
+                    Todas las fotografías, videos, recorridos virtuales, logotipos, textos y códigos fuente publicados en <strong>www.consoria.com</strong> (o su dominio local) son propiedad exclusiva de CONSORIA Inmobiliaria o han sido autorizados expresamente por los propietarios de los inmuebles. Queda estrictamente prohibida la reproducción, copia, alteración o distribución de este material por parte de terceros o agencias de la competencia sin autorización previa y por escrito.
+                </p>
+
+                <p class="opacity-75" style="line-height: 1.8;">
+                    <em>Los valores de los cánones de arriendo, cuotas de administración y precios de venta anunciados en este portal están sujetos a cambios sin previo aviso y a la disponibilidad de los inmuebles al momento de la negociación.</em>
+                </p>
+                
+                <div class="mt-5 text-center">
+                    <p class="small text-muted mb-4">Última actualización: Septiembre de {{ 'now'|date('Y') }}</p>
+                    <a href="{{ path('home') }}" class="btn btn-outline-gold px-4 py-2 rounded-pill" style="border: 1px solid var(--luxe-gold); color: var(--luxe-gold);">
+                        <i class="fas fa-arrow-left me-2"></i>Volver al Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

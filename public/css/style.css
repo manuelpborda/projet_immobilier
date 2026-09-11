@@ -4,7 +4,7 @@
 
 :root {
     /* --- PALETA NOCTURNA DE LUJO (MIDNIGHT SLATE Y ORO) --- */
-    --luxe-black: #1A1D24;         /* Fondo Principal: Azul Noche/Carbón (Transmite confianza y calidez) */
+    --luxe-black: #1A1D24;         /* Fondo Principal: Azul Noche/Carbón */
     --luxe-card-bg: #232730;       /* Tarjetas: Más elevadas para una profundidad 3D real */
     --luxe-gold: #D4AF37;          /* Oro Metálico Institucional */
     --luxe-gold-bright: #F3E5AB;   /* Brillo de oro suave para hovers */
@@ -17,7 +17,7 @@
     
     /* Sombras Premium */
     --shadow-gold: 0 8px 25px rgba(212, 175, 55, 0.12);
-    --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.4); /* Sombra más suave para no ensuciar el fondo */
+    --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.4); 
 }
 
 /* 
@@ -131,7 +131,7 @@ nav a:hover {
 .search-section ol { list-style-type: decimal; }
 
 /* 
-   GRID DE PROPIEDADES: 3x3 DESKTOP
+   GRID DE PROPIEDADES
 */
 .grille-biens {
     display: grid;
@@ -184,9 +184,7 @@ nav a:hover {
     padding: 0;
     max-width: 100%;
 }
-.favorito-card {
-    background: transparent !important;
-}
+.favorito-card { background: transparent !important; }
 .favorito-img {
     max-width: 380px;
     width: 100%;
@@ -424,45 +422,21 @@ footer {
     font-size: 1.05em;
     line-height: 1.7em;
 }
-.detalle-bien-info h1 {
-    color: var(--luxe-gold);
-    margin-bottom: 0.5em;
-}
-.detalle-bien-info ul {
-    list-style: none;
-    padding: 0;
-}
-.detalle-bien-info li {
-    margin-bottom: 0.8em;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-    padding-bottom: 0.4em;
-}
+.detalle-bien-info h1 { color: var(--luxe-gold); margin-bottom: 0.5em; }
+.detalle-bien-info ul { list-style: none; padding: 0; }
+.detalle-bien-info li { margin-bottom: 0.8em; border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding-bottom: 0.4em; }
 
 /* =============================
    RESPONSIVE
    ============================= */
 @media (max-width: 1100px) {
-    .grille-biens {
-        grid-template-columns: repeat(2, 1fr); 
-        padding: 0 4vw;
-    }
+    .grille-biens { grid-template-columns: repeat(2, 1fr); padding: 0 4vw; }
     .footer-section { gap: 20px; }
 }
 @media (max-width: 700px) {
-    nav {
-        flex-direction: column;
-        gap: 8px;
-        padding: 16px 4vw;
-    }
-    .grille-biens {
-        grid-template-columns: 1fr; 
-        gap: 20px;
-        padding: 0 1vw;
-    }
-    .footer-section {
-        flex-direction: column;
-        gap: 10px;
-    }
+    nav { flex-direction: column; gap: 8px; padding: 16px 4vw; }
+    .grille-biens { grid-template-columns: 1fr; gap: 20px; padding: 0 1vw; }
+    .footer-section { flex-direction: column; gap: 10px; }
 }
 
 /* =============================
@@ -598,41 +572,45 @@ footer {
 }
 
 /* =========================================================
-   MODO CLARO (LIGHT MODE OVERRIDES)
+   MODO CLARO (LIGHT MODE OVERRIDES) - BLINDAJE CONTRA BOOTSTRAP
    ========================================================= */
+
 html.light-mode body {
-    background-color: #F8F9FA;
-    color: #212529;
+    background-color: #F5F7FA !important; /* Blanco Perla Premium */
+    color: #212529 !important;
 }
+
 html.light-mode nav, html.light-mode footer, html.light-mode .search-section,
 html.light-mode .footer-gallery-container, html.light-mode .footer-info-columns {
-    background: #FFFFFF;
-    color: #212529;
-    border-color: rgba(0, 0, 0, 0.1);
+    background-color: #FFFFFF !important;
+    color: #212529 !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
 }
-html.light-mode a, html.light-mode .footer-contact a { color: #495057; }
-html.light-mode nav a:hover { color: var(--luxe-gold); text-shadow: none; }
+
+html.light-mode a, html.light-mode .footer-contact a { color: #495057 !important; }
+html.light-mode nav a:hover { color: var(--luxe-gold) !important; text-shadow: none !important; }
 
 html.light-mode .carte-bien, html.light-mode .admin-table, 
 html.light-mode .register-container, html.light-mode .contact-info-block,
 html.light-mode .admin-table th, html.light-mode .tabla-estadisticas th {
-    background: #FFFFFF;
-    color: #212529;
-    border-color: rgba(0, 0, 0, 0.08);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    background-color: #FFFFFF !important;
+    color: #212529 !important;
+    border-color: rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important;
 }
-html.light-mode .admin-table th { background: #F8F9FA; border-bottom: 2px solid #DEE2E6; }
+html.light-mode .admin-table th { background-color: #F8F9FA !important; border-bottom: 2px solid #E9ECEF !important; }
 
 html.light-mode .search-section form select, html.light-mode .search-section form input[type="text"],
 html.light-mode .register-container input, html.light-mode .contact-form input, html.light-mode .contact-form textarea,
 html.light-mode .register-container select {
-    background: #FFFFFF;
-    color: #212529;
-    border: 1px solid #CED4DA;
+    background-color: #FFFFFF !important;
+    color: #212529 !important;
+    border: 1px solid #CED4DA !important;
 }
 
 .footer-gallery-container { overflow: hidden; width: 100%; border-top: 1px solid rgba(212, 175, 55, 0.2); }
-.footer-gallery { display: flex; width: fit-content; animation: scrollGallery 25s linear infinite; }
+.footer-gallery { display: flex; width: max-content; animation: scrollGallery 60s linear infinite; }
 .footer-gallery img { height: 100px; margin: 10px 24px; object-fit: contain; flex-shrink: 0; border-radius: 10px; transition: transform 0.3s ease; }
 .footer-gallery img:hover { transform: scale(1.05); }
 @keyframes scrollGallery { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -693,3 +671,101 @@ html.light-mode .register-container select {
     color: var(--luxe-white) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
+
+/* =========================================================
+   SECCIÓN EXPERIENCIAS (DINÁMICA OSCURO / CLARO)
+   ========================================================= */
+
+/* --- MODO OSCURO (Por Defecto) --- */
+.seccion-experiencias {
+    background: linear-gradient(135deg, var(--luxe-card-bg, #1C1E22) 0%, #111 100%);
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+.texto-adaptable { color: #FFFFFF; }
+.border-adaptable { border-color: rgba(255,255,255,0.05) !important; }
+
+.btn-yt-adaptable {
+    border: 1px solid var(--luxe-gold);
+    color: var(--luxe-gold);
+    background: transparent;
+}
+.btn-yt-adaptable:hover {
+    background-color: var(--luxe-gold) !important;
+    color: #111 !important;
+}
+
+/* --- MODO CLARO (El fondo gris elegante) --- */
+html.light-mode .seccion-experiencias {
+    background: linear-gradient(135deg, #E9ECEF 0%, #DEE2E6 100%) !important;
+    border-top: 1px solid rgba(212, 175, 55, 0.3) !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3) !important;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.03) !important;
+}
+
+/* Forzamos que los textos blancos se vuelvan grises oscuros para que se lean bien */
+html.light-mode .seccion-experiencias .texto-adaptable {
+    color: #2C313C !important; 
+}
+html.light-mode .seccion-experiencias .border-adaptable {
+    border-color: rgba(0,0,0,0.1) !important;
+}
+/* =========================================================
+   FOOTER DINÁMICO (OSCURO / CLARO)
+   ========================================================= */
+   
+/* --- MODO OSCURO (Por Defecto) --- */
+.footer-adaptable {
+    background: linear-gradient(180deg, #1C1E22 0%, #111 100%);
+}
+.footer-bottom-adaptable {
+    background: #0a0a0c;
+}
+.texto-footer-adaptable {
+    color: #FFFFFF;
+}
+.badge-adaptable {
+    background-color: rgba(255,255,255,0.1) !important;
+    color: #FFF !important;
+}
+
+/* --- MODO CLARO --- */
+html.light-mode .footer-adaptable {
+    background: #FFFFFF !important;
+}
+html.light-mode .footer-bottom-adaptable {
+    background: #F5F7FA !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+html.light-mode .texto-footer-adaptable {
+    color: #2C313C !important; /* Gris oscuro para contraste y lectura perfecta */
+}
+html.light-mode .badge-adaptable {
+    background-color: rgba(0,0,0,0.05) !important;
+    color: #2C313C !important;
+}
+/* =========================================================
+   FLECHAS DEL CARRUSEL (VISIBILIDAD Y DISEÑO PREMIUM)
+   ========================================================= */
+.seccion-experiencias .carousel-control-prev-icon,
+.seccion-experiencias .carousel-control-next-icon {
+    background-color: var(--luxe-gold, #D4AF37);
+    border-radius: 50%;
+    padding: 24px; /* Crea el círculo perfecto alrededor de la flecha */
+    background-size: 40%; /* Ajusta el tamaño del ícono dentro del círculo */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Efecto al pasar el cursor (Hover) */
+.seccion-experiencias .carousel-control-prev:hover .carousel-control-prev-icon,
+.seccion-experiencias .carousel-control-next:hover .carousel-control-next-icon {
+    transform: scale(1.15);
+    background-color: #111; /* Se vuelve negro/oscuro al interactuar */
+}
+
+/* Ajuste del hover específicamente para el Modo Claro */
+html.light-mode .seccion-experiencias .carousel-control-prev:hover .carousel-control-prev-icon,
+html.light-mode .seccion-experiencias .carousel-control-next:hover .carousel-control-next-icon {
+    background-color: #2C313C;
+} 

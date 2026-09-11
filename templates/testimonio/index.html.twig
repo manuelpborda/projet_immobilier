@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestión de Testimonios - CONSORIA{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    {# ENCABEZADO CON BOTÓN EN ESPAÑOL Y ALTO CONTRASTE #}
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h1 class="h2 fw-bold text-white mb-1"><i class="fas fa-star me-2" style="color: var(--luxe-gold, #D4AF37);"></i>Testimonios de Clientes</h1>
+            <p class="text-white opacity-75 small mb-0">Administra los comentarios y videos reales de entregas de inmuebles.</p>
+        </div>
+        
+        {# BOTÓN PRINCIPAL: DORADO CON TEXTO EN NEGRO (MÁXIMA VISIBILIDAD) #}
+        <a href="{{ path('app_testimonio_new') }}" class="btn fw-bold shadow-lg" style="background-color: var(--luxe-gold, #D4AF37); color: #111; border-radius: 25px; padding: 10px 24px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;">
+            <i class="fas fa-plus-circle me-2"></i> Crear Nuevo Testimonio
+        </a>
+    </div>
+
+    {# TABLA DE TESTIMONIOS #}
+    <div class="table-responsive rounded-4 shadow-lg p-3" style="background-color: #1c1e22; border: 1px solid rgba(212, 175, 55, 0.2);">
+        <table class="table table-dark table-hover align-middle mb-0">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--luxe-gold, #D4AF37); color: var(--luxe-gold, #D4AF37);">
+                    <th class="py-3">Cliente</th>
+                    <th class="py-3">Operación / Rol</th>
+                    <th class="py-3">Calificación</th>
+                    <th class="py-3">Video YouTube</th>
+                    <th class="py-3">Estado</th>
+                    <th class="py-3 text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for testimonio in testimonios %}
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td class="fw-bold text-white py-3">{{ testimonio.nombreCliente }}</td>
+                        <td class="text-white opacity-75 py-3">{{ testimonio.rolCliente ?: 'Sin especificar' }}</td>
+                        <td class="py-3" style="color: var(--luxe-gold, #D4AF37);">
+                            {% for i in 1..testimonio.calificacion %}★{% endfor %}
+                        </td>
+                        <td class="py-3">
+                            {% if testimonio.urlVideo %}
+                                <a href="{{ testimonio.urlVideo }}" target="_blank" class="badge bg-danger text-white text-decoration-none px-3 py-2 rounded-pill">
+                                    <i class="fab fa-youtube me-1"></i> Ver Video
+                                </a>
+                            {% else %}
+                                <span class="text-white opacity-50 small">Sin video</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3">
+                            {% if testimonio.activo %}
+                                <span class="badge bg-success px-3 py-2 rounded-pill">Publicado</span>
+                            {% else %}
+                                <span class="badge bg-secondary px-3 py-2 rounded-pill">Oculto</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 text-end">
+                            <a href="{{ path('app_testimonio_show', {'id': testimonio.id}) }}" class="btn btn-sm btn-outline-info me-1 rounded-pill px-3" title="Ver detalle"><i class="fas fa-eye me-1"></i> Ver</a>
+                            <a href="{{ path('app_testimonio_edit', {'id': testimonio.id}) }}" class="btn btn-sm rounded-pill px-3 fw-bold" style="background-color: var(--luxe-gold, #D4AF37); color: #111;" title="Editar"><i class="fas fa-edit me-1"></i> Editar</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-white opacity-75">
+                            <i class="fas fa-star fa-3x mb-3" style="color: #444;"></i><br>
+                            Aún no has creado ningún testimonio.<br>
+                            <a href="{{ path('app_testimonio_new') }}" class="btn btn-sm mt-3 fw-bold" style="background-color: var(--luxe-gold, #D4AF37); color: #111; border-radius: 20px;">
+                                + Agregar el primero
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

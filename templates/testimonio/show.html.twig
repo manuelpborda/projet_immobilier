@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Testimonio{% endblock %}
+
+{% block body %}
+    <h1>Testimonio</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ testimonio.id }}</td>
+            </tr>
+            <tr>
+                <th>NombreCliente</th>
+                <td>{{ testimonio.nombreCliente }}</td>
+            </tr>
+            <tr>
+                <th>RolCliente</th>
+                <td>{{ testimonio.rolCliente }}</td>
+            </tr>
+            <tr>
+                <th>Mensaje</th>
+                <td>{{ testimonio.mensaje }}</td>
+            </tr>
+            <tr>
+                <th>Calificacion</th>
+                <td>{{ testimonio.calificacion }}</td>
+            </tr>
+            <tr>
+                <th>UrlVideo</th>
+                <td>{{ testimonio.urlVideo }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{{ testimonio.activo ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_testimonio_index') }}">back to list</a>
+
+    <a href="{{ path('app_testimonio_edit', {'id': testimonio.id}) }}">edit</a>
+
+    {{ include('testimonio/_delete_form.html.twig') }}
+{% endblock %}

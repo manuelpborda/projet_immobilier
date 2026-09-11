@@ -3,34 +3,158 @@
 {% block title %}Comprar Inmueble - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
-<div class="section-texto">
-    <h1>Compra tu inmueble en Colombia</h1>
-    <p>
-        Encuentra tu próxima casa, apartamento, oficina o lote en Bogotá, Medellín, Cartagena, Villavicencio y más.<br>
-        En <strong>CONSORIA Inmobiliaria</strong> te asesoramos de principio a fin para que tu compra sea segura y sin sorpresas.
-    </p>
+{# === ESTILOS ESPECÍFICOS Y ADAPTABLES PARA ESTA PÁGINA === #}
+<style>
+    .hero-buy {
+        background: linear-gradient(180deg, var(--luxe-black, #111) 0%, rgba(28, 30, 34, 0.95) 100%);
+        border-bottom: 2px solid var(--luxe-gold, #D4AF37);
+        color: #E4E7EC;
+    }
+    .card-buy {
+        background: var(--luxe-card-bg, #1C1E22);
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        color: #E4E7EC;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-buy:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+        border-color: rgba(212, 175, 55, 0.4);
+    }
+    .texto-muteado { opacity: 0.85; }
+    
+    /* MODO CLARO */
+    html.light-mode .hero-buy {
+        background: linear-gradient(180deg, #F5F7FA 0%, #FFFFFF 100%) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .card-buy {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .card-buy:hover {
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1) !important;
+    }
+    html.light-mode .texto-muteado {
+        color: #495057 !important;
+        opacity: 1;
+    }
+    .icon-gold { color: var(--luxe-gold, #D4AF37); font-size: 1.5rem; }
+</style>
 
-    <h2>¿Por qué comprar con nosotros?</h2>
-    <ul>
-        <li>Acompañamiento personalizado por expertos inmobiliarios</li>
-        <li>Inmuebles con documentos verificados y listos para negociar</li>
-        <li>Asesoría legal y financiera sin costo adicional</li>
-        <li>Opciones de financiación y apoyo en trámites notariales</li>
-        <li>Negociación directa y transparente</li>
-    </ul>
-
-    <a href="{{ path('home', { tipoTransaccion: 'venta' }) }}" class="btn-warning" style="margin-top: 1em;">Ver propiedades en venta</a>
-
-    <h3>¿Tienes preguntas? Contáctanos:</h3>
-    <ul>
-        <li><strong>Teléfono/WhatsApp:</strong> <a href="https://wa.me/573124504982" target="_blank" style="color: var(--luxe-yellow);">+57 312 4504982</a></li>
-        <li><strong>Oficina principal:</strong> Cra 7D # 151-42, oficina 201 Bogotá</li>
-        <li><strong>Email:</strong> <a href="mailto:consoriainmobiliaria@gmail.com" style="color: var(--luxe-yellow);">consoriainmobiliaria@gmail.com</a></li>
-    </ul>
+{# ========================================== #}
+{# HERO SECTION (Encabezado Premium)          #}
+{# ========================================== #}
+<div class="py-5 mb-5 shadow-sm hero-buy">
+    <div class="container text-center py-5">
+        <span class="text-uppercase fw-bold small d-block mb-3" style="letter-spacing: 2px; color: var(--luxe-gold, #D4AF37);">Invierte en tu futuro</span>
+        <h1 class="display-4 fw-bold mb-4" style="color: var(--luxe-gold, #D4AF37); letter-spacing: -1px;">
+            Compra tu inmueble en Colombia
+        </h1>
+        <p class="lead mx-auto texto-muteado mb-5" style="max-width: 800px; font-weight: 400; line-height: 1.8;">
+            Encuentra tu próxima casa, apartamento, oficina o lote en <strong>Bogotá, Medellín, Cartagena, Villavicencio y más.</strong> 
+            En <span style="color: var(--luxe-gold);">CONSORIA Inmobiliaria</span> te asesoramos de principio a fin para que tu compra sea segura y sin sorpresas.
+        </p>
+        <a href="{{ path('home') }}" class="btn btn-lg fw-bold px-5 py-3 rounded-pill shadow-lg text-uppercase" style="background: linear-gradient(135deg, var(--luxe-gold), #AA8623); color: #111; letter-spacing: 1px;">
+            <i class="fas fa-search me-2"></i> Ver propiedades en venta
+        </a>
+    </div>
 </div>
 
-{# Imagen centrada, fuera de section-texto, con límite de tamaño #}
-<div style="text-align: center; margin: 2em auto;">
-    <img src="assets/img/static_pages/buy.png" alt="Propiedad 1" class="img-info" style="max-width: 700px;">
+<div class="container mb-5 pb-4">
+    <div class="row gx-5 align-items-center mb-5 pb-4">
+        
+        {# ========================================== #}
+        {# COLUMNA IZQ: Razones para comprar          #}
+        {# ========================================== #}
+        <div class="col-lg-6 mb-5 mb-lg-0">
+            <h2 class="h3 fw-bold mb-4" style="color: var(--luxe-gold, #D4AF37);">¿Por qué comprar con nosotros?</h2>
+            
+            <div class="d-flex mb-4">
+                <div class="me-3 mt-1"><i class="fas fa-user-tie icon-gold"></i></div>
+                <div>
+                    <h5 class="fw-bold mb-1">Acompañamiento personalizado</h5>
+                    <p class="texto-muteado small mb-0">Guiado por expertos inmobiliarios capacitados.</p>
+                </div>
+            </div>
+            
+            <div class="d-flex mb-4">
+                <div class="me-3 mt-1"><i class="fas fa-file-signature icon-gold"></i></div>
+                <div>
+                    <h5 class="fw-bold mb-1">Inmuebles verificados</h5>
+                    <p class="texto-muteado small mb-0">Documentación al día y listos para negociar.</p>
+                </div>
+            </div>
+            
+            <div class="d-flex mb-4">
+                <div class="me-3 mt-1"><i class="fas fa-balance-scale icon-gold"></i></div>
+                <div>
+                    <h5 class="fw-bold mb-1">Asesoría legal y financiera</h5>
+                    <p class="texto-muteado small mb-0">Protegemos tu inversión sin costo adicional.</p>
+                </div>
+            </div>
+            
+            <div class="d-flex mb-4">
+                <div class="me-3 mt-1"><i class="fas fa-coins icon-gold"></i></div>
+                <div>
+                    <h5 class="fw-bold mb-1">Opciones de financiación</h5>
+                    <p class="texto-muteado small mb-0">Apoyo integral en trámites notariales y créditos.</p>
+                </div>
+            </div>
+            
+            <div class="d-flex">
+                <div class="me-3 mt-1"><i class="fas fa-handshake icon-gold"></i></div>
+                <div>
+                    <h5 class="fw-bold mb-1">Negociación directa</h5>
+                    <p class="texto-muteado small mb-0">Procesos 100% transparentes y seguros.</p>
+                </div>
+            </div>
+        </div>
+        
+        {# ========================================== #}
+        {# COLUMNA DER: Imagen representativa         #}
+        {# ========================================== #}
+        <div class="col-lg-6 text-center">
+            <div class="rounded-4 overflow-hidden shadow-lg" style="border: 1px solid rgba(212, 175, 55, 0.3);">
+                {# Cambia 'fondo2.jpg' por el nombre de la imagen de tu ciudad que tenías antes si prefieres otra #}
+                <img src="{{ asset('assets/img/fondo2.jpg') }}" alt="Inmuebles en Colombia" class="w-100" style="object-fit: cover; min-height: 400px;">
+            </div>
+        </div>
+    </div>
+
+    {# ========================================== #}
+    {# SECCIÓN DE CONTACTO (Tarjetas)             #}
+    {# ========================================== #}
+    <div class="text-center mt-5 pt-5" style="border-top: 1px solid rgba(212, 175, 55, 0.2);">
+        <h3 class="fw-bold mb-5" style="color: var(--luxe-gold, #D4AF37);">¿Tienes preguntas? Contáctanos</h3>
+        
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="card-buy p-4 rounded-4 h-100 text-center">
+                    <i class="fas fa-phone-alt fa-2x mb-3" style="color: var(--luxe-gold, #D4AF37);"></i>
+                    <h6 class="fw-bold mb-2">Teléfono/WhatsApp</h6>
+                    <a href="https://wa.me/573124504982" target="_blank" class="text-decoration-none texto-muteado small d-block">+57 312 4504982</a>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card-buy p-4 rounded-4 h-100 text-center">
+                    <i class="fas fa-map-marker-alt fa-2x mb-3" style="color: var(--luxe-gold, #D4AF37);"></i>
+                    <h6 class="fw-bold mb-2">Oficina Principal</h6>
+                    <p class="texto-muteado small mb-0">Sede Norte, Barrio Cedritos<br>Bogotá D.C. (Cita previa)</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card-buy p-4 rounded-4 h-100 text-center">
+                    <i class="fas fa-envelope fa-2x mb-3" style="color: var(--luxe-gold, #D4AF37);"></i>
+                    <h6 class="fw-bold mb-2">Email Directo</h6>
+                    <a href="mailto:consoriainmobiliaria@gmail.com" class="text-decoration-none texto-muteado small d-block">consoriainmobiliaria@gmail.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

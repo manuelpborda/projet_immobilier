@@ -10,13 +10,13 @@
     <div class="container">
         <div class="text-center mb-5">
             <h1 class="display-4 fw-bold mb-3">Encuentra tu Inmueble Ideal</h1>
-            <p class="lead opacity-75">Explora miles de propiedades exclusivas en Colombia y Francia</p>
+            <p class="lead opacity-75">Explora miles de propiedades exclusivas en Colombia </p>
         </div>
 
         <div class="premium-search-card rounded-4 p-4 p-md-5 mx-auto shadow-lg" style="max-width: 1100px;">
             <form method="get" action="{{ path('home') }}" class="row g-4 align-items-end">
                 <div class="col-md-3">
-                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-home me-2 text-primary"></i>Tipo de Inmueble</label>
+                    <label class="form-label fw-bold search-label small"><i class="fas fa-home me-2 text-primary"></i>Tipo de Inmueble</label>
                     <select name="typeDeBien" class="form-select custom-input shadow-sm">
                         <option value="">Todos los tipos</option>
                         {% for tipo in tiposDeBien %}
@@ -30,7 +30,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-handshake me-2 text-primary"></i>Transacción</label>
+                    <label class="form-label fw-bold search-label small"><i class="fas fa-handshake me-2 text-primary"></i>Transacción</label>
                     <select name="tipoTransaccion" class="form-select custom-input shadow-sm">
                         <option value="">Todas las operaciones</option>
                         <option value="venta" {% if app.request.get('tipoTransaccion') == 'venta' %}selected{% endif %}>Venta</option>
@@ -39,7 +39,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-city me-2 text-primary"></i>Ciudad</label>
+                    <label class="form-label fw-bold search-label small"><i class="fas fa-city me-2 text-primary"></i>Ciudad</label>
                     <select name="ville" class="form-select custom-input shadow-sm">
                         <option value="">Todas las ciudades</option>
                         {% for ciudad in ciudadesDisponibles %}
@@ -48,12 +48,12 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Dirección / Barrio</label>
+                    <label class="form-label fw-bold search-label small"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Dirección / Barrio</label>
                     <input type="text" name="adresse" class="form-control custom-input shadow-sm" placeholder="Ej. Chapinero..." value="{{ app.request.get('adresse') }}">
                 </div>
                 
                 <div class="col-md-3">
-                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-tags me-2 text-primary"></i>Presupuesto</label>
+                    <label class="form-label fw-bold search-label small"><i class="fas fa-tags me-2 text-primary"></i>Presupuesto</label>
                     <select name="rangoPrecio" class="form-select custom-input shadow-sm">
                         <option value="">Cualquier precio</option>
                         <option value="1-100000000" {% if app.request.get('rangoPrecio') == '1-100000000' %}selected{% endif %}>Hasta $100 Millones</option>
@@ -65,7 +65,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-ruler-combined me-2 text-primary"></i>Superficie</label>
+                    <label class="form-label fw-bold search-label small"><i class="fas fa-ruler-combined me-2 text-primary"></i>Superficie</label>
                     <select name="rangoSuperficie" class="form-select custom-input shadow-sm">
                         <option value="">Cualquier tamaño</option>
                         <option value="1-49" {% if app.request.get('rangoSuperficie') == '1-49' %}selected{% endif %}>Menos de 50 m²</option>
@@ -76,7 +76,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label fw-bold opacity-75 small"><i class="fas fa-paint-roller me-2 text-primary"></i>Estado</label>
+                    <label class="form-label fw-bold search-label small"><i class="fas fa-paint-roller me-2 text-primary"></i>Estado</label>
                     <select name="etatDuBien" class="form-select custom-input shadow-sm">
                         <option value="">Cualquier estado</option>
                         {% for etat in estadosDeBien %}
@@ -112,8 +112,10 @@
             <div class="col">
                 <div class="card h-100 shadow-sm border-0 property-card overflow-hidden" style="border-radius: 15px;">
                     
-                    {# IMAGEN CON BADGE Y CORAZÓN #}
-                    <div class="position-relative">
+                    {# ============================================== #}
+                    {# CONTENEDOR DE IMAGEN (CON OVERFLOW HIDDEN)     #}
+                    {# ============================================== #}
+                    <div class="position-relative" style="overflow: hidden;">
                         {% set fotoPrincipal = 'https://placehold.co/600x400/e9ecef/6c757d?text=Sin+Imagen' %}
                         {% if bien.foto %}
                             {% set fotosArray = bien.foto|split(',') %}
@@ -121,16 +123,29 @@
                                 {% set fotoPrincipal = asset('uploads/bienes/' ~ fotosArray[0]) %}
                             {% endif %}
                         {% endif %}
-                        <img src="{{ fotoPrincipal }}" alt="Inmueble en {{ bien.ville }}" class="card-img-top" loading="lazy" style="object-fit: cover; height: 250px;">
                         
-                        {# =============================================================== #}
-                        {# === BOTÓN DE FAVORITOS (CORAZÓN FLOTANTE - SIEMPRE VISIBLE) === #}
-                        {# =============================================================== #}
+                        {# Imagen #}
+                        <img src="{{ fotoPrincipal }}" alt="Inmueble en {{ bien.ville }}" class="card-img-top" loading="lazy" style="object-fit: cover; height: 250px; {% if bien.vendido %}filter: grayscale(80%) brightness(0.7); transition: all 0.3s ease;{% endif %}">
+                        
+                        {# SELLO DE VENDIDO / ARRENDADO (Cortado por el overflow:hidden del contenedor) #}
+                        {% if bien.vendido %}
+                            <div class="position-absolute top-50 start-50 text-center" style="z-index: 15; transform: translate(-50%, -50%) rotate(-35deg); width: 160%; pointer-events: none;">
+                                <div class="text-white fw-bold py-2 text-uppercase shadow-lg" style="background: rgba(220, 53, 69, 0.95); letter-spacing: 5px; font-size: 1.3rem; border-top: 2px solid rgba(255,255,255,0.8); border-bottom: 2px solid rgba(255,255,255,0.8);">
+                                    {% if bien.tipoTransaccion == 'arriendo' %}
+                                        ARRENDADO
+                                    {% else %}
+                                        VENDIDO
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {# BOTÓN FAVORITOS #}
                         <div class="position-absolute top-0 start-0 m-3" style="z-index: 10;">
                             {% if app.user %}
                                 <form method="post" action="{{ path('agregar_favorito', {'id': bien.id}) }}">
-                                    <button type="submit" class="btn btn-light rounded-circle shadow-lg p-0 d-flex justify-content-center align-items-center border-0" style="width: 42px; height: 42px; background-color: white;" title="Guardar en mis Favoritos">
-                                        <i class="fas fa-heart text-danger fs-5"></i>
+                                    <button type="submit" class="btn btn-light rounded-circle shadow-lg p-0 d-flex justify-content-center align-items-center border-0" style="width: 42px; height: 42px; background-color: white;" title="Guardar en mis Favoritos" {% if bien.vendido %}disabled{% endif %}>
+                                        <i class="fas fa-heart {% if bien.vendido %}text-secondary{% else %}text-danger{% endif %} fs-5"></i>
                                     </button>
                                 </form>
                             {% else %}
@@ -140,15 +155,17 @@
                             {% endif %}
                         </div>
 
-                        {# Badge de Venta/Arriendo #}
-                        {% if bien.tipoTransaccion %}
-                            <div class="position-absolute top-0 end-0 m-3">
-                                <span class="badge {% if bien.tipoTransaccion == 'venta' %}bg-primary{% elseif bien.tipoTransaccion == 'arriendo' %}bg-success{% else %}bg-info{% endif %} fs-6 shadow px-3 py-2 rounded-pill">
+                        {# BADGE DE TRANSACCIÓN (Solo si NO está vendido) #}
+                        {% if bien.tipoTransaccion and not bien.vendido %}
+                            <div class="position-absolute top-0 end-0 m-3" style="z-index: 10;">
+                                {% set bgTransaccion = 'rgba(28, 30, 34, 0.9)' %}
+                                {% if bien.tipoTransaccion == 'venta' %}{% set bgTransaccion = 'rgba(212, 175, 55, 0.9)' %}{% endif %}
+                                <span class="badge fs-6 shadow px-3 py-2 rounded-pill" style="background-color: {{ bgTransaccion }}; color: {% if bien.tipoTransaccion == 'venta' %}#111{% else %}var(--luxe-gold){% endif %}; border: 1px solid var(--luxe-gold); backdrop-filter: blur(5px);">
                                     {{ bien.tipoTransaccion|capitalize }}
                                 </span>
                             </div>
                         {% endif %}
-                    </div>
+                    </div> {# <-- FIN DEL CONTENEDOR DE IMAGEN #}
                     
                     {# CUERPO DE LA TARJETA #}
                     <div class="card-body d-flex flex-column p-4 bg-body-tertiary">
@@ -167,8 +184,9 @@
                             <a href="{{ path('bien_show', {'id': bien.id}) }}" class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-4 py-2">Ver detalle</a>
                         </div>
                     </div>
-                </div>
-            </div>
+
+                </div> {# <-- FIN DE LA TARJETA (CARD) #}
+            </div> {# <-- FIN DE LA COLUMNA (COL) #}
         {% else %}
             <div class="col-12 text-center py-5">
                 <i class="fas fa-search fa-3x text-muted mb-3 opacity-50"></i>
@@ -183,6 +201,91 @@
         {{ knp_pagination_render(bienes) }}
     </div>
 </main>
+
+{# ========================================================================= #}
+{# === SECCIÓN UX: TESTIMONIOS Y CASOS DE ÉXITO (DINÁMICO CON VIDEO) === #}
+{# ========================================================================= #}
+{% if testimonios|length > 0 %}
+<section class="py-5 my-5 shadow-sm seccion-experiencias">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="text-uppercase fw-bold small d-block mb-2" style="letter-spacing: 2px; color: var(--luxe-gold, #D4AF37);">Experiencias Reales</span>
+            <h2 class="h2 fw-bold texto-adaptable">Lo que dicen nuestros clientes</h2>
+            <div class="mt-3 mx-auto" style="width: 60px; height: 3px; background-color: var(--luxe-gold, #D4AF37);"></div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div id="testimoniosCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+                    
+                    {# Indicadores dinámicos #}
+                    <div class="carousel-indicators" style="bottom: -50px;">
+                        {% for testimonio in testimonios %}
+                            <button type="button" data-bs-target="#testimoniosCarousel" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %}" style="width: 10px; height: 10px; border-radius: 50%; background-color: var(--luxe-gold, #D4AF37);"></button>
+                        {% endfor %}
+                    </div>
+
+                    <div class="carousel-inner text-center px-2 px-md-5">
+                        {% for testimonio in testimonios %}
+                            <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="10000">
+                                <div class="row align-items-center justify-content-center">
+                                    
+                                    {# Video o Avatar #}
+                                    {% if testimonio.urlVideo %}
+                                        <div class="col-md-6 mb-4 mb-md-0">
+                                            {% set videoId = testimonio.urlVideo|replace({'https://www.youtube.com/watch?v=': '', 'https://youtu.be/': ''}) %}
+                                            <div class="ratio ratio-16x9 shadow-lg rounded-4 overflow-hidden" style="border: 2px solid rgba(212, 175, 55, 0.3);">
+                                                <iframe src="https://www.youtube.com/embed/{{ videoId }}" title="Testimonio Consoria" allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-12 mb-4">
+                                            <img src="https://ui-avatars.com/api/?name={{ testimonio.nombreCliente|url_encode }}&background=D4AF37&color=111&size=100" alt="{{ testimonio.nombreCliente }}" class="rounded-circle shadow" style="border: 3px solid rgba(212, 175, 55, 0.5); padding: 5px;">
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {# TEXTO DEL TESTIMONIO #}
+                                    <div class="{% if testimonio.urlVideo %}col-md-6 text-md-start{% else %}col-12{% endif %}">
+                                        <div class="mb-3">
+                                            {% for i in 1..5 %}
+                                                <i class="fas fa-star" style="color: {% if i <= testimonio.calificacion %}var(--luxe-gold, #D4AF37){% else %}#444{% endif %};"></i>
+                                            {% endfor %}
+                                        </div>
+                                        <h4 class="fw-light fst-italic mb-4 texto-adaptable" style="line-height: 1.6; font-size: 1.1rem;">
+                                            "{{ testimonio.mensaje }}"
+                                        </h4>
+                                        <h6 class="fw-bold text-uppercase mb-0" style="color: var(--luxe-gold, #D4AF37);">{{ testimonio.nombreCliente }}</h6>
+                                        <p class="small opacity-50 texto-adaptable">{{ testimonio.rolCliente }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {# Controles #}
+                    <button class="carousel-control-prev d-none d-md-flex" type="button" data-bs-target="#testimoniosCarousel" data-bs-slide="prev" style="width: 5%;">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next d-none d-md-flex" type="button" data-bs-target="#testimoniosCarousel" data-bs-slide="next" style="width: 5%;">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
+                </div>
+                
+                {# BOTÓN DE YOUTUBE #}
+                <div class="text-center mt-5 pt-4 border-top border-adaptable">
+                    <p class="opacity-75 mb-3 small texto-adaptable">¿Quieres ver más entregas de inmuebles y clientes satisfechos?</p>
+                    <a href="https://www.youtube.com/@consorciocomercialinmobili559" target="_blank" rel="noopener noreferrer" class="btn rounded-pill px-4 py-2 btn-yt-adaptable" style="transition: all 0.3s ease;">
+                        <i class="fab fa-youtube me-2" style="color: #ff0000;"></i> Visita nuestro canal de YouTube
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
 
 {# ========================================================================= #}
 {# === SECCIÓN UX: CONVENIOS === #}
@@ -222,6 +325,16 @@
         border: 1px solid rgba(255, 255, 255, 0.05);
         box-shadow: 0 1rem 3rem rgba(0,0,0,0.5) !important;
     }
+    
+    /* === CORRECCIÓN DE CONTRASTE PARA EL FILTRO === */
+    .search-label {
+        color: #111 !important; /* Oscuro para contraste sobre gris claro */
+        opacity: 0.85;
+    }
+    html.dark-mode .search-label, body.dark-mode .search-label, :root.dark-mode .search-label, [data-bs-theme="dark"] .search-label {
+        color: #fff !important; /* Blanco si entran al modo oscuro */
+    }
+
     .custom-input { background-color: var(--bs-body-bg); border: 1px solid var(--bs-border-color); color: var(--bs-body-color); border-radius: 8px; padding: 0.6rem 1rem; }
     .custom-input:focus { border-color: var(--bs-primary); box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25); }
     .property-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }

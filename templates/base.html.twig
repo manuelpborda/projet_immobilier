@@ -14,7 +14,7 @@
     <title>{% block title %}CONSORIA Inmobiliaria{% endblock %}</title>
     
     {# === SEO: Meta Descripción Dinámica === #}
-    <meta name="description" content="{% block meta_description %}Encuentra las mejores casas y apartamentos en venta y arriendo con Consoria Inmobiliaria en Colombia y Francia. Descubre propiedades exclusivas adaptadas a tus necesidades.{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Encuentra las mejores casas y apartamentos en venta y arriendo con Consoria Inmobiliaria en Colombia. Descubre propiedades exclusivas adaptadas a tus necesidades.{% endblock %}">
      
     {# === SEO & RESPONSIVE === #}
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -82,8 +82,10 @@
                     <a href="{{ path('admin_estudios_index') }}" class="text-success fw-bold">
                         <i class="fas fa-file-invoice-dollar me-1"></i> Estudios
                     </a>
+                    <a href="{{ path('app_testimonio_index') }}" class="text-gold fw-bold">
+                        <i class="fas fa-star me-1"></i> Testimonios
+                    </a>
                     
-                    {# === BOTÓN PARA QUE TU HERMANO CREE INMUEBLES === #}
                     {# === BOTÓN PARA QUE TU HERMANO CREE INMUEBLES === #}
                     <a href="{{ path('proprietaire_bien_nuevo') }}" class="btn btn-sm ms-2 fw-bold shadow-sm" style="background-color: var(--luxe-gold, #D4AF37); color: #111; border-radius: 20px; padding: 6px 15px;">
                         <i class="fas fa-plus-circle me-1"></i> Nuevo Inmueble
@@ -104,6 +106,7 @@
                     <a href="{{ path('proprietaire_dashboard') }}">Panel Propietario</a>
                     <a href="{{ path('proprietaire_bien_nuevo') }}">Publicar Bien</a>
                     <a href="{{ path('proprietaire_documentos') }}" class="text-gold fw-bold"><i class="fas fa-folder-open me-1"></i> Mis Documentos</a>
+                    <a href="{{ path('app_testimonio_index') }}" class="text-gold fw-bold"><i class="fas fa-star me-1"></i> Testimonios</a>
                     <a href="{{ path('contact') }}">Contacto</a>
 
                     {# ZONA DE PERFIL RESALTADA #}
@@ -149,8 +152,7 @@
         </div>
     </nav>
 
-    <div class="container mt-4 min-vh-100"><div class="container mt-4 mb-5 flex-grow-1">
-    
+    <main class="container mt-4 mb-5 flex-grow-1">
         {# === GESTIÓN DE MENSAJES FLASH === #}
         {% for label, messages in app.flashes %}
             {% for msg in messages %}
@@ -162,72 +164,106 @@
         {% endfor %}
 
         {% block body %}{% endblock %}
-    </div>
+    </main>
 
-<footer class="mt-auto" style="background: linear-gradient(180deg, #1C1E22 0%, #111 100%); border-top: 2px solid var(--luxe-gold, #D4AF37); padding-top: 2rem;">
-    <div class="footer-gallery-container mb-4" style="position: relative; overflow: hidden; min-height: 100px;">
+<footer class="mt-auto footer-adaptable" style="border-top: 2px solid var(--luxe-gold, #D4AF37); padding-top: 2rem;">
+    {# GALERÍA ANIMADA (Bucle infinito 4K-Ready) #}
+    <div class="footer-gallery-container mb-5" style="position: relative; overflow: hidden; min-height: 100px;">
         <div class="footer-gallery">
-            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 1" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 2" loading="lazy">
+            {# --- GRUPO 1 --- #}
+            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
             <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
             <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 5" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 6" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 7" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img9.webp') }}" alt="Galería 8" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img10.webp') }}" alt="Galería 1 duplicado" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 2 duplicado" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 3 duplicado" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img9.webp') }}" alt="Galería 4 duplicado" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 5 duplicado" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 6 duplicado" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 7 duplicado" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
+            
+            {# --- GRUPO 2 --- #}
+            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
+
+            {# --- GRUPO 3 --- #}
+            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
+
+            {# --- GRUPO 4 (Blindaje para pantallas gigantes) --- #}
+            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
+            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
         </div>
     </div>
 
-    <div class="container pb-4">
-        <div class="row text-center text-md-start g-4">
-            {# OFICINA BOGOTÁ (CORREGIDA) #}
-            <div class="col-md-4">
-                <h6 class="text-gold fw-bold mb-3"><i class="fas fa-map-marker-alt me-2"></i>Oficina en Colombia</h6>
-                <p class="text-white opacity-75 mb-1">Cra 7D # 151-42, Oficina 201</p>
-                <p class="text-white opacity-75 mb-1">Bogotá, D.C.</p>
-                {% if app.request.attributes.get('_route') == 'home' %}
-                    <p id="clima-bogota" class="small text-muted mt-2"><i class="fas fa-cloud-sun me-1"></i> Clima: cargando...</p>
-                {% endif %}
+    {# INFORMACIÓN DE CONTACTO (DISEÑO LUXE CENTRADO) #}
+    <div class="container pb-5">
+        <div class="row justify-content-center text-center g-4 mx-auto" style="max-width: 1000px;">
+            
+            {# OFICINA BOGOTÁ #}
+            <div class="col-md-4 footer-col-luxe">
+                <h6 class="fw-bold mb-3 text-uppercase" style="color: var(--luxe-gold, #D4AF37); letter-spacing: 1px;">
+                    <i class="fas fa-map-marker-alt me-2"></i>Sede Colombia
+                </h6>
+                <p class="texto-footer-adaptable opacity-75 mb-1 small">Atención presencial (Zona Norte)</p>
+                <p class="texto-footer-adaptable opacity-75 mb-1 small">Barrio Cedritos, Bogotá D.C.</p>
+                <p class="texto-footer-adaptable opacity-50 mb-0 mt-2 small" style="font-style: italic;">* Atención exclusiva con cita previa</p>
             </div>
             
-            {# OFICINA PARÍS (PROYECTO DE EXPANSIÓN) #}
-            <div class="col-md-4">
-                <h6 class="text-gold fw-bold mb-3 d-flex align-items-center justify-content-center justify-content-md-start">
-                    <i class="fas fa-globe-europe me-2"></i>Oficina en Francia 
-                    <span class="badge bg-secondary ms-2" style="font-size: 0.65em; letter-spacing: 1px;">PROXIMAMENTE</span>
+            {# OFICINA PARÍS #}
+            <div class="col-md-4 footer-col-luxe">
+                <h6 class="fw-bold mb-3 text-uppercase d-flex align-items-center justify-content-center" style="color: var(--luxe-gold, #D4AF37); letter-spacing: 1px;">
+                    <i class="fas fa-globe-europe me-2"></i>Sede Francia
                 </h6>
-                <p class="text-white opacity-50 mb-1" style="font-style: italic;">Expansión internacional en desarrollo.</p>
-                <p class="text-white opacity-50 mb-1" style="font-style: italic;">Próximamente en París, Europa.</p>
-                {% if app.request.attributes.get('_route') == 'home' %}
-                    <p id="clima-paris" class="small text-muted mt-2 opacity-50"><i class="fas fa-cloud-sun me-1"></i> Clima: cargando...</p>
-                {% endif %}
+                <p class="texto-footer-adaptable opacity-50 mb-1 small" style="font-style: italic;">Expansión internacional en desarrollo.</p>
+                <p class="texto-footer-adaptable opacity-50 mb-1 small" style="font-style: italic;">Próximamente en París, Europa.</p>
             </div>
             
             {# CONTACTO #}
-            <div class="col-md-4 text-md-end">
-                <h6 class="text-gold fw-bold mb-3"><i class="fas fa-headset me-2"></i>Habla con un agente</h6>
-                <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success rounded-pill px-4 py-2">
-                    <i class="fab fa-whatsapp me-2 fa-lg"></i> Contactar por WhatsApp
+            <div class="col-md-4">
+                <h6 class="fw-bold mb-3 text-uppercase" style="color: var(--luxe-gold, #D4AF37); letter-spacing: 1px;">
+                    <i class="fas fa-headset me-2"></i>Atención VIP
+                </h6>
+                <p class="texto-footer-adaptable opacity-75 mb-3 small">Asesoría inmobiliaria personalizada.</p>
+                <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer" class="btn btn-sm rounded-pill px-4 py-2" style="background: rgba(18, 140, 126, 0.15); border: 1px solid #128C7E; color: #25D366; transition: all 0.3s ease;" onmouseover="this.style.background='#128C7E'; this.style.color='#fff';" onmouseout="this.style.background='rgba(18, 140, 126, 0.15)'; this.style.color='#25D366';">
+                    <i class="fab fa-whatsapp me-2 fa-lg"></i> Contactar Asesor
                 </a>
             </div>
         </div>
     </div>
 
-    <div class="footer-bottom text-center py-3" style="background: #000; border-top: 1px solid rgba(212, 175, 55, 0.1);">
-        <p class="mb-0 small text-white opacity-50">
+    {# COPYRIGHT #}
+    <div class="footer-bottom-adaptable text-center py-4" style="border-top: 1px solid rgba(212, 175, 55, 0.1);">
+        <p class="mb-0 small texto-footer-adaptable opacity-75" style="letter-spacing: 0.5px;">
             &copy; {{ 'now'|date('Y') }} Consoria Inmobiliaria. Todos los derechos reservados. | 
-            <a href="{{ path('mentions_legales') }}" class="text-white text-decoration-none hover-gold">Aviso Legal y Términos de Uso</a>
+            <a href="{{ path('mentions_legales') }}" class="texto-footer-adaptable text-decoration-none fw-bold" style="transition: color 0.3s ease;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color=''">Aviso Legal y Términos de Uso</a>
         </p>
     </div>
 </footer>
-
+<style>
+    /* Estilo para los separadores sutiles en pantallas grandes */
+    @media (min-width: 768px) {
+        .footer-col-luxe {
+            border-right: 1px solid rgba(212, 175, 55, 0.15);
+        }
+    }
+</style>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ asset('js/darkmode_toggle.js') }}"></script>

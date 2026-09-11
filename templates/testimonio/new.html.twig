@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crear Nuevo Testimonio - CONSORIA{% endblock %}
+
+{% block body %}
+<div class="container my-5" style="max-width: 800px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 fw-bold text-white mb-0"><i class="fas fa-plus-circle me-2" style="color: var(--luxe-gold, #D4AF37);"></i>Nuevo Testimonio</h1>
+        <a href="{{ path('app_testimonio_index') }}" class="btn btn-outline-light rounded-pill px-4">
+            <i class="fas fa-arrow-left me-2"></i>Volver a la lista
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-lg p-4 rounded-4" style="background-color: #1c1e22; border: 1px solid rgba(212, 175, 55, 0.2) !important;">
+        {{ form_start(form) }}
+            <div class="row g-3 text-white">
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.nombreCliente, {'attr': {'class': 'form-control bg-dark text-white border-secondary'}}) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.rolCliente, {'attr': {'class': 'form-select bg-dark text-white border-secondary'}}) }}
+                </div>
+                <div class="col-12 mb-3">
+                    {{ form_row(form.mensaje, {'attr': {'class': 'form-control bg-dark text-white border-secondary', 'rows': 4}}) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.calificacion, {'attr': {'class': 'form-select bg-dark text-white border-secondary'}}) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.urlVideo, {'attr': {'class': 'form-control bg-dark text-white border-secondary'}}) }}
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="form-check form-switch fs-5">
+                        {{ form_widget(form.activo, {'attr': {'class': 'form-check-input'}}) }}
+                        {{ form_label(form.activo, null, {'label_attr': {'class': 'form-check-label text-white small ms-2'}}) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn fw-bold py-3 text-uppercase shadow" style="background-color: var(--luxe-gold, #D4AF37); color: #111; border-radius: 30px; letter-spacing: 1px;">
+                    <i class="fas fa-save me-2"></i>Guardar y Publicar Testimonio
+                </button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

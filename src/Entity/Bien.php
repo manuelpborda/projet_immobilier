@@ -100,6 +100,9 @@ class Bien
     #[ORM\Column(length: 150, nullable: true)]
     private ?string $barrio = null;
 
+    #[ORM\Column]
+    private ?bool $vendido = null;
+
     public function __construct()
     {
         $this->visites = new ArrayCollection();
@@ -445,6 +448,18 @@ class Bien
     public function setBarrio(?string $barrio): static
     {
         $this->barrio = $barrio;
+        return $this;
+    }
+
+    public function isVendido(): ?bool
+    {
+        return $this->vendido;
+    }
+
+    public function setVendido(bool $vendido): static
+    {
+        $this->vendido = $vendido;
+
         return $this;
     }
 }

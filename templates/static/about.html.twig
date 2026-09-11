@@ -3,15 +3,46 @@
 {% block title %}Quiénes somos - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
+{# === ESTILOS ESPECÍFICOS Y ADAPTABLES PARA ESTA PÁGINA === #}
+<style>
+    .hero-nosotros {
+        background: linear-gradient(180deg, var(--luxe-black, #111) 0%, rgba(28, 30, 34, 0.95) 100%);
+        border-bottom: 2px solid var(--luxe-gold, #D4AF37);
+        color: #E4E7EC;
+    }
+    .tarjeta-nosotros {
+        background: var(--luxe-card-bg, #1C1E22);
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        color: #E4E7EC;
+    }
+    .texto-muteado { opacity: 0.85; }
+    
+    /* MODO CLARO */
+    html.light-mode .hero-nosotros {
+        background: linear-gradient(180deg, #F5F7FA 0%, #FFFFFF 100%) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .tarjeta-nosotros {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .texto-muteado {
+        color: #495057 !important;
+        opacity: 1;
+    }
+</style>
+
 {# ========================================== #}
-{# HERO SECTION (Encabezado oscuro e imponente) #}
+{# HERO SECTION (Encabezado Adaptable)        #}
 {# ========================================== #}
-<div class="py-5 mb-5 shadow-sm" style="background: linear-gradient(180deg, var(--luxe-black, #111) 0%, rgba(28, 30, 34, 0.95) 100%); border-bottom: 2px solid var(--luxe-gold, #D4AF37);">
+<div class="py-5 mb-5 shadow-sm hero-nosotros">
     <div class="container text-center py-4">
         <h1 class="display-5 fw-bold mb-3" style="color: var(--luxe-gold, #D4AF37); letter-spacing: -1px;">
             ¿Quiénes somos en CONSORIA Inmobiliaria?
         </h1>
-        <p class="lead opacity-75 mx-auto text-white" style="max-width: 900px; font-weight: 300;">
+        <p class="lead mx-auto texto-muteado" style="max-width: 900px; font-weight: 400;">
             Somos una agencia moderna y confiable con <strong style="color: var(--luxe-gold, #D4AF37);">más de 15 años de experiencia</strong>. Operamos en las principales ciudades de Colombia, ofreciendo servicios de compra, venta, arriendo y alquiler vacacional de inmuebles. Nuestra prioridad es acompañar a los clientes con ética, transparencia y cercanía en cada proceso.
         </p>
     </div>
@@ -24,23 +55,23 @@
         {# ========================================== #}
         <div class="col-lg-6 mb-4 mb-lg-0">
             <h2 class="h3 fw-bold mb-4" style="color: var(--luxe-gold, #D4AF37);">Misión y Valores</h2>
-            <p class="text-white opacity-75 mb-4" style="line-height: 1.7;">
+            <p class="texto-muteado mb-4" style="line-height: 1.7;">
                 Nuestra misión es ayudarte a encontrar el hogar ideal o una inversión inmobiliaria segura, usando tecnología moderna y atención personalizada. Trabajamos bajo los principios de confianza, honestidad y profesionalismo.
             </p>
             
-            <div class="p-4 rounded-4 shadow-sm" style="background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.1);">
-                <ul class="list-unstyled text-white opacity-75 mb-0">
+            <div class="p-4 rounded-4 shadow-sm tarjeta-nosotros">
+                <ul class="list-unstyled mb-0">
                     <li class="mb-3 d-flex align-items-center">
                         <i class="fas fa-handshake fa-lg me-3" style="color: var(--luxe-gold, #D4AF37); width: 30px; text-align: center;"></i> 
-                        Atención cercana y personalizada
+                        <span>Atención cercana y personalizada</span>
                     </li>
                     <li class="mb-3 d-flex align-items-center">
                         <i class="fas fa-balance-scale fa-lg me-3" style="color: var(--luxe-gold, #D4AF37); width: 30px; text-align: center;"></i> 
-                        Acompañamiento legal completo
+                        <span>Acompañamiento legal completo</span>
                     </li>
                     <li class="d-flex align-items-center">
                         <i class="fas fa-eye fa-lg me-3" style="color: var(--luxe-gold, #D4AF37); width: 30px; text-align: center;"></i> 
-                        Transparencia en todas las operaciones
+                        <span>Transparencia en todas las operaciones</span>
                     </li>
                 </ul>
             </div>
@@ -49,7 +80,6 @@
         {# ========================================== #}
         {# COLUMNA DERECHA: Logo / Identidad          #}
         {# ========================================== #}
-        
         <div class="col-lg-6 text-center h-100">
             <div class="rounded-4 overflow-hidden shadow-lg h-100 d-flex" style="border: 1px solid rgba(212, 175, 55, 0.3); min-height: 350px;">
                 <img src="{{ asset('assets/img/fondo2.jpg') }}" alt="Consoria Inmobiliaria - Tu patrimonio, nuestro propósito" class="w-100" style="object-fit: cover; object-position: center;">
@@ -58,35 +88,35 @@
     </div>
 
     {# ========================================== #}
-    {# SECCIÓN DONDE ENCONTRARNOS                 #}
+    {# SECCIÓN DONDE ENCONTRARNOS (Privacidad VIP)#}
     {# ========================================== #}
     <div class="row">
         <div class="col-12">
-            <div class="p-5 shadow-lg rounded-4 text-center" style="background: linear-gradient(135deg, #1C1E22 0%, #111 100%); border: 1px solid rgba(212, 175, 55, 0.3);">
+            <div class="p-5 shadow-lg rounded-4 text-center tarjeta-nosotros">
                 <h3 class="fw-bold mb-5" style="color: var(--luxe-gold, #D4AF37);">¿Dónde encontrarnos?</h3>
                 
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-4">
-                        <div class="text-white">
+                        <div>
                             <i class="fas fa-map-marker-alt fa-2x mb-3" style="color: var(--luxe-gold, #D4AF37);"></i>
                             <h6 class="fw-bold mb-2">Oficina Principal</h6>
-                            <p class="opacity-75 small mb-0">Cra 7D # 151-42, Oficina 201<br>Bogotá, Colombia</p>
+                            <p class="texto-muteado small mb-0">Sede Norte, Barrio Cedritos<br>Bogotá D.C. (Atención con cita previa)</p>
                         </div>
                     </div>
                     
                     <div class="col-md-4">
-                        <div class="text-white border-start border-end border-secondary-subtle">
+                        <div class="border-start border-end border-secondary-subtle">
                             <i class="fas fa-phone-alt fa-2x mb-3" style="color: var(--luxe-gold, #D4AF37);"></i>
                             <h6 class="fw-bold mb-2">Teléfono/WhatsApp</h6>
-                            <a href="https://wa.me/573124504982" target="_blank" class="text-decoration-none opacity-75 small text-white d-block">+57 312 4504982</a>
+                            <a href="https://wa.me/573124504982" target="_blank" class="text-decoration-none texto-muteado small d-block">+57 312 4504982</a>
                         </div>
                     </div>
                     
                     <div class="col-md-4">
-                        <div class="text-white">
+                        <div>
                             <i class="fas fa-envelope fa-2x mb-3" style="color: var(--luxe-gold, #D4AF37);"></i>
                             <h6 class="fw-bold mb-2">Email Directo</h6>
-                            <a href="mailto:consoriainmobiliaria@gmail.com" class="text-decoration-none opacity-75 small text-white d-block">consoriainmobiliaria<br>@gmail.com</a>
+                            <a href="mailto:consoriainmobiliaria@gmail.com" class="text-decoration-none texto-muteado small d-block">consoriainmobiliaria@gmail.com</a>
                         </div>
                     </div>
                 </div>

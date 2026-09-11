@@ -1,120 +1,167 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Arrienda tu inmueble - CONSORIA Inmobiliaria{% endblock %}
+{% block title %}Arriendos y Vacacional - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
+{# === ESTILOS ESPECÍFICOS Y ADAPTABLES PARA ESTA PÁGINA === #}
+<style>
+    .hero-rent {
+        background: linear-gradient(180deg, var(--luxe-black, #111) 0%, rgba(28, 30, 34, 0.95) 100%);
+        border-bottom: 2px solid var(--luxe-gold, #D4AF37);
+        color: #E4E7EC;
+    }
+    .card-rent {
+        background: var(--luxe-card-bg, #1C1E22);
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        color: #E4E7EC;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-rent:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+        border-color: rgba(212, 175, 55, 0.4);
+    }
+    .condiciones-box {
+        background: rgba(0,0,0,0.2);
+        border-left: 4px solid var(--luxe-gold, #D4AF37);
+    }
+    .texto-muteado { opacity: 0.85; }
+    
+    /* MODO CLARO */
+    html.light-mode .hero-rent {
+        background: linear-gradient(180deg, #F5F7FA 0%, #FFFFFF 100%) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .card-rent {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .card-rent:hover {
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1) !important;
+    }
+    html.light-mode .condiciones-box {
+        background: rgba(212, 175, 55, 0.05) !important;
+    }
+    html.light-mode .texto-muteado {
+        color: #495057 !important;
+        opacity: 1;
+    }
+    .icon-gold { color: var(--luxe-gold, #D4AF37); font-size: 1.2rem; }
+</style>
+
 {# ========================================== #}
-{# HERO SECTION (Encabezado oscuro e imponente) #}
+{# HERO SECTION (Encabezado Premium)          #}
 {# ========================================== #}
-<div class="py-5 mb-5 shadow-sm" style="background: linear-gradient(180deg, var(--luxe-black, #111) 0%, rgba(28, 30, 34, 0.95) 100%); border-bottom: 2px solid var(--luxe-gold, #D4AF37);">
-    <div class="container text-center py-4">
-        <h1 class="display-5 fw-bold mb-3" style="color: var(--luxe-gold, #D4AF37); letter-spacing: -1px;">
-            Arrienda tu inmueble fácil y seguro
+<div class="py-5 mb-5 shadow-sm hero-rent">
+    <div class="container text-center py-5">
+        <span class="text-uppercase fw-bold small d-block mb-3" style="letter-spacing: 2px; color: var(--luxe-gold, #D4AF37);">Gestión Inmobiliaria Integral</span>
+        <h1 class="display-4 fw-bold mb-4" style="color: var(--luxe-gold, #D4AF37); letter-spacing: -1px;">
+            Arriendos y Alquiler Vacacional
         </h1>
-        <p class="lead opacity-75 mx-auto text-white" style="max-width: 800px; font-weight: 300;">
-            Con <strong style="color: var(--luxe-gold, #D4AF37);">CONSORIA Inmobiliaria</strong> puedes arrendar tu apartamento, casa, oficina o local comercial en las principales ciudades de Colombia con total respaldo. Encontramos el arrendatario ideal y te acompañamos en cada paso.
+        <p class="lead mx-auto texto-muteado" style="max-width: 800px; font-weight: 400; line-height: 1.8;">
+            Confía tu inmueble a <strong style="color: var(--luxe-gold);">CONSORIA Inmobiliaria</strong>. Nos encargamos de todo el proceso para que obtengas rentabilidad de forma segura, ya sea a largo plazo o en estancias cortas.
         </p>
     </div>
 </div>
 
-<div class="container mb-5">
-    <div class="row g-4 align-items-stretch">
-        {# ========================================== #}
-        {# TARJETA 1: ARRIENDO TRADICIONAL            #}
-        {# ========================================== #}
+<div class="container mb-5 pb-4">
+    {# ========================================== #}
+    {# SERVICIOS (Dos tarjetas equilibradas)      #}
+    {# ========================================== #}
+    <div class="row g-5 mb-5">
+        
+        <!-- ============================================== -->
+        <!-- TARJETA IZQUIERDA: ARRIENDO TRADICIONAL        -->
+        <!-- ============================================== -->
         <div class="col-lg-6">
-            <div class="card h-100 border-0 shadow-lg rounded-4 p-4" style="background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.1) !important;">
-                <div class="card-body d-flex flex-column">
-                    <div class="text-center mb-4">
-                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 80px; height: 80px; background: rgba(212, 175, 55, 0.1);">
-                            <i class="fas fa-key fa-2x" style="color: var(--luxe-gold, #D4AF37);"></i>
-                        </div>
-                        <h2 class="h4 fw-bold text-white text-uppercase" style="letter-spacing: 1px;">Arriendo Tradicional</h2>
-                    </div>
-                    
-                    <h5 class="fw-bold mb-3 small text-uppercase" style="color: var(--luxe-gold, #D4AF37);">¿Por qué arrendar con nosotros?</h5>
-                    <ul class="list-unstyled text-white opacity-75 mb-4 mb-4">
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Promoción en los principales portales inmobiliarios</li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Selección y validación estricta de inquilinos</li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Gestión completa de contratos de arriendo</li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Asesoría legal durante todo el proceso</li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Gestión de cobro y seguimiento mensual</li>
-                    </ul>
+            <div class="card-rent p-4 p-md-5 rounded-4 h-100 d-flex flex-column">
+                <h3 class="fw-bold mb-4 text-center" style="color: var(--luxe-gold, #D4AF37);">Arriendo Tradicional</h3>
+                
+                <ul class="list-unstyled mb-4 flex-grow-1">
+                    <li class="mb-3 d-flex"><i class="fas fa-check mt-1 me-3 icon-gold"></i> <span class="texto-muteado">Estudio riguroso de arrendatarios y fiadores</span></li>
+                    <li class="mb-3 d-flex"><i class="fas fa-check mt-1 me-3 icon-gold"></i> <span class="texto-muteado">Elaboración de contratos blindados legalmente</span></li>
+                    <li class="mb-3 d-flex"><i class="fas fa-check mt-1 me-3 icon-gold"></i> <span class="texto-muteado">Inventario detallado con registro fotográfico</span></li>
+                    <li class="mb-3 d-flex"><i class="fas fa-check mt-1 me-3 icon-gold"></i> <span class="texto-muteado">Gestión de cobro y seguimiento mensual</span></li>
+                </ul>
 
-                    <div class="p-3 rounded-3 mb-4 mt-auto" style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--luxe-gold, #D4AF37);">
-                        <h6 class="fw-bold text-white mb-2">Condiciones de corretaje</h6>
-                        <p class="mb-1 text-white opacity-75 small"><i class="fas fa-file-contract me-2" style="color: var(--luxe-gold, #D4AF37);"></i><strong>Comisión: 50% del primer canon + IVA</strong> (solo si se concreta el arriendo).</p>
-                        <p class="mb-0 text-white opacity-75 small"><i class="fas fa-shield-alt me-2" style="color: var(--luxe-gold, #D4AF37);"></i>No cobramos anticipos. Solo si el arriendo es exitoso.</p>
-                    </div>
-
-                    {# NOTA: Reemplaza '#' por tu ruta real de listado de arriendos, ej: path('inmuebles_lista', {'tipo': 'arriendo'}) #}
-                    <a href="#" class="btn w-100 fw-bold py-3" style="background: transparent; border: 1px solid var(--luxe-gold, #D4AF37); color: var(--luxe-gold, #D4AF37); transition: all 0.3s ease;">
-                        Ver inmuebles en arriendo
-                    </a>
+                {# BLOQUE CORREGIDO: CONDICIONES ARRIENDO TRADICIONAL #}
+                <div class="condiciones-box p-4 rounded-3 mb-4">
+                    <h6 class="fw-bold mb-3">Condiciones Arriendo Tradicional</h6>
+                    <p class="small texto-muteado mb-2"><i class="fas fa-chart-line me-2" style="color: var(--luxe-gold);"></i> <strong>En Administración:</strong> 12% Mensual</p>
+                    <p class="small texto-muteado mb-0"><i class="fas fa-file-signature me-2" style="color: var(--luxe-gold);"></i> <strong>Corretaje:</strong> Primer canon de arrendamiento</p>
+                </div>
+                
+                <div class="text-center mt-auto">
+                    <a href="/" class="btn btn-outline-warning w-100 rounded-pill py-2 fw-bold" style="border-color: var(--luxe-gold); color: var(--luxe-gold);">Ver inmuebles en arriendo</a>
                 </div>
             </div>
         </div>
 
-        {# ========================================== #}
-        {# TARJETA 2: ARRIENDO VACACIONAL             #}
-        {# ========================================== #}
+        <!-- ============================================== -->
+        <!-- TARJETA DERECHA: ALQUILER VACACIONAL           -->
+        <!-- ============================================== -->
         <div class="col-lg-6">
-            <div class="card h-100 border-0 shadow-lg rounded-4 p-4" style="background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.1) !important;">
-                <div class="card-body d-flex flex-column">
-                    <div class="text-center mb-4">
-                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 80px; height: 80px; background: rgba(212, 175, 55, 0.1);">
-                            <i class="fas fa-suitcase-rolling fa-2x" style="color: var(--luxe-gold, #D4AF37);"></i>
-                        </div>
-                        <h2 class="h4 fw-bold text-white text-uppercase" style="letter-spacing: 1px;">Arriendo Vacacional</h2>
-                    </div>
-                    
-                    <p class="text-white opacity-75 mb-4" style="line-height: 1.7;">
-                        ¿Buscas alquilar tu propiedad por temporadas? También te ayudamos a promocionar y gestionar tu inmueble en alquiler vacacional, para estadías cortas en plataformas de alcance global como <strong>Airbnb o Booking</strong>.
-                    </p>
+            <div class="card-rent p-4 p-md-5 rounded-4 h-100 d-flex flex-column">
+                <h3 class="fw-bold mb-4 text-center" style="color: var(--luxe-gold, #D4AF37);">Alquiler Vacacional</h3>
+                
+                <ul class="list-unstyled mb-4 flex-grow-1">
+                    <li class="mb-3 d-flex"><i class="fas fa-check mt-1 me-3 icon-gold"></i> <span class="texto-muteado">Publicación en plataformas premium (Airbnb, Booking)</span></li>
+                    <li class="mb-3 d-flex"><i class="fas fa-check mt-1 me-3 icon-gold"></i> <span class="texto-muteado">Gestión completa de reservas y atención de huéspedes</span></li>
+                    <li class="mb-3 d-flex"><i class="fas fa-check mt-1 me-3 icon-gold"></i> <span class="texto-muteado">Coordinación de limpieza y mantenimiento continuo</span></li>
+                    <li class="mb-3 d-flex"><i class="fas fa-check mt-1 me-3 icon-gold"></i> <span class="texto-muteado">Asesoría profesional para optimizar ocupación y precio</span></li>
+                </ul>
 
-                    <h5 class="fw-bold mb-3 small text-uppercase" style="color: var(--luxe-gold, #D4AF37);">Nuestra Gestión Incluye</h5>
-                    <ul class="list-unstyled text-white opacity-75 mb-4">
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Gestión completa de reservas, check-in y check-out</li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Promoción destacada en plataformas internacionales</li>
-                        <li class="mb-3 d-flex align-items-start"><i class="fas fa-check mt-1 me-3" style="color: var(--luxe-gold, #D4AF37);"></i> Asesoría profesional para optimizar ocupación y precio</li>
-                    </ul>
-
-                    <div class="p-3 rounded-3 mt-auto" style="background: rgba(255, 255, 255, 0.03); border-left: 3px solid var(--luxe-gold, #D4AF37);">
-                        <h6 class="fw-bold text-white mb-2">Condiciones de corretaje</h6>
-                        <p class="mb-0 text-white opacity-75 small"><i class="fas fa-percentage me-2" style="color: var(--luxe-gold, #D4AF37);"></i><strong>Comisión: 10% del valor total</strong> de cada alquiler.</p>
-                    </div>
+                <div class="condiciones-box p-4 rounded-3 mb-4 mt-auto">
+                    <h6 class="fw-bold mb-3">Condiciones de corretaje</h6>
+                    <p class="small texto-muteado mb-0"><i class="fas fa-percent me-2" style="color: var(--luxe-gold);"></i> <strong>Comisión: 10% del valor total</strong> de cada alquiler vacacional concretado.</p>
                 </div>
             </div>
         </div>
     </div>
 
     {# ========================================== #}
-    {# SECCIÓN DE CONTACTO FINAL                  #}
+    {# SECCIÓN DE CONTACTO (3 Tarjetas)           #}
     {# ========================================== #}
-    <div class="row mt-5">
-        <div class="col-12">
-            <div class="p-5 shadow-lg rounded-4 text-center" style="background: linear-gradient(135deg, #1C1E22 0%, #111 100%); border: 1px solid rgba(212, 175, 55, 0.3);">
-                <h3 class="fw-bold mb-4" style="color: var(--luxe-gold, #D4AF37);">¿Quieres que te asesoremos personalmente?</h3>
-                
-                <div class="d-flex flex-wrap justify-content-center gap-4 gap-md-5 mb-5">
-                    <div class="text-white text-center">
-                        <i class="fas fa-map-marker-alt fa-2x mb-2 d-block" style="color: var(--luxe-gold, #D4AF37);"></i>
-                        <span class="opacity-75 small">Cra 7D # 151-42, Of. 201<br>Bogotá, Colombia</span>
-                    </div>
-                    <div class="text-white text-center">
-                        <i class="fas fa-envelope fa-2x mb-2 d-block" style="color: var(--luxe-gold, #D4AF37);"></i>
-                        <span class="opacity-75 small">gabrielpulido1984<br>@gmail.com</span>
-                    </div>
-                    <div class="text-white text-center">
-                        <i class="fas fa-phone-alt fa-2x mb-2 d-block" style="color: var(--luxe-gold, #D4AF37);"></i>
-                        <span class="opacity-75 small">+57 312 4504982<br>Atención Telefónica</span>
-                    </div>
+    <div class="text-center mt-5 pt-5" style="border-top: 1px solid rgba(212, 175, 55, 0.2);">
+        <h3 class="fw-bold mb-5" style="color: var(--luxe-gold, #D4AF37);">¿Quieres que te asesoremos personalmente?</h3>
+        
+        <div class="row g-4 justify-content-center">
+            
+            <!-- Ubicación -->
+            <div class="col-md-4">
+                <div class="card-rent p-4 rounded-4 h-100 text-center">
+                    <i class="fas fa-map-marker-alt fa-2x mb-3" style="color: var(--luxe-gold, #D4AF37);"></i>
+                    <h6 class="fw-bold mb-2">Oficina Principal</h6>
+                    <p class="texto-muteado small mb-0">Sede Norte, Barrio Cedritos<br>Bogotá D.C. (Cita previa)</p>
                 </div>
-
-                <a href="https://wa.me/573124504982?text=Hola,%20estoy%20interesado%20en%20recibir%20asesor%C3%ADa%20para%20arrendar%20mi%20inmueble." target="_blank" class="btn text-white fw-bold py-3 px-5 rounded-pill shadow-sm" style="background: linear-gradient(135deg, #1E3A2F, #128C7E);">
-                    <i class="fab fa-whatsapp me-2 fa-lg"></i>Contactar Asesor por WhatsApp
-                </a>
             </div>
+
+            <!-- Email -->
+            <div class="col-md-4">
+                <div class="card-rent p-4 rounded-4 h-100 text-center">
+                    <i class="fas fa-envelope fa-2x mb-3" style="color: var(--luxe-gold, #D4AF37);"></i>
+                    <h6 class="fw-bold mb-2">Email Directo</h6>
+                    <a href="mailto:consoriainmobiliaria@gmail.com" class="text-decoration-none texto-muteado small d-block">consoriainmobiliaria@gmail.com</a>
+                </div>
+            </div>
+            
+            <!-- Teléfono & WhatsApp -->
+            <div class="col-md-4">
+                <div class="card-rent p-4 rounded-4 h-100 text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <i class="fas fa-phone-alt fa-2x mb-3" style="color: var(--luxe-gold, #D4AF37);"></i>
+                        <h6 class="fw-bold mb-2">Atención Telefónica</h6>
+                        <a href="tel:+573124504982" class="text-decoration-none texto-muteado small d-block mb-3">+57 312 4504982</a>
+                    </div>
+                    
+                    <a href="https://wa.me/573124504982" target="_blank" class="btn btn-sm w-100 rounded-pill py-2 mt-auto" style="background: rgba(37, 211, 102, 0.15); border: 1px solid #25D366; color: #25D366; transition: all 0.3s ease;" onmouseover="this.style.background='#25D366'; this.style.color='#fff';" onmouseout="this.style.background='rgba(37, 211, 102, 0.15)'; this.style.color='#25D366';">
+                        <i class="fab fa-whatsapp me-2"></i> Contactar por WhatsApp
+                    </a>
+                </div>
+            </div>
+            
         </div>
     </div>
 </div>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\BienRepository;
+use App\Repository\TestimonioRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ class HomeController extends AbstractController
      * Soporta redirección directa desde páginas como /rent con el parámetro ?tipo=arriendo
      */
     #[Route('/', name: 'home')]
-    public function index(BienRepository $bienRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(BienRepository $bienRepository, TestimonioRepository $testimonioRepository, Request $request, PaginatorInterface $paginator): Response
     {
         // 1. Captura y normalización de parámetros GET
         $typeDeBien      = $request->query->get('typeDeBien');
@@ -83,12 +84,16 @@ class HomeController extends AbstractController
         $page = $request->query->getInt('page', 1);
         $bienes = $paginator->paginate($qb, $page, 9);
 
-        // 5. Envío de datos idéntico a tu Twig original para no romper el diseño gráfico
+        // 5. Extracción de testimonios activos para el carrusel de la página de inicio
+        $testimonios = $testimonioRepository->findBy(['activo' => true]);
+
+        // 6. Envío de datos idéntico a tu Twig original para no romper el diseño gráfico
         return $this->render('home/index.html.twig', [
             'bienes' => $bienes,
             'tiposDeBien' => $tiposDeBien,
             'ciudadesDisponibles' => $ciudadesDisponibles,
             'estadosDeBien' => $estadosDeBien,
+            'testimonios' => $testimonios,
         ]);
     }
 }

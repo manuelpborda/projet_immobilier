@@ -1,122 +1,215 @@
-{# templates/registration/register.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Crear cuenta - CONSORIA{% endblock %}
-
-{% block stylesheets %}
-<style>
-    /* Contenedor principal centrado */
-    .register-container {
-        max-width: 600px;
-        margin: 50px auto;
-        padding: 40px;
-        background: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    h1 { color: #333; margin-bottom: 25px; text-align: center; }
-
-    /* Estilo de los grupos de formulario (input + label) */
-    .form-group { margin-bottom: 20px; }
-    
-    label { 
-        display: block; 
-        margin-bottom: 8px; 
-        font-weight: 600; 
-        color: #555; 
-    }
-
-    input, select {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-        box-sizing: border-box; /* Importante para que el padding no rompa el ancho */
-    }
-
-    input:focus {
-        border-color: #ffc107; /* Color corporativo */
-        outline: none;
-        box-shadow: 0 0 5px rgba(255, 193, 7, 0.3);
-    }
-
-    /* Botón consistente con tu formulario de contacto */
-    .btn-register {
-        display: block;
-        width: 100%;
-        padding: 15px;
-        background-color: #ffc107;
-        color: #333;
-        border: none;
-        border-radius: 5px;
-        font-weight: bold;
-        font-size: 18px;
-        cursor: pointer;
-        transition: background 0.3s;
-        margin-top: 20px;
-    }
-
-    .btn-register:hover { background-color: #e0a800; }
-</style>
-{% endblock %}
+{% block title %}Registro - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
-<div class="register-container">
-    <h1>Crear una cuenta</h1>
+{# === ESTILOS ESPECÍFICOS Y ADAPTABLES PARA REGISTRO === #}
+<style>
+    .register-wrapper {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        padding: 3rem 0;
+    }
+    .card-register {
+        background: var(--luxe-card-bg, #1C1E22);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        color: #E4E7EC;
+    }
+    .register-info-side {
+        background: linear-gradient(135deg, rgba(17,17,17,0.9) 0%, rgba(28,30,34,0.9) 100%), url('{{ asset('assets/img/fondo3.jpg') }}') center/199% no-repeat;
+        border-right: 1px solid rgba(212, 175, 55, 0.2);
+    }
+    .texto-muteado { opacity: 0.85; }
 
-    {{ form_start(registrationForm) }}
-        <div class="form-group">
-            {{ form_label(registrationForm.typeUser) }}
-            {{ form_widget(registrationForm.typeUser) }}
+    /* ========================================== */
+    /* ESTILOS PARA FORMULARIO MIXTO (HTML + SYMFONY) */
+    /* ========================================== */
+    .form-label-adaptable, .form-luxe-container form label {
+        color: #E4E7EC !important;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        margin-top: 0.5rem;
+    }
+    /* Estilizar inputs */
+    .form-control-luxe,
+    .form-luxe-container form input:not([type="checkbox"]):not([type="hidden"]),
+    .form-luxe-container form select {
+        background-color: var(--luxe-black, #111) !important;
+        border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        color: #E4E7EC !important;
+        border-radius: 8px !important;
+        padding: 0.75rem 1rem !important;
+        width: 100%;
+    }
+    .form-control-luxe:focus,
+    .form-luxe-container form input:focus,
+    .form-luxe-container form select:focus {
+        border-color: var(--luxe-gold, #D4AF37) !important;
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15) !important;
+        outline: none !important;
+    }
+    /* Checkbox de términos */
+    .form-luxe-container form input[type="checkbox"] {
+        accent-color: var(--luxe-gold, #D4AF37);
+        transform: scale(1.2);
+        margin-right: 10px;
+        cursor: pointer;
+    }
+    .form-luxe-container form .form-check-label {
+        font-weight: normal;
+        font-size: 0.85rem;
+        opacity: 0.85;
+        cursor: pointer;
+    }
+    /* Errores */
+    .form-luxe-container ul { list-style: none; padding-left: 0; color: #ff6b6b; font-size: 0.85rem; margin-top: 5px; }
+    
+    /* MODO CLARO */
+    html.light-mode .card-register {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+        color: #212529 !important;
+    }
+    html.light-mode .register-info-side {
+        background: linear-gradient(135deg, rgba(245,247,250,0.9) 0%, rgba(255,255,255,0.95) 100%), url('{{ asset('assets/img/fondo3.jpg') }}') center/199% no-repeat;
+        border-right: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    html.light-mode .form-label-adaptable, html.light-mode .form-luxe-container form label { color: #2C313C !important; }
+    html.light-mode .form-control-luxe,
+    html.light-mode .form-luxe-container form input:not([type="checkbox"]):not([type="hidden"]),
+    html.light-mode .form-luxe-container form select {
+        background-color: #F8F9FA !important;
+        border: 1px solid #CED4DA !important;
+        color: #212529 !important;
+    }
+    html.light-mode .form-control-luxe:focus,
+    html.light-mode .form-luxe-container form input:not([type="checkbox"]):focus,
+    html.light-mode .form-luxe-container form select:focus {
+        background-color: #FFFFFF !important;
+    }
+    html.light-mode .texto-muteado { color: #495057 !important; opacity: 1; }
+    .icon-gold { color: var(--luxe-gold, #D4AF37); }
+</style>
+
+<div class="register-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                
+                <div class="card-register rounded-4 overflow-hidden shadow-lg d-flex flex-column flex-lg-row">
+                    
+                    {# ========================================== #}
+                    {# COLUMNA IZQUIERDA: Contexto / Beneficios   #}
+                    {# ========================================== #}
+                    <div class="col-lg-5 register-info-side p-5 d-flex flex-column justify-content-center text-center text-lg-start">
+                        <div class="mb-4">
+                            <i class="fas fa-user-plus fa-3x icon-gold mb-3"></i>
+                            <h2 class="fw-bold" style="color: var(--luxe-gold);">Únete a CONSORIA</h2>
+                            <p class="texto-muteado mt-3">Crea tu cuenta y descubre un mundo de oportunidades inmobiliarias.</p>
+                        </div>
+                        
+                        <div class="mt-4 d-none d-lg-block">
+                            <ul class="list-unstyled">
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-search-location icon-gold me-3 mt-1"></i>
+                                    <span class="texto-muteado small">Búsquedas personalizadas y alertas de nuevos inmuebles.</span>
+                                </li>
+                                <li class="mb-3 d-flex align-items-start">
+                                    <i class="fas fa-key icon-gold me-3 mt-1"></i>
+                                    <span class="texto-muteado small">Si eres propietario, gestiona tus inmuebles con total seguridad.</span>
+                                </li>
+                                <li class="d-flex align-items-start">
+                                    <i class="fas fa-headset icon-gold me-3 mt-1"></i>
+                                    <span class="texto-muteado small">Soporte prioritario y asesoría directa con nuestros expertos.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {# ========================================== #}
+                    {# COLUMNA DERECHA: Formulario de Registro    #}
+                    {# ========================================== #}
+                    <div class="col-lg-7 p-5">
+                        <div class="px-md-4 form-luxe-container">
+                            <div class="text-center mb-4">
+                                <h3 class="fw-bold">Crear una cuenta</h3>
+                                <p class="texto-muteado small">Completa tus datos para registrarte en la plataforma.</p>
+                            </div>
+
+                            {# FORMULARIO CONECTADO A SYMFONY #}
+                            {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
+                                
+                                {# ============================================== #}
+                                {# 1. CAMPOS PERSONALIZADOS (HTML Puro)           #}
+                                {# ============================================== #}
+                                <div class="mb-3">
+                                    <label for="tipo_usuario" class="form-label form-label-adaptable">Tipo de usuario</label>
+                                    <select name="tipo_usuario" id="tipo_usuario" class="form-select form-control-luxe" required>
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                        <option value="comprador">Comprador / Arrendatario</option>
+                                        <option value="propietario">Propietario</option>
+                                    </select>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="nombre" class="form-label form-label-adaptable">Nombre</label>
+                                        <input type="text" name="nombre" id="nombre" class="form-control form-control-luxe" required placeholder="Ej. Juan">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="apellido" class="form-label form-label-adaptable">Apellido</label>
+                                        <input type="text" name="apellido" id="apellido" class="form-control form-control-luxe" required placeholder="Ej. Pérez">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="telefono" class="form-label form-label-adaptable">Teléfono / Celular</label>
+                                    <input type="tel" name="telefono" id="telefono" class="form-control form-control-luxe" required placeholder="+57 300 000 0000">
+                                </div>
+
+                                {# ============================================== #}
+                                {# 2. CAMPOS NATIVOS DE SYMFONY (Email, Password) #}
+                                {# ============================================== #}
+                                <div class="mb-3">
+                                    {{ form_label(registrationForm.email, 'Correo electrónico', {'label_attr': {'class': 'form-label form-label-adaptable'}}) }}
+                                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control form-control-luxe'}}) }}
+                                    <div class="text-danger small mt-1">{{ form_errors(registrationForm.email) }}</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    {# form_row renderiza automáticamente la repetición de contraseña si es RepeatedType #}
+                                    {{ form_row(registrationForm.plainPassword) }}
+                                </div>
+
+                                <div class="mb-4 mt-4 text-start">
+                                    {{ form_row(registrationForm.agreeTerms) }}
+                                </div>
+
+                                <button type="submit" class="btn w-100 fw-bold py-3 rounded-3 mb-4" style="background: linear-gradient(135deg, var(--luxe-gold), #AA8623); color: #111; font-size: 1.1rem; border:none; transition: transform 0.3s ease;">
+                                    <i class="fas fa-user-check me-2"></i> Registrarme
+                                </button>
+                                
+                                <div class="text-center mt-3">
+                                    <p class="texto-muteado small">
+                                        ¿Ya tienes una cuenta? <a href="{{ path('app_login') }}" class="text-decoration-none fw-bold" style="color: var(--luxe-gold);">Inicia sesión aquí</a>
+                                    </p>
+                                </div>
+
+                                {# Ocultar cualquier campo residual #}
+                                <div style="display:none;">
+                                    {{ form_rest(registrationForm) }}
+                                </div>
+
+                            {{ form_end(registrationForm, {'render_rest': false}) }}
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.firstName) }}
-            {{ form_widget(registrationForm.firstName) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.lastName) }}
-            {{ form_widget(registrationForm.lastName) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.email) }}
-            {{ form_widget(registrationForm.email) }}
-        </div>
-
-        <div class="form-group">
-            {# PERFILADO DE SEGURIDAD: Se remueve el form_label maestro para eliminar el texto "Plain password" #}
-            {{ form_widget(registrationForm.plainPassword) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.phone) }}
-            {{ form_widget(registrationForm.phone) }}
-        </div>
-
-        {# --- BLOQUE DEL CHECKBOX BLINDADO CON ESTILOS EN LÍNEA INMUTABLES --- #}
-        <div style="display: flex !important; align-items: flex-start !important; gap: 12px !important; margin-top: 25px; margin-bottom: 20px;">
-            
-            {# Forzamos al checkbox a medir 18px x 18px y anulamos el width: 100% general #}
-            {{ form_widget(registrationForm.agreeTerms, {
-                'attr': {
-                    'style': 'width: 18px !important; height: 18px !important; margin: 3px 0 0 0 !important; cursor: pointer !important; flex-shrink: 0 !important; display: inline-block !important;'
-                }
-            }) }}
-            
-            {# Forzamos al texto legal a comportarse como texto en línea al lado del cuadro #}
-            {{ form_label(registrationForm.agreeTerms, null, {
-                'label_attr': {
-                    'style': 'display: inline !important; font-size: 13px !important; font-weight: 500 !important; color: #666 !important; line-height: 1.4 !important; cursor: pointer !important; margin: 0 !important;'
-                }
-            }) }}
-            
-        </div>
-
-        <button type="submit" class="btn-register">Registrarse</button>
-    {{ form_end(registrationForm) }}
+    </div>
 </div>
 {% endblock %}
