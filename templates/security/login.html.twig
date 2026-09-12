@@ -141,13 +141,13 @@
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <label for="inputPassword" class="form-label form-label-adaptable mb-0">Contraseña</label>
                                         {# Enlace opcional de recuperar contraseña #}
-                                        <a href="#" class="small text-decoration-none" style="color: var(--luxe-gold);">¿Olvidaste tu contraseña?</a>
+                                        <a href="{{ path('app_forgot_password_request') }}" class="small text-decoration-none" style="color: var(--luxe-gold);">¿Olvidaste tu contraseña?</a>
                                     </div>
                                     <div class="input-group">
                                         <span class="input-group-text border-0" style="background-color: rgba(212, 175, 55, 0.1); color: var(--luxe-gold);">
                                             <i class="fas fa-lock"></i>
                                         </span>
-                                        <input type="password" name="_password" id="inputPassword" class="form-control form-control-luxe border-start-0" autocomplete="current-password" required placeholder="••••••••">
+                                        <input type="password" name="_password" id="inputPassword" class="form-control form-control-luxe border-start-0" autocomplete="current-password" required placeholder="Ingresa tu contraseña">
                                     </div>
                                 </div>
 

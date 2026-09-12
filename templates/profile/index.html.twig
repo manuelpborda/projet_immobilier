@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mi Perfil - CONSORIA{% endblock %}
+
+{% block body %}
+<style>
+    .profile-card { background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.2); }
+    .form-luxe label { color: #E4E7EC; font-weight: 600; margin-bottom: 0.5rem; }
+    .form-luxe input { background-color: var(--luxe-black, #111); border: 1px solid rgba(212, 175, 55, 0.3); color: #E4E7EC; border-radius: 8px; padding: 0.75rem 1rem; width: 100%; }
+    .form-luxe input:focus { border-color: var(--luxe-gold, #D4AF37); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15); outline: none; }
+    
+    /* Nueva clase para que el correo se adapte al modo oscuro/claro */
+    .texto-email { color: #E4E7EC; }
+    
+    html.light-mode .profile-card { background: #FFFFFF; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+    html.light-mode .form-luxe label { color: #2C313C; }
+    html.light-mode .form-luxe input { background-color: #F8F9FA; border: 1px solid #CED4DA; color: #212529; }
+    html.light-mode .texto-email { color: #212529 !important; }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h2 class="fw-bold mb-4" style="color: var(--luxe-gold);"><i class="fas fa-id-badge me-2"></i> Mi Perfil</h2>
+            
+            <div class="profile-card rounded-4 p-4 p-md-5">
+                <div class="d-flex align-items-center mb-4 pb-3" style="border-bottom: 1px solid rgba(212, 175, 55, 0.2);">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 70px; height: 70px; background: rgba(212,175,55,0.1); border: 2px solid var(--luxe-gold);">
+                        <i class="fas fa-user fa-2x" style="color: var(--luxe-gold);"></i>
+                    </div>
+                    <div class="ms-3">
+                        {# Aquí aplicamos la nueva clase de color y ELIMINAMOS la línea del rol #}
+                        <h5 class="mb-0 fw-bold texto-email">{{ app.user.email }}</h5>
+                    </div>
+                </div>
+
+                {{ form_start(form, {'attr': {'class': 'form-luxe'}}) }}
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            {{ form_row(form.firstName) }}
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            {{ form_row(form.lastName) }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        {{ form_row(form.phone) }}
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 pt-3">
+                        <a href="{{ path('app_profile_password') }}" class="text-decoration-none" style="color: var(--luxe-gold);"><i class="fas fa-key me-1"></i> Cambiar contraseña</a>
+                        <button type="submit" class="btn fw-bold px-4 py-2 rounded-pill" style="background: var(--luxe-gold); color: #111;">
+                            <i class="fas fa-save me-1"></i> Guardar Cambios
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

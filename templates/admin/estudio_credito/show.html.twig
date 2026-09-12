@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle de Solicitud - CONSORIA{% endblock %}
+
+{% block body %}
+<style>
+    /* Estilos por defecto (Modo Oscuro) */
+    .card-luxe { background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.2); color: #E4E7EC; }
+    .card-header-luxe { background: rgba(212, 175, 55, 0.1); border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
+    .list-group-item-luxe { background: transparent; color: #E4E7EC; border-color: rgba(255,255,255,0.1); }
+    .text-whatsapp { color: #25D366; }
+    .text-header-muted { color: #ADB5BD; }
+
+    /* Adaptación a Modo Claro */
+    html.light-mode .card-luxe { background: #FFFFFF; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.08); color: #212529; }
+    html.light-mode .card-header-luxe { background: #F8F9FA; border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
+    html.light-mode .list-group-item-luxe { color: #212529; border-color: rgba(0,0,0,0.05); }
+    html.light-mode .text-whatsapp { color: #128C7E; }
+    html.light-mode .text-header-muted { color: #6C757D; }
+</style>
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color: var(--luxe-gold);"><i class="fas fa-file-invoice-dollar me-2"></i> Detalle de Viabilidad</h2>
+        <a href="{{ path('admin_estudios_index') }}" class="btn btn-outline-secondary rounded-pill">
+            <i class="fas fa-arrow-left me-2"></i> Volver a la lista
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {# INFORMACIÓN PERSONAL #}
+        <div class="col-md-6">
+            <div class="card card-luxe h-100 border-0">
+                <div class="card-header card-header-luxe border-0">
+                    <h5 class="mb-0 fw-bold" style="color: var(--luxe-gold);"><i class="fas fa-user me-2"></i> Datos Personales</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-group-item-luxe"><strong>Nombre:</strong> {{ estudio.nombresApellidos }}</li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Cédula:</strong> {{ estudio.cedula }}</li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Celular:</strong> <a href="https://wa.me/57{{ estudio.celular }}" target="_blank" class="text-whatsapp text-decoration-none fw-bold"><i class="fab fa-whatsapp"></i> {{ estudio.celular }}</a></li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Correo:</strong> {{ estudio.correo }}</li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Estado Civil:</strong> {{ estudio.estadoCivil ?: 'N/A' }}</li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Dirección:</strong> {{ estudio.direccionDomicilio ?: 'N/A' }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {# INFORMACIÓN LABORAL #}
+        <div class="col-md-6">
+            <div class="card card-luxe h-100 border-0">
+                <div class="card-header card-header-luxe border-0">
+                    <h5 class="mb-0 fw-bold" style="color: var(--luxe-gold);"><i class="fas fa-briefcase me-2"></i> Perfil Laboral</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-group-item-luxe"><strong>Profesión:</strong> {{ estudio.profesion ?: 'N/A' }}</li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Empresa:</strong> {{ estudio.empresaDondeLabora ?: 'N/A' }}</li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Cargo:</strong> {{ estudio.cargo ?: 'N/A' }}</li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Contrato:</strong> {{ estudio.tipoContrato ?: 'N/A' }}</li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Antigüedad:</strong> {{ estudio.fechaIngreso ?: 'N/A' }}</li>
+                        <li class="list-group-item list-group-item-luxe"><strong>Nivel Estudios:</strong> {{ estudio.nivelEstudios ?: 'N/A' }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {# INFORMACIÓN FINANCIERA Y CRÉDITO #}
+        <div class="col-12">
+            <div class="card card-luxe border-0">
+                <div class="card-header card-header-luxe border-0">
+                    <h5 class="mb-0 fw-bold" style="color: var(--luxe-gold);"><i class="fas fa-chart-line me-2"></i> Datos Financieros y Solicitud</h5>
+                </div>
+                <div class="card-body row">
+                    <div class="col-md-6 border-end">
+                        <h6 class="text-header-muted mb-3 text-uppercase fw-bold">Ingresos y Patrimonio</h6>
+                        <p class="mb-1"><strong>Ingresos Fijos:</strong> $ {{ estudio.ingresosFijos|number_format(0, ',', '.') }}</p>
+                        <p class="mb-1"><strong>Ingresos Variables:</strong> $ {{ estudio.ingresosVariables|number_format(0, ',', '.') }}</p>
+                        <p class="mb-1"><strong>Patrimonio Inmuebles:</strong> $ {{ estudio.patrimonioInmuebles|number_format(0, ',', '.') }}</p>
+                        <p class="mb-1"><strong>Vehículos:</strong> $ {{ estudio.valorVehiculos|number_format(0, ',', '.') }}</p>
+                        <p class="mb-1 text-danger fw-bold"><strong>Deudas Financieras:</strong> $ {{ estudio.deudasFinancieras|number_format(0, ',', '.') }}</p>
+                    </div>
+                    <div class="col-md-6 ps-md-4 mt-4 mt-md-0">
+                        <h6 class="text-header-muted mb-3 text-uppercase fw-bold">Detalle del Crédito</h6>
+                        <p class="mb-1 text-success fs-5 fw-bold"><strong>Monto Solicitado:</strong> $ {{ estudio.valorSolicitado|number_format(0, ',', '.') }}</p>
+                        <p class="mb-1"><strong>Valor Inmueble:</strong> $ {{ estudio.valorInmueble|number_format(0, ',', '.') }}</p>
+                        <p class="mb-1"><strong>Línea de Crédito:</strong> {{ estudio.lineaCredito ?: 'N/A' }}</p>
+                        <p class="mb-1"><strong>Plazo:</strong> {{ estudio.plazoAnos ?: 'N/A' }} años</p>
+                        <p class="mb-1"><strong>Sistema Amortización:</strong> {{ estudio.sistemaAmortizacion ?: 'N/A' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

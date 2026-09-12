@@ -11,55 +11,80 @@
         {# COLUMNA IZQUIERDA: Bienvenida y Botón de Acción #}
         <div class="dashboard-welcome-zone" style="flex: 1; min-width: 280px; max-width: 360px; margin-bottom: 20px;">
             <h1 style="color: var(--luxe-gold); margin-top: 0; margin-bottom: 10px; font-size: 2rem;">
-                Bienvenido, {{ user.firstName }} {{ user.lastName }}
+                Bienvenido, {{ user.firstName|default('Propietario') }} {{ user.lastName|default('') }}
             </h1>
-            <p style="color: #a0a0a0; line-height: 1.5; margin-bottom: 25px;">
+            <p class="text-muted" style="line-height: 1.5; margin-bottom: 25px;">
                 Gestiona tus inmuebles y observa el rendimiento de tus publicaciones.
             </p>
             
-            {# El botón ahora vive aquí, visible y protegido de amontonamientos #}
-            <a href="{{ path('proprietaire_bien_nuevo') }}" class="btn-primary" style="display: inline-block; background-color: var(--luxe-gold, #d4af37); color: #111111; padding: 12px 24px; font-weight: bold; text-decoration: none; border-radius: 4px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);">
+            <a href="{{ path('proprietaire_bien_nuevo') }}" class="btn fw-bold text-uppercase" style="display: inline-block; background-color: var(--luxe-gold, #d4af37); color: #111111; padding: 12px 24px; border-radius: 4px; font-size: 0.85rem; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);">
                 + Publicar nuevo inmueble
             </a>
         </div>
 
-        {# COLUMNA DERECHA: Tabla con máxima representación y espacio libre #}
+        {# COLUMNA DERECHA: Tabla con máxima representación #}
         <div class="dashboard-table-zone" style="flex: 2; min-width: 320px; width: 100%;">
-            {# La tabla usa la clase 'admin-table' que ya tienes definida en style.css #}
-            <div style="overflow-x: auto; background-color: #1e1e1e; border-radius: 8px; padding: 5px;">
-                <table class="admin-table" style="width: 100%; margin: 0;">
+            <div style="overflow-x: auto; background-color: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 8px; padding: 5px;">
+                <table class="table mb-0 align-middle" style="width: 100%; border-collapse: collapse;">
                     <thead>
-                        <tr>
-                            <th>Foto</th>
-                            <th>Título</th>
-                            <th>Precio</th>
-                            <th>Acciones</th>
+                        <tr style="border-bottom: 1px solid rgba(212, 175, 55, 0.2);">
+                            <th style="padding: 15px; text-align: left; color: var(--luxe-gold); text-transform: uppercase; font-size: 0.85rem; border: none;">Foto</th>
+                            <th style="padding: 15px; text-align: left; color: var(--luxe-gold); text-transform: uppercase; font-size: 0.85rem; border: none;">Inmueble</th>
+                            <th style="padding: 15px; text-align: left; color: var(--luxe-gold); text-transform: uppercase; font-size: 0.85rem; border: none;">Precio</th>
+                            <th style="padding: 15px; text-align: center; color: var(--luxe-gold); text-transform: uppercase; font-size: 0.85rem; border: none;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for bien in bienes %}
-                        <tr>
-                            <td>
+                        <tr style="border-bottom: 1px solid rgba(128, 128, 128, 0.1);">
+                            {# COLUMNA 1: FOTO #}
+                            <td style="padding: 15px; border: none;">
                                 {% if bien.foto %}
-                                    <img src="{{ asset('uploads/bienes/' ~ bien.foto) }}" alt="Foto" style="width: 80px; border-radius: 4px;">
+                                    <img src="{{ asset('uploads/bienes/' ~ (bien.foto|split(',')|first)) }}" alt="Portada" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.3);">
                                 {% else %}
-                                    <span>Sin foto</span>
+                                    <div style="width: 80px; height: 80px; background: rgba(128,128,128,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px dashed rgba(212, 175, 55, 0.3);">
+                                        <i class="fas fa-camera text-muted"></i>
+                                    </div>
                                 {% endif %}
                             </td>
-                            <td>{{ bien.typeDeBien }} en {{ bien.ville }}</td>
-                            <td class="prix-bien">{{ bien.prix|number_format(0, ',', '.') }} €</td>
-                            <td>
-                                <a href="{{ path('proprietaire_bien_editar', {id: bien.id}) }}" style="color: var(--luxe-gold);">Editar</a>
-                                |
+                            
+                            {# COLUMNA 2: TÍTULO Y CIUDAD #}
+                            <td style="padding: 15px; border: none;">
+                                <strong style="font-size: 1.1rem; color: inherit;">{{ bien.titulo ?: bien.typeDeBien }}</strong><br>
+                                <small class="text-muted" style="font-size: 0.9rem;">
+                                    <i class="fas fa-map-marker-alt me-1 text-danger"></i> {{ bien.ville }}
+                                </small>
+                            </td>
+                            
+                            {# COLUMNA 3: PRECIO #}
+                            <td style="padding: 15px; font-weight: bold; color: var(--luxe-gold); font-size: 1.1rem; border: none;">
+                                $ {{ bien.prix|number_format(0, ',', '.') }}
+                            </td>
+                            
+                            {# COLUMNA 4: ACCIONES #}
+                            <td style="padding: 15px; text-align: center; white-space: nowrap; border: none;">
+                                <a href="{{ path('bien_show', {id: bien.id}) }}" target="_blank" class="btn btn-sm btn-outline-secondary" style="margin-right: 5px;" title="Ver Publicación en vivo">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                
+                                <a href="{{ path('proprietaire_bien_editar', {id: bien.id}) }}" class="btn btn-sm" style="border: 1px solid var(--luxe-gold); color: var(--luxe-gold); margin-right: 5px;" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                
                                 <form action="{{ path('proprietaire_bien_eliminar', {id: bien.id}) }}" method="post" style="display:inline;">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bien.id) }}">
-                                    <button type="submit" style="background:none; border:none; color:red; cursor:pointer;" onclick="return confirm('¿Seguro?')">Eliminar</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return confirm('¿Estás seguro de eliminar este inmueble permanentemente?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="4" style="text-align: center; padding: 20px; color: #a0a0a0;">Aún no tienes inmuebles publicados.</td>
+                            <td colspan="4" style="text-align: center; padding: 40px; color: #a0a0a0; border: none;">
+                                <i class="fas fa-home fa-3x mb-3" style="opacity: 0.2;"></i><br>
+                                Aún no tienes inmuebles publicados.
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

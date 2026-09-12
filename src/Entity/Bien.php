@@ -39,6 +39,9 @@ class Bien
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $foto = null;
+        // === NUEVO CAMPO PARA YOUTUBE ===
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $urlVideo = null;
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $tipoTransaccion = null;
@@ -108,6 +111,7 @@ class Bien
         $this->visites = new ArrayCollection();
         $this->offres = new ArrayCollection();
         $this->favoritos = new ArrayCollection();
+        $this->vendido = false; // Por defecto, un inmueble nuevo no está vendido
     }
 
     public function getId(): ?int
@@ -460,6 +464,16 @@ class Bien
     {
         $this->vendido = $vendido;
 
+        return $this;
+    }
+    public function getUrlVideo(): ?string
+    {
+        return $this->urlVideo;
+    }
+
+    public function setUrlVideo(?string $urlVideo): static
+    {
+        $this->urlVideo = $urlVideo;
         return $this;
     }
 }

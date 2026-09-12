@@ -3,37 +3,140 @@
 {% block title %}Vende tu Propiedad - CONSORIA Inmobiliaria{% endblock %}
 
 {% block body %}
-<div class="section-texto">
-    <h1>Vende tu propiedad con respaldo y confianza</h1>
-    <p>
-        En <strong>CONSORIA Inmobiliaria</strong> te acompañamos en todo el proceso de venta de tu apartamento, casa, local u oficina.
-        Nuestra experiencia, visibilidad y red de contactos aseguran una venta rápida y con el mejor retorno.
-    </p>
+<style>
+    /* === ADAPTACIÓN AUTOMÁTICA DE COLORES (CLARO / OSCURO) === */
+    .luxe-card-dynamic { background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.2); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .luxe-card-dynamic:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15); }
+    
+    .text-dynamic { color: #E4E7EC; }
+    .text-dynamic-muted { color: #A0A0A0; }
+    
+    /* Hero Banner: Usamos la imagen que tenías, pero como fondo oscuro y elegante */
+    .luxe-hero-banner {
+        background: linear-gradient(135deg, rgba(17, 17, 17, 0.9), rgba(28, 30, 34, 0.85)), url('{{ asset("assets/img/static_pages/location2.png") }}') center/cover no-repeat;
+        border-radius: 15px;
+        padding: 80px 20px;
+        margin-bottom: 50px;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+    }
 
-    <h2>¿Por qué vender con nosotros?</h2>
-    <ul>
-        <li>Promoción en portales especializados y redes sociales</li>
-        <li>Asesoría jurídica y notarial durante todo el proceso</li>
-        <li>Evaluación del mercado y tasación sin costo</li>
-        <li>Negociación estratégica para proteger tus intereses</li>
-        <li>Atención personalizada y reportes periódicos</li>
-    </ul>
+    /* Adaptación a Modo Claro */
+    html.light-mode .luxe-card-dynamic { background: #FFFFFF; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    html.light-mode .luxe-card-dynamic:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+    html.light-mode .text-dynamic { color: #212529; }
+    html.light-mode .text-dynamic-muted { color: #6C757D; }
+</style>
 
-    <h3>Condiciones de corretaje para venta</h3>
-    <ul>
-        <li>Comisión: <strong>3% + IVA del valor de venta</strong></li>
-        <li>No cobramos anticipos. Solo cuando la venta se concreta</li>
-    </ul> <br>
+<div class="container my-5">
+    
+    {# === HERO SECTION === #}
+    <div class="luxe-hero-banner text-center shadow-lg">
+        <h1 class="display-5 fw-bold mb-4" style="color: var(--luxe-gold);">Vende tu propiedad con respaldo y confianza</h1>
+        <p class="lead text-white mx-auto" style="max-width: 800px; opacity: 0.9; line-height: 1.8;">
+            En <strong>CONSORIA Inmobiliaria</strong> te acompañamos en todo el proceso de venta de tu apartamento, casa, local u oficina. 
+            Nuestra experiencia, visibilidad y red de contactos aseguran una venta rápida y con el mejor retorno.
+        </p>
+    </div>
 
-    <a href="{{ path('contact') }}" class="btn-primary" style="margin-top: 1.5em;">Contáctanos para vender</a> <br> <br>
+    {# === POR QUÉ VENDER CON NOSOTROS (Tarjetas) === #}
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-dynamic mb-5">¿Por qué elegir a CONSORIA?</h2>
+        <div class="row g-4 justify-content-center">
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="luxe-card-dynamic p-4 rounded-4 h-100 d-flex flex-column align-items-center text-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; background: rgba(212,175,55,0.1);">
+                        <i class="fas fa-bullhorn fa-2x" style="color: var(--luxe-gold);"></i>
+                    </div>
+                    <h5 class="fw-bold text-dynamic mb-3">Máxima Promoción</h5>
+                    <p class="text-dynamic-muted small m-0">Publicación destacada en portales especializados y redes sociales para llegar al comprador ideal.</p>
+                </div>
+            </div>
 
-    <img src="assets/img/static_pages/propiedades_venta.jpg" alt="Vende con Consoria" class="img-info">
+            <div class="col-md-6 col-lg-4">
+                <div class="luxe-card-dynamic p-4 rounded-4 h-100 d-flex flex-column align-items-center text-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; background: rgba(212,175,55,0.1);">
+                        <i class="fas fa-balance-scale fa-2x" style="color: var(--luxe-gold);"></i>
+                    </div>
+                    <h5 class="fw-bold text-dynamic mb-3">Asesoría Jurídica</h5>
+                    <p class="text-dynamic-muted small m-0">Acompañamiento legal y notarial durante todo el proceso para una transacción 100% segura.</p>
+                </div>
+            </div>
 
-    <h3>¿Tienes preguntas o deseas una valoración sin costo?</h3>
-    <ul>
-        <li><strong>WhatsApp:</strong> <a href="https://wa.me/573124504982" target="_blank">+57 312 4504982</a></li>
-        <li><strong>Email:</strong> <a href="mailto:consoriainmobiliaria@gmail.com">consoriainmobiliaria@gmail.com</a></li>
-        <li><strong>Oficina:</strong> Cra 7D # 151-42, oficina 201 Bogotá</li>
-    </ul>
+            <div class="col-md-6 col-lg-4">
+                <div class="luxe-card-dynamic p-4 rounded-4 h-100 d-flex flex-column align-items-center text-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; background: rgba(212,175,55,0.1);">
+                        <i class="fas fa-chart-line fa-2x" style="color: var(--luxe-gold);"></i>
+                    </div>
+                    <h5 class="fw-bold text-dynamic mb-3">Valoración Exacta</h5>
+                    <p class="text-dynamic-muted small m-0">Evaluación profunda del mercado y tasación sin costo para garantizar el mejor precio competitivo.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="luxe-card-dynamic p-4 rounded-4 h-100 d-flex flex-column align-items-center text-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; background: rgba(212,175,55,0.1);">
+                        <i class="fas fa-handshake fa-2x" style="color: var(--luxe-gold);"></i>
+                    </div>
+                    <h5 class="fw-bold text-dynamic mb-3">Negociación Estratégica</h5>
+                    <p class="text-dynamic-muted small m-0">Protegemos tus intereses comerciales para cerrar el trato con las mejores condiciones a tu favor.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="luxe-card-dynamic p-4 rounded-4 h-100 d-flex flex-column align-items-center text-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px; background: rgba(212,175,55,0.1);">
+                        <i class="fas fa-user-tie fa-2x" style="color: var(--luxe-gold);"></i>
+                    </div>
+                    <h5 class="fw-bold text-dynamic mb-3">Atención Personalizada</h5>
+                    <p class="text-dynamic-muted small m-0">Reportes periódicos y comunicación constante sobre el rendimiento y visitas de tu propiedad.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {# === CONDICIONES DE CORRETAJE === #}
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8">
+            <div class="luxe-card-dynamic p-4 p-md-5 rounded-4 text-center" style="border-top: 4px solid var(--luxe-gold);">
+                <h3 class="fw-bold text-dynamic mb-4"><i class="fas fa-file-contract me-2" style="color: var(--luxe-gold);"></i> Condiciones de corretaje</h3>
+                
+                <div class="d-flex justify-content-center gap-4 flex-wrap">
+                    <div class="p-3">
+                        <h2 class="display-6 fw-bold mb-0" style="color: var(--luxe-gold);">3% <span class="fs-5">+ IVA</span></h2>
+                        <span class="text-dynamic-muted fw-bold text-uppercase" style="letter-spacing: 1px;">Comisión por venta</span>
+                    </div>
+                    <div class="border-end border-secondary d-none d-md-block"></div>
+                    <div class="p-3 d-flex flex-column justify-content-center text-start">
+                        <p class="text-dynamic m-0 fw-bold"><i class="fas fa-check-circle text-success me-2"></i> Sin pagos anticipados</p>
+                        <p class="text-dynamic-muted small m-0 ms-4">Solo cobramos nuestros honorarios cuando la venta se ha concretado exitosamente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# === CALL TO ACTION & CONTACTO === #}
+    <div class="text-center mt-5 pt-4" style="border-top: 1px solid rgba(212, 175, 55, 0.2);">
+        <h3 class="fw-bold text-dynamic mb-4">¿Tienes preguntas o deseas una valoración sin costo?</h3>
+        
+        <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+            <a href="https://wa.me/573124504982" target="_blank" class="btn fw-bold py-3 px-4 rounded-pill text-white d-flex align-items-center" style="background-color: #128C7E; border: none; box-shadow: 0 4px 10px rgba(18, 140, 126, 0.2); transition: transform 0.2s ease;">
+                <i class="fab fa-whatsapp fs-5 me-2"></i> Chatear por WhatsApp
+            </a>
+            
+            <a href="{{ path('contact') }}" class="btn fw-bold py-3 px-4 rounded-pill d-flex align-items-center" style="background-color: var(--luxe-gold); color: #111; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2); transition: transform 0.2s ease;">
+                <i class="fas fa-envelope me-2"></i> Formulario de Contacto
+            </a>
+        </div>
+        
+        {# === DIRECCIÓN GENÉRICA Y PRIVADA === #}
+        <div class="d-flex justify-content-center flex-wrap gap-4 text-dynamic-muted mt-4">
+            <p class="mb-0"><i class="fas fa-envelope text-dynamic me-2"></i> consoriainmobiliaria@gmail.com</p>
+            <p class="mb-0"><i class="fas fa-map-marker-alt text-danger me-2"></i> Bogotá D.C. - Zona Norte, Cedritos</p>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

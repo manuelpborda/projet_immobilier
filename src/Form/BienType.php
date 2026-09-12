@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType; // <-- Importación para el enlace de YouTube
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -162,8 +163,19 @@ class BienType extends AbstractType
                 'label' => 'Dirección (Información privada)'
             ]);
 
-        
        // 3. MULTIMEDIA
+        $builder->add('urlVideo', UrlType::class, [
+            'label' => '🎥 Enlace de video en YouTube (Opcional)',
+            'required' => false,
+            'attr' => [
+                'placeholder' => 'Ej: https://www.youtube.com/watch?v=...'
+            ],
+            'help' => 'Copia y pega la URL completa de tu video de YouTube para mostrar un recorrido virtual.',
+            'help_attr' => [
+                'style' => 'color: #555555; font-size: 0.85rem; margin-top: 5px; display: block;'
+            ]
+        ]);
+
         for ($i = 1; $i <= 20; $i++) {
             $builder->add('foto' . $i, FileType::class, [
                 // Etiqueta destacada si es la primera foto

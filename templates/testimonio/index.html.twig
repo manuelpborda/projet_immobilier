@@ -3,21 +3,25 @@
 {% block title %}Gestión de Testimonios - CONSORIA{% endblock %}
 
 {% block body %}
+<style>
+    .texto-adaptable { color: #E4E7EC; }
+    .texto-adaptable-muted { color: rgba(228, 231, 236, 0.75); }
+    html.light-mode .texto-adaptable { color: #212529 !important; }
+    html.light-mode .texto-adaptable-muted { color: rgba(33, 37, 41, 0.75) !important; }
+</style>
+
 <div class="container my-5">
-    {# ENCABEZADO CON BOTÓN EN ESPAÑOL Y ALTO CONTRASTE #}
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
-            <h1 class="h2 fw-bold text-white mb-1"><i class="fas fa-star me-2" style="color: var(--luxe-gold, #D4AF37);"></i>Testimonios de Clientes</h1>
-            <p class="text-white opacity-75 small mb-0">Administra los comentarios y videos reales de entregas de inmuebles.</p>
+            <h1 class="h2 fw-bold texto-adaptable mb-1"><i class="fas fa-star me-2" style="color: var(--luxe-gold, #D4AF37);"></i>Testimonios de Clientes</h1>
+            <p class="texto-adaptable-muted small mb-0">Administra los comentarios y videos reales de entregas de inmuebles.</p>
         </div>
         
-        {# BOTÓN PRINCIPAL: DORADO CON TEXTO EN NEGRO (MÁXIMA VISIBILIDAD) #}
         <a href="{{ path('app_testimonio_new') }}" class="btn fw-bold shadow-lg" style="background-color: var(--luxe-gold, #D4AF37); color: #111; border-radius: 25px; padding: 10px 24px; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;">
             <i class="fas fa-plus-circle me-2"></i> Crear Nuevo Testimonio
         </a>
     </div>
 
-    {# TABLA DE TESTIMONIOS #}
     <div class="table-responsive rounded-4 shadow-lg p-3" style="background-color: #1c1e22; border: 1px solid rgba(212, 175, 55, 0.2);">
         <table class="table table-dark table-hover align-middle mb-0">
             <thead>
@@ -61,7 +65,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-white opacity-75">
+                        <td colspan="6" class="text-center py-5 texto-adaptable-muted">
                             <i class="fas fa-star fa-3x mb-3" style="color: #444;"></i><br>
                             Aún no has creado ningún testimonio.<br>
                             <a href="{{ path('app_testimonio_new') }}" class="btn btn-sm mt-3 fw-bold" style="background-color: var(--luxe-gold, #D4AF37); color: #111; border-radius: 20px;">

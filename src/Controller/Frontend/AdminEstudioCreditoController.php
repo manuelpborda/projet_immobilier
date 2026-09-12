@@ -11,16 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * Controlador protegido para que el Administrador gestione los estudios de crédito.
- */
 #[Route('/admin')]
 #[IsGranted('ROLE_ADMIN')]
 class AdminEstudioCreditoController extends AbstractController
 {
-    /**
-     * Lista todas las solicitudes recibidas, de la más nueva a la más antigua.
-     */
     #[Route('/estudios-credito', name: 'admin_estudios_index', methods: ['GET'])]
     public function index(EstudioClienteRepository $repository): Response
     {
@@ -31,9 +25,6 @@ class AdminEstudioCreditoController extends AbstractController
         ]);
     }
 
-    /**
-     * Exporta todos los registros a un archivo CSV compatible con Excel.
-     */
     #[Route('/estudios-credito/exportar', name: 'admin_estudios_export', methods: ['GET'])]
     public function export(EstudioClienteRepository $repository): Response
     {
@@ -41,13 +32,12 @@ class AdminEstudioCreditoController extends AbstractController
         
         $output = fopen('php://temp', 'w');
         
-        // Agregar BOM para que Excel en Windows lea correctamente las tildes y la letra Ñ (UTF-8)
+        // Agregar BOM para que Excel lea correctamente las tildes y la Ñ
         fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
         
-        // Cabeceras de las columnas en Excel
-        fputcsv($output, ['Fecha Solicitud', 'Cédula', 'Nombres y Apellidos', 'Celular', 'Correo', 'Profesión', 'Empresa', 'Cargo', 'Contrato', 'Ingresos Fijos', 'Ingresos Variables', 'Patrimonio Total', 'Deudas Financieras', 'Valor Inmueble', 'Monto Solicitado', 'Línea Crédito'], ';');
+        // Cabeceras exactas
+        fputcsv($output, ['Fecha Solicitud', 'Cédula', 'Nombres y Apellidos', 'Celular', 'Correo', 'Profesión', 'Empresa', 'Cargo', 'Contrato', 'Ingresos Fijos', 'Ingresos Variables', 'Patrimonio Inmuebles', 'Deudas Financieras', 'Valor Inmueble', 'Monto Solicitado', 'Línea Crédito'], ';');
         
-        // Llenado de los datos fila por fila
         foreach ($estudios as $e) {
             fputcsv($output, [
                 $e->getFechaSolicitud()->format('d/m/Y H:i'),
@@ -61,7 +51,7 @@ class AdminEstudioCreditoController extends AbstractController
                 $e->getTipoContrato() ?? 'N/A',
                 $e->getIngresosFijos() ?? '0',
                 $e->getIngresosVariables() ?? '0',
-                $e->getPatrimonioTotal() ?? '0',
+                $e->getPatrimonioInmuebles() ?? '0', // <- CORREGIDO AQUÍ
                 $e->getDeudasFinancieras() ?? '0',
                 $e->getValorInmueble() ?? '0',
                 $e->getValorSolicitado() ?? '0',
@@ -80,9 +70,6 @@ class AdminEstudioCreditoController extends AbstractController
         return $response;
     }
 
-    /**
-     * Muestra los detalles completos de una solicitud específica.
-     */
     #[Route('/estudios-credito/{id}', name: 'admin_estudios_show', methods: ['GET'])]
     public function show(EstudioCliente $estudio): Response
     {
@@ -91,9 +78,6 @@ class AdminEstudioCreditoController extends AbstractController
         ]);
     }
 
-    /**
-     * Acción segura para eliminar una solicitud de estudio de crédito.
-     */
     #[Route('/estudios-credito/eliminar/{id}', name: 'admin_estudios_delete', methods: ['POST'])]
     public function delete(Request $request, EstudioCliente $estudio, EntityManagerInterface $em): Response
     {

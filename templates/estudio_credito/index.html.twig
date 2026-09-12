@@ -5,7 +5,7 @@
 {% block body %}
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-lg-10"> {# Ampliamos el contenedor a col-10 para que los 33 campos se acomoden mejor #}
+        <div class="col-lg-10"> {# Ampliamos el contenedor a col-10 para que los campos se acomoden mejor #}
             
             <div class="text-center mb-5">
                 <h1 class="display-5 fw-bold text-success mb-3">
@@ -21,7 +21,6 @@
                         Respaldado por las mejores entidades financieras
                     </span>
                     <div class="d-flex flex-wrap justify-content-center align-items-center gap-4">
-                        {# Cambiamos el bucle a 13 y la extensión exacta a .webp.jpeg #}
                         {% for i in 1..13 %}
                             <img src="{{ asset('assets/convenios/convenio' ~ i ~ '.webp.jpeg') }}" alt="Banco Aliado" height="40" style="object-fit: contain; filter: grayscale(100%); opacity: 0.6; transition: 0.3s;" onmouseover="this.style.filter='none'; this.style.opacity='1';" onmouseout="this.style.filter='grayscale(100%)'; this.style.opacity='0.6';">
                         {% endfor %}
@@ -31,7 +30,8 @@
 
             <div class="card shadow border-0 mb-5 bg-body-tertiary">
                 <div class="card-body p-4 p-md-5">
-                    {{ form_start(form) }}
+                    {# Le agregamos un ID al formulario para que el Javascript pueda interceptarlo al enviar #}
+                    {{ form_start(form, {'attr': {'id': 'form-estudio-viabilidad'}}) }}
                     
                     {# --- SECCIÓN 1: DATOS PERSONALES --- #}
                     <h4 class="text-primary border-bottom pb-2 mb-4"><i class="fas fa-user me-2"></i>1. Datos Personales y de Contacto</h4>
@@ -118,4 +118,44 @@
         </div>
     </div>
 </div>
+
+{# === SCRIPT DE FORMATO DE MONEDA AUTOMÁTICO === #}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Selecciona todos los inputs que tengan la clase 'form-moneda' (que pusimos en el EstudioClienteType)
+        const currencyInputs = document.querySelectorAll('.form-moneda');
+
+        // Función para aplicar los puntos de miles
+        function formatCurrency(value) {
+            // Elimina todo lo que no sea número
+            let cleanValue = value.replace(/\D/g, '');
+            if (cleanValue === '') return '';
+            // Aplica el formato de separador de miles con puntos
+            return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Aplicar el formato mientras el cliente escribe
+        currencyInputs.forEach(input => {
+            // Formatear al instante si la página recargó con datos
+            if(input.value) {
+                input.value = formatCurrency(input.value);
+            }
+            
+            input.addEventListener('input', function (e) {
+                this.value = formatCurrency(this.value);
+            });
+        });
+
+        // Limpiar los puntos de miles justo antes de enviar el formulario a Symfony
+        const form = document.getElementById('form-estudio-viabilidad');
+        if(form) {
+            form.addEventListener('submit', function () {
+                currencyInputs.forEach(input => {
+                    // Quita los puntos para que a la base de datos llegue un número entero puro (Ej: 1500000)
+                    input.value = input.value.replace(/\./g, '');
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}

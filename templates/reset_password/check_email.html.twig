@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Correo Enviado - CONSORIA{% endblock %}
+
+{% block body %}
+<style>
+    .auth-wrapper { min-height: 70vh; display: flex; align-items: center; padding: 3rem 0; }
+    .card-luxe { background: var(--luxe-card-bg, #1C1E22); border: 1px solid rgba(212, 175, 55, 0.2); color: #E4E7EC; }
+    .texto-muteado { opacity: 0.85; }
+    html.light-mode .card-luxe { background: #FFFFFF !important; border: 1px solid rgba(0, 0, 0, 0.08) !important; box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important; color: #212529 !important; }
+    html.light-mode .texto-muteado { color: #495057 !important; opacity: 1; }
+</style>
+
+<div class="auth-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card-luxe rounded-4 p-4 p-md-5 shadow-lg text-center">
+                    
+                    <div class="mb-4">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 80px; height: 80px; background: rgba(212,175,55,0.1); border: 2px solid var(--luxe-gold, #D4AF37);">
+                            <i class="fas fa-envelope-open-text fa-2x" style="color: var(--luxe-gold, #D4AF37);"></i>
+                        </span>
+                        <h3 class="fw-bold">¡Revisa tu correo!</h3>
+                    </div>
+
+                    <p class="texto-muteado mb-4">
+                        Si existe una cuenta asociada a ese correo electrónico, te hemos enviado un enlace que expirará en 
+                        <strong>{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
+                    </p>
+                    
+                    <p class="texto-muteado small mb-4">
+                        Si no recibes el correo, comprueba tu carpeta de Spam o intenta <a href="{{ path('app_forgot_password_request') }}" style="color: var(--luxe-gold);">enviarlo de nuevo</a>.
+                    </p>
+
+                    <a href="{{ path('app_login') }}" class="btn w-100 fw-bold py-3 rounded-3" style="border: 1px solid var(--luxe-gold); color: var(--luxe-gold); transition: all 0.3s ease;" onmouseover="this.style.background='var(--luxe-gold)'; this.style.color='#111'" onmouseout="this.style.background='transparent'; this.style.color='var(--luxe-gold)'">
+                        Volver al Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

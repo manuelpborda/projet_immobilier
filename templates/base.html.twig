@@ -10,24 +10,16 @@
     }
     </script>
 
-    {# === SEO: Título Dinámico === #}
     <title>{% block title %}CONSORIA Inmobiliaria{% endblock %}</title>
-    
-    {# === SEO: Meta Descripción Dinámica === #}
     <meta name="description" content="{% block meta_description %}Encuentra las mejores casas y apartamentos en venta y arriendo con Consoria Inmobiliaria en Colombia. Descubre propiedades exclusivas adaptadas a tus necesidades.{% endblock %}">
-     
-    {# === SEO & RESPONSIVE === #}
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <meta name="robots" content="index, follow">
     
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome (Iconos para UX) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-    {# MEJORAS UX/UI PARA LA BARRA DE NAVEGACIÓN #}
     <style>
         .nav-wrapper {
             display: flex;
@@ -35,16 +27,16 @@
             flex-wrap: wrap;
             gap: 1.5rem;
             padding: 0.5rem 1rem;
-            background: var(--luxe-card-bg, #1C1E22); /* Fondo premium para la navbar */
+            background: var(--luxe-card-bg, #1C1E22);
             border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         }
-        .nav-enlaces a {
+        .nav-enlaces a:not(.dropdown-item):not(.btn) {
             font-size: 1.05rem; 
             text-decoration: none;
             transition: all 0.3s ease;
-            color: #fff; /* Texto blanco por defecto */
+            color: #fff;
         }
-        .nav-enlaces a:hover {
+        .nav-enlaces a:not(.dropdown-item):not(.btn):hover {
             color: var(--luxe-gold, #D4AF37) !important;
         }
         .user-zone {
@@ -55,88 +47,99 @@
             border-left: 1px solid rgba(212, 175, 55, 0.3);
             padding-left: 1rem;
         }
-        .text-gold {
-            color: var(--luxe-gold, #D4AF37) !important; 
+        .text-gold { color: var(--luxe-gold, #D4AF37) !important; }
+        
+        /* Estilos Dropdown Luxe */
+        .dropdown-menu-luxe {
+            background-color: var(--luxe-card-bg, #1C1E22);
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
+        .dropdown-menu-luxe .dropdown-item { color: #E4E7EC; transition: 0.2s; }
+        .dropdown-menu-luxe .dropdown-item:hover { background-color: rgba(212, 175, 55, 0.1); color: var(--luxe-gold, #D4AF37); }
+        .dropdown-menu-luxe .dropdown-divider { border-color: rgba(212, 175, 55, 0.15); }
+        html.light-mode .dropdown-menu-luxe { background-color: #ffffff; border-color: rgba(0,0,0,0.1); }
+        html.light-mode .dropdown-menu-luxe .dropdown-item { color: #212529; }
+        html.light-mode .dropdown-menu-luxe .dropdown-item:hover { background-color: #f8f9fa; }
+        html.light-mode .nav-enlaces a:not(.dropdown-item):not(.btn) { color: #212529; }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100" style="background-color: var(--luxe-black, #111); color: #fff;">
 
     <nav class="nav-wrapper">
-        {# LOGO DE LA EMPRESA #}
         <a href="{{ path('home') }}" class="me-3">
             <img src="{{ asset('assets/img/logo.webp') }}" alt="Logo CONSORIA Inmobiliaria" width="150" height="100" style="vertical-align:middle; object-fit: contain;">
         </a>
 
         <div class="nav-enlaces d-flex flex-wrap align-items-center gap-3 flex-grow-1">
+            <a href="{{ path('home') }}">Inicio</a>
+            <a href="{{ path('buy') }}">Comprar</a>
+            <a href="{{ path('sell') }}">Vender</a>
+            <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
+            <a href="{{ path('estudio_credito') }}" class="text-success fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Estudio de Crédito</a>
+
             {% if app.user %}
+                
+                {# === MENÚ ADMIN === #}
                 {% if 'ROLE_ADMIN' in app.user.roles %}
-                    <a href="{{ path('admin_dashboard') }}">Panel Admin</a>
-                    <a href="{{ path('admin_usuarios') }}">Usuarios</a>
-                    <a href="{{ path('admin_documentos_index') }}" class="fw-bold text-warning">
-                        <i class="fas fa-folder-open me-1"></i> Documentos
-                    </a>
-                    <a href="{{ path('admin_interacciones_index') }}" class="fw-bold text-warning">
-                        <i class="fas fa-envelope-open-text me-1"></i> Solicitudes
-                    </a>
-                    <a href="{{ path('admin_estudios_index') }}" class="text-success fw-bold">
-                        <i class="fas fa-file-invoice-dollar me-1"></i> Estudios
-                    </a>
-                    <a href="{{ path('app_testimonio_index') }}" class="text-gold fw-bold">
-                        <i class="fas fa-star me-1"></i> Testimonios
-                    </a>
-                    
-                    {# === BOTÓN PARA QUE TU HERMANO CREE INMUEBLES === #}
+                    <li class="nav-item dropdown" style="list-style: none;">
+                        <a class="nav-link dropdown-toggle text-gold fw-bold" href="#" data-bs-toggle="dropdown">Admin Panel</a>
+                        <ul class="dropdown-menu dropdown-menu-luxe shadow">
+                            <li><a class="dropdown-item" href="{{ path('admin_dashboard') }}"><i class="fas fa-chart-line me-2 text-gold"></i> Dashboard</a></li>
+                            
+                            {# === NUEVO BOTÓN PARA VER/EDITAR INMUEBLES === #}
+                            <li><a class="dropdown-item" href="{{ path('proprietaire_dashboard') }}"><i class="fas fa-building me-2 text-gold"></i> Inmuebles</a></li>
+                            
+                            <li><a class="dropdown-item" href="{{ path('admin_usuarios') }}"><i class="fas fa-users me-2 text-gold"></i> Usuarios</a></li>
+                            <li><a class="dropdown-item" href="{{ path('admin_documentos_index') }}"><i class="fas fa-folder-open me-2 text-gold"></i> Documentos</a></li>
+                            <li><a class="dropdown-item" href="{{ path('admin_interacciones_index') }}"><i class="fas fa-envelope-open-text me-2 text-gold"></i> Solicitudes</a></li>
+                            <li><a class="dropdown-item" href="{{ path('admin_estudios_index') }}"><i class="fas fa-file-invoice-dollar me-2 text-gold"></i> Estudios</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_testimonio_index') }}"><i class="fas fa-star me-2 text-gold"></i> Testimonios</a></li>
+                        </ul>
+                    </li>
                     <a href="{{ path('proprietaire_bien_nuevo') }}" class="btn btn-sm ms-2 fw-bold shadow-sm" style="background-color: var(--luxe-gold, #D4AF37); color: #111; border-radius: 20px; padding: 6px 15px;">
                         <i class="fas fa-plus-circle me-1"></i> Nuevo Inmueble
                     </a>
-                    
-                    {# ZONA DE PERFIL RESALTADA #}
-                    <div class="user-zone">
-                        <span class="text-gold fw-bold"><i class="fas fa-user-shield me-1"></i> Hola, {{ app.user.email|split('@')[0]|capitalize }}</span>
-                        <a href="{{ path('app_logout') }}" class="btn btn-outline-danger btn-sm rounded-pill px-3"><i class="fas fa-sign-out-alt me-1"></i> Salir</a>
-                    </div>
-
+                
+                {# === MENÚ PROPIETARIO === #}
                 {% elseif 'ROLE_PROPRIETAIRE' in app.user.roles %}
-                    <a href="{{ path('home') }}">Inicio</a>
-                    <a href="{{ path('buy') }}">Comprar</a>
-                    <a href="{{ path('sell') }}">Vender</a>
-                    <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
-                    <a href="{{ path('estudio_credito') }}" class="text-success fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Estudio de Crédito</a>
-                    <a href="{{ path('proprietaire_dashboard') }}">Panel Propietario</a>
-                    <a href="{{ path('proprietaire_bien_nuevo') }}">Publicar Bien</a>
-                    <a href="{{ path('proprietaire_documentos') }}" class="text-gold fw-bold"><i class="fas fa-folder-open me-1"></i> Mis Documentos</a>
-                    <a href="{{ path('app_testimonio_index') }}" class="text-gold fw-bold"><i class="fas fa-star me-1"></i> Testimonios</a>
+                    <li class="nav-item dropdown" style="list-style: none;">
+                        <a class="nav-link dropdown-toggle text-gold fw-bold" href="#" data-bs-toggle="dropdown">Mi Panel</a>
+                        <ul class="dropdown-menu dropdown-menu-luxe shadow">
+                            <li><a class="dropdown-item" href="{{ path('proprietaire_dashboard') }}"><i class="fas fa-chart-pie me-2 text-gold"></i> Resumen</a></li>
+                            <li><a class="dropdown-item" href="{{ path('proprietaire_bien_nuevo') }}"><i class="fas fa-home me-2 text-gold"></i> Publicar Bien</a></li>
+                            <li><a class="dropdown-item" href="{{ path('proprietaire_documentos') }}"><i class="fas fa-folder-open me-2 text-gold"></i> Mis Documentos</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ path('app_testimonio_index') }}"><i class="fas fa-star me-2 text-gold"></i> Mis Testimonios</a></li>
+                        </ul>
+                    </li>
                     <a href="{{ path('contact') }}">Contacto</a>
 
-                    {# ZONA DE PERFIL RESALTADA #}
-                    <div class="user-zone">
-                        <span class="text-gold fw-bold"><i class="fas fa-user-tie me-1"></i> Bienvenido, {{ app.user.email|split('@')[0]|capitalize }}</span>
-                        <a href="{{ path('app_logout') }}" class="btn btn-outline-danger btn-sm rounded-pill px-3"><i class="fas fa-sign-out-alt me-1"></i> Salir</a>
-                    </div>
-
+                {# === MENÚ CLIENTE === #}
                 {% elseif 'ROLE_CLIENT' in app.user.roles %}
-                    <a href="{{ path('home') }}">Inicio</a>
-                    <a href="{{ path('buy') }}">Comprar</a>
-                    <a href="{{ path('sell') }}">Vender</a>
-                    <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
-                    <a href="{{ path('estudio_credito') }}" class="text-success fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Estudio de Crédito</a>
-                    <a href="{{ path('client_dashboard') }}">Mi Panel</a>
-                    <a href="{{ path('favoritos_index') }}">Mis Favoritos</a>
+                    <li class="nav-item dropdown" style="list-style: none;">
+                        <a class="nav-link dropdown-toggle text-gold fw-bold" href="#" data-bs-toggle="dropdown">Mi Panel</a>
+                        <ul class="dropdown-menu dropdown-menu-luxe shadow">
+                            <li><a class="dropdown-item" href="{{ path('client_dashboard') }}"><i class="fas fa-chart-pie me-2 text-gold"></i> Resumen</a></li>
+                            <li><a class="dropdown-item" href="{{ path('favoritos_index') }}"><i class="fas fa-heart me-2 text-gold"></i> Mis Favoritos</a></li>
+                        </ul>
+                    </li>
                     <a href="{{ path('contact') }}">Contacto</a>
-
-                    {# ZONA DE PERFIL RESALTADA #}
-                    <div class="user-zone">
-                        <span class="text-gold fw-bold"><i class="fas fa-user me-1"></i> Hola, {{ app.user.email|split('@')[0]|capitalize }}</span>
-                        <a href="{{ path('app_logout') }}" class="btn btn-outline-danger btn-sm rounded-pill px-3"><i class="fas fa-sign-out-alt me-1"></i> Salir</a>
-                    </div>
                 {% endif %}
+
+                {# === MENÚ DE PERFIL DESPLEGABLE (DERECHA) - RUTAS CONECTADAS === #}
+                <div class="user-zone dropdown">
+                    <a href="#" class="text-gold fw-bold text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-lg me-1"></i> {{ app.user.email|split('@')[0]|capitalize }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-luxe shadow mt-2">
+                        <li><a class="dropdown-item" href="{{ path('app_profile') }}"><i class="fas fa-id-badge me-2 text-gold"></i> Mi Perfil</a></li>
+                        <li><a class="dropdown-item" href="{{ path('app_profile_password') }}"><i class="fas fa-key me-2 text-gold"></i> Cambiar Contraseña</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+
             {% else %}
-                <a href="{{ path('home') }}">Inicio</a>
-                <a href="{{ path('buy') }}">Comprar</a>
-                <a href="{{ path('sell') }}">Vender</a>
-                <a href="{{ path('rent') }}">Arriendo/Vacacional</a>
-                <a href="{{ path('estudio_credito') }}" class="text-success fw-bold"><i class="fas fa-file-invoice-dollar me-1"></i> Estudio de Crédito</a>
                 <a href="{{ path('about') }}">Nosotros</a>
                 <a href="{{ path('contact') }}">Contacto</a>
                 
@@ -146,14 +149,10 @@
                 </div>
             {% endif %}
             
-            <button id="darkModeToggle" class="btn btn-sm ms-2 rounded-circle" title="Modo Oscuro / Claro" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--luxe-gold, #D4AF37); color: var(--luxe-gold, #D4AF37);">
-                <i class="fas fa-moon"></i>
-            </button>
         </div>
     </nav>
 
     <main class="container mt-4 mb-5 flex-grow-1">
-        {# === GESTIÓN DE MENSAJES FLASH === #}
         {% for label, messages in app.flashes %}
             {% for msg in messages %}
                 <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show shadow-sm" role="alert" style="border-left: 4px solid var(--luxe-gold, #D4AF37);">
@@ -166,106 +165,62 @@
         {% block body %}{% endblock %}
     </main>
 
-<footer class="mt-auto footer-adaptable" style="border-top: 2px solid var(--luxe-gold, #D4AF37); padding-top: 2rem;">
-    {# GALERÍA ANIMADA (Bucle infinito 4K-Ready) #}
-    <div class="footer-gallery-container mb-5" style="position: relative; overflow: hidden; min-height: 100px;">
-        <div class="footer-gallery">
-            {# --- GRUPO 1 --- #}
-            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
-            
-            {# --- GRUPO 2 --- #}
-            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
-
-            {# --- GRUPO 3 --- #}
-            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
-
-            {# --- GRUPO 4 (Blindaje para pantallas gigantes) --- #}
-            <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
-            <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
-        </div>
-    </div>
-
-    {# INFORMACIÓN DE CONTACTO (DISEÑO LUXE CENTRADO) #}
-    <div class="container pb-5">
-        <div class="row justify-content-center text-center g-4 mx-auto" style="max-width: 1000px;">
-            
-            {# OFICINA BOGOTÁ #}
-            <div class="col-md-4 footer-col-luxe">
-                <h6 class="fw-bold mb-3 text-uppercase" style="color: var(--luxe-gold, #D4AF37); letter-spacing: 1px;">
-                    <i class="fas fa-map-marker-alt me-2"></i>Sede Colombia
-                </h6>
-                <p class="texto-footer-adaptable opacity-75 mb-1 small">Atención presencial (Zona Norte)</p>
-                <p class="texto-footer-adaptable opacity-75 mb-1 small">Barrio Cedritos, Bogotá D.C.</p>
-                <p class="texto-footer-adaptable opacity-50 mb-0 mt-2 small" style="font-style: italic;">* Atención exclusiva con cita previa</p>
-            </div>
-            
-            {# OFICINA PARÍS #}
-            <div class="col-md-4 footer-col-luxe">
-                <h6 class="fw-bold mb-3 text-uppercase d-flex align-items-center justify-content-center" style="color: var(--luxe-gold, #D4AF37); letter-spacing: 1px;">
-                    <i class="fas fa-globe-europe me-2"></i>Sede Francia
-                </h6>
-                <p class="texto-footer-adaptable opacity-50 mb-1 small" style="font-style: italic;">Expansión internacional en desarrollo.</p>
-                <p class="texto-footer-adaptable opacity-50 mb-1 small" style="font-style: italic;">Próximamente en París, Europa.</p>
-            </div>
-            
-            {# CONTACTO #}
-            <div class="col-md-4">
-                <h6 class="fw-bold mb-3 text-uppercase" style="color: var(--luxe-gold, #D4AF37); letter-spacing: 1px;">
-                    <i class="fas fa-headset me-2"></i>Atención VIP
-                </h6>
-                <p class="texto-footer-adaptable opacity-75 mb-3 small">Asesoría inmobiliaria personalizada.</p>
-                <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer" class="btn btn-sm rounded-pill px-4 py-2" style="background: rgba(18, 140, 126, 0.15); border: 1px solid #128C7E; color: #25D366; transition: all 0.3s ease;" onmouseover="this.style.background='#128C7E'; this.style.color='#fff';" onmouseout="this.style.background='rgba(18, 140, 126, 0.15)'; this.style.color='#25D366';">
-                    <i class="fab fa-whatsapp me-2 fa-lg"></i> Contactar Asesor
-                </a>
+    {% include 'partials/_footer.html.twig' ignore missing %}
+    <footer class="mt-auto footer-adaptable" style="border-top: 2px solid var(--luxe-gold, #D4AF37); padding-top: 2rem;">
+        <div class="footer-gallery-container mb-5" style="position: relative; overflow: hidden; min-height: 100px;">
+            <div class="footer-gallery">
+                <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img1.webp') }}" alt="Galería 1" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img2.webp') }}" alt="Galería 2" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img3.webp') }}" alt="Galería 3" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img4.webp') }}" alt="Galería 4" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img5.webp') }}" alt="Galería 5" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img6.webp') }}" alt="Galería 6" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img7.webp') }}" alt="Galería 7" loading="lazy">
+                <img src="{{ asset('assets/footer-gallery/img8.webp') }}" alt="Galería 8" loading="lazy">
             </div>
         </div>
-    </div>
-
-    {# COPYRIGHT #}
-    <div class="footer-bottom-adaptable text-center py-4" style="border-top: 1px solid rgba(212, 175, 55, 0.1);">
-        <p class="mb-0 small texto-footer-adaptable opacity-75" style="letter-spacing: 0.5px;">
-            &copy; {{ 'now'|date('Y') }} Consoria Inmobiliaria. Todos los derechos reservados. | 
-            <a href="{{ path('mentions_legales') }}" class="texto-footer-adaptable text-decoration-none fw-bold" style="transition: color 0.3s ease;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color=''">Aviso Legal y Términos de Uso</a>
-        </p>
-    </div>
-</footer>
-<style>
-    /* Estilo para los separadores sutiles en pantallas grandes */
-    @media (min-width: 768px) {
-        .footer-col-luxe {
-            border-right: 1px solid rgba(212, 175, 55, 0.15);
-        }
-    }
-</style>
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ asset('js/darkmode_toggle.js') }}"></script>
+        <div class="container pb-5">
+            <div class="row justify-content-center text-center g-4 mx-auto" style="max-width: 1000px;">
+                <div class="col-md-4 footer-col-luxe">
+                    <h6 class="fw-bold mb-3 text-uppercase" style="color: var(--luxe-gold, #D4AF37); letter-spacing: 1px;"><i class="fas fa-map-marker-alt me-2"></i>Sede Colombia</h6>
+                    <p class="texto-footer-adaptable opacity-75 mb-1 small">Atención presencial (Zona Norte)</p>
+                    <p class="texto-footer-adaptable opacity-75 mb-1 small">Barrio Cedritos, Bogotá D.C.</p>
+                    <p class="texto-footer-adaptable opacity-50 mb-0 mt-2 small" style="font-style: italic;">* Atención exclusiva con cita previa</p>
+                </div>
+                <div class="col-md-4 footer-col-luxe">
+                    <h6 class="fw-bold mb-3 text-uppercase d-flex align-items-center justify-content-center" style="color: var(--luxe-gold, #D4AF37); letter-spacing: 1px;"><i class="fas fa-globe-europe me-2"></i>Sede Francia</h6>
+                    <p class="texto-footer-adaptable opacity-50 mb-1 small" style="font-style: italic;">Expansión internacional en desarrollo.</p>
+                    <p class="texto-footer-adaptable opacity-50 mb-1 small" style="font-style: italic;">Próximamente en París, Europa.</p>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="fw-bold mb-3 text-uppercase" style="color: var(--luxe-gold, #D4AF37); letter-spacing: 1px;"><i class="fas fa-headset me-2"></i>Atención VIP</h6>
+                    <p class="texto-footer-adaptable opacity-75 mb-3 small">Asesoría inmobiliaria personalizada.</p>
+                    <a href="https://wa.me/573124504982" target="_blank" rel="noopener noreferrer" class="btn btn-sm rounded-pill px-4 py-2" style="background: rgba(18, 140, 126, 0.15); border: 1px solid #128C7E; color: #25D366; transition: all 0.3s ease;" onmouseover="this.style.background='#128C7E'; this.style.color='#fff';" onmouseout="this.style.background='rgba(18, 140, 126, 0.15)'; this.style.color='#25D366';"><i class="fab fa-whatsapp me-2 fa-lg"></i> Contactar Asesor</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom-adaptable text-center py-4" style="border-top: 1px solid rgba(212, 175, 55, 0.1);">
+            <p class="mb-0 small texto-footer-adaptable opacity-75" style="letter-spacing: 0.5px;">
+                &copy; {{ 'now'|date('Y') }} Consoria Inmobiliaria. Todos los derechos reservados. | 
+                <a href="{{ path('mentions_legales') }}" class="texto-footer-adaptable text-decoration-none fw-bold" style="transition: color 0.3s ease;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color=''">Aviso Legal y Términos de Uso</a> |
+                
+                {# === NUEVO BOTÓN MODO OSCURO (Discreto y UX Friendly) === #}
+                <button id="darkModeToggle" class="btn btn-link p-0 ms-2 text-decoration-none texto-footer-adaptable fw-bold" style="border: none; background: transparent; transition: color 0.3s ease;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color=''">
+                    <i class="fas fa-moon me-1"></i> Modo Oscuro
+                </button>
+            </p>
+        </div>
+    </footer>
+    <style>@media (min-width: 768px) { .footer-col-luxe { border-right: 1px solid rgba(212, 175, 55, 0.15); } }</style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/darkmode_toggle.js') }}"></script>
 </body>
 </html>
